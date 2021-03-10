@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class OrderDetail extends Model
 {
@@ -30,4 +31,9 @@ class OrderDetail extends Model
     {
         return $this->hasOne(RefundRequest::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

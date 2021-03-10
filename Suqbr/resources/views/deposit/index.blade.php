@@ -46,20 +46,21 @@
                                     <form action="{{ route('deposit.store') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="order_detail_id" value="{{$order_detail->id}}">
-                                        {{-- <input type="hidden" name="order_detail_id" value="{{ $order_detail->profit }}">
-                                        <input type="hidden" name="order_detail_id" value="$order_detail->id"> --}}
-                                        {{-- <a href="{{ route('deposit.store') }}" class="btn btn-primary dropdown-toggle dropdown-toggle-icon" >
-                                            {{__('Splitting')}}
-                                        </a> --}}
-                                        <button
-                                        class="btn dropdown-toggle dropdown-toggle-icon {{$order_detail->commission_splitting_status == 'done' ? 'btn-danger disabled' : 'btn-primary' }}">{{$order_detail->commission_splitting_status == 'done' ? __('done') : __('Splitting') }}</button>
 
-                                           {{-- <form class="d-inline-block" action="{{ route('profit_distribution.destroy', $order_detail->id) }}" method="post">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-danger"  --}}{{--onclick="return confirm('Are you confirm ?')"--}}{{-->{{__('Delete')}}</button>
-                                            --}}
-                                        </form>
+                                        @if ($order_detail->commission_splitting_status == 'done')
+                                        <button class="btn dropdown-toggle dropdown-toggle-icon btn-success disabled">
+                                            {{ __('Done') }}
+                                        </button>
+                                        @elseif($order_detail->payment_status == 'paid' && $order_detail->delivery_status == 'delivered' )
+                                        <button class="btn dropdown-toggle dropdown-toggle-icon btn-primary">
+                                            {{ __('Splitting') }}
+                                            </button>
+                                        @else
+                                        <button class="btn dropdown-toggle dropdown-toggle-icon btn-warning disabled">
+                                        {{ __('Splitting') }}
+                                        </button>
+                                        @endif
+                                    </form>
                                 </div>
                             </td>
                         </tr>

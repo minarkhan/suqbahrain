@@ -59,13 +59,18 @@ protected $fillable = [
         return $this->belongsTo(Product::class);
     }
 
-    
+
     public function seller(){
         return $this->belongsTo(Seller::class);
     }
 
     public function userseller(){
         return $this->belongsTo(User::class, 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }
