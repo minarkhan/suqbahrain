@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Deposit;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class DepositController extends Controller
 {
@@ -43,6 +44,7 @@ class DepositController extends Controller
 
 
     $order_detail = OrderDetail::find($request->order_detail_id);
+    // return Carbon::now()->diffInDays($order_detail->created_at);
 
     if($order_detail->commission_splitting_status == 'pending' && $order_detail->payment_status == 'paid' && $order_detail->delivery_status == 'delivered'){
 
@@ -56,39 +58,39 @@ class DepositController extends Controller
         $suqbahrain = User::where( 'email', 'info@suqbahrain.com')->where('user_type', 'admin')->first();
         $profit = $order_detail->profit;
 
-        if($order_detail->user->is_merchant == 1 && $order_detail->created_at + 7 == ){
+        if($order_detail->user->is_merchant == 1 && Carbon::now()->diffInDays($order_detail->created_at) > 6 ){
 
-        //Marcent profit 50%
-        $deposit1 = new Deposit();
-        $deposit1->user_id = $order_detail->user_id;
-        $deposit1->product_id = $order_detail->product_id;
-        $deposit1->order_id = $order_detail->order_id;
-        $deposit1->deposit_amount = ($profit * 50) / 100;
-        $deposit1->save();
+            //Marcent profit 50%
+            $deposit1 = new Deposit();
+            $deposit1->user_id = $order_detail->user_id;
+            $deposit1->product_id = $order_detail->product_id;
+            $deposit1->order_id = $order_detail->order_id;
+            $deposit1->deposit_amount = ($profit * 50) / 100;
+            $deposit1->save();
 
-        //Dristributor profit 10%
-        $deposit2 = new Deposit();
-        $deposit2->user_id = $Distributor->id;
-        $deposit2->product_id = $order_detail->product_id;
-        $deposit2->order_id = $order_detail->order_id;
-        $deposit2->deposit_amount = ($profit * 10) / 100;
-        $deposit2->save();
+            //Dristributor profit 10%
+            $deposit2 = new Deposit();
+            $deposit2->user_id = $Distributor->id;
+            $deposit2->product_id = $order_detail->product_id;
+            $deposit2->order_id = $order_detail->order_id;
+            $deposit2->deposit_amount = ($profit * 10) / 100;
+            $deposit2->save();
 
-        //BDO profit 2.5%
-        $deposit3 = new Deposit();
-        $deposit3->user_id = $BDO->id;
-        $deposit3->product_id = $order_detail->product_id;
-        $deposit3->order_id = $order_detail->order_id;
-        $deposit3->deposit_amount = ($profit * 2.5) / 100;
-        $deposit3->save();
+            //BDO profit 2.5%
+            $deposit3 = new Deposit();
+            $deposit3->user_id = $BDO->id;
+            $deposit3->product_id = $order_detail->product_id;
+            $deposit3->order_id = $order_detail->order_id;
+            $deposit3->deposit_amount = ($profit * 2.5) / 100;
+            $deposit3->save();
 
-        //Suq Bahrain profit 37.5%
-        $deposit4 = new Deposit();
-        $deposit4->user_id = $suqbahrain->id;
-        $deposit4->product_id = $order_detail->product_id;
-        $deposit4->order_id = $order_detail->order_id;
-        $deposit4->deposit_amount = ($profit * 37.5) / 100;
-        $deposit4->save();
+            //Suq Bahrain profit 37.5%
+            $deposit4 = new Deposit();
+            $deposit4->user_id = $suqbahrain->id;
+            $deposit4->product_id = $order_detail->product_id;
+            $deposit4->order_id = $order_detail->order_id;
+            $deposit4->deposit_amount = ($profit * 37.5) / 100;
+            $deposit4->save();
 
         }
 
