@@ -22,6 +22,7 @@ use PDF;
 use Mail;
 use App\Mail\InvoiceEmailManager;
 use CoreComponentRepository;
+use App\Deposit;
 
 class OrderController extends Controller
 {
@@ -290,6 +291,7 @@ class OrderController extends Controller
                 $order_detail->product_referral_code = $cartItem['product_referral_code'];
                 $order_detail->category_id = $product->category_id;
                 $order_detail->profit = $profit;
+                $order_detail->club_point = $price * 10;
                 $order_detail->user_id  =$order->user_id;
 
                 if ($cartItem['shipping_type'] == 'home_delivery') {
@@ -305,6 +307,75 @@ class OrderController extends Controller
 
                 $product->num_of_sale++;
                 $product->save();
+
+
+
+
+
+
+                //after product buy Distribute club point into customer, distributor, marchant.
+
+
+                // $order_detail = OrderDetail::find($request->order_detail_id);
+                // return Carbon::now()->diffInDays($order_detail->created_at);
+
+                    //distributor
+                    $refDistributorCode = $order_detail->user->referred_by;
+                    $Distributor = User::where( 'referral_code', $refDistributorCode)->first();
+                    //BDO
+                    $refBDOCode = $Distributor->referred_by;
+                    $BDO = User::where( 'referral_code', $refBDOCode)->first();
+                    //Suq Bahrain.
+                    $suqbahrain = User::where( 'email', 'info@suqbahrain.com')->where('user_type', 'admin')->first();
+                    $profit = $order_detail->profit;
+
+                    if($order_detail->user->is_merchant != 1 ){
+
+                        //Marcent profit 50%
+                        $deposit1 = new Deposit();
+                        $deposit1->user_id = $order_detail->user_id;
+                        $deposit1->product_id = $order_detail->product_id;
+                        $deposit1->order_id = $order_detail->order_id;
+                        $deposit1->deposit_amount = ($profit * 50) / 100;
+                        $deposit1->save();
+
+                        //Dristributor profit 10%
+                        $deposit2 = new Deposit();
+                        $deposit2->user_id = $Distributor->id;
+                        $deposit2->product_id = $order_detail->product_id;
+                        $deposit2->order_id = $order_detail->order_id;
+                        $deposit2->deposit_amount = ($profit * 10) / 100;
+                        $deposit2->save();
+
+                        //BDO profit 2.5%
+                        $deposit3 = new Deposit();
+                        $deposit3->user_id = $BDO->id;
+                        $deposit3->product_id = $order_detail->product_id;
+                        $deposit3->order_id = $order_detail->order_id;
+                        $deposit3->deposit_amount = ($profit * 2.5) / 100;
+                        $deposit3->save();
+
+                        //Suq Bahrain profit 37.5%
+                        $deposit4 = new Deposit();
+                        $deposit4->user_id = $suqbahrain->id;
+                        $deposit4->product_id = $order_detail->product_id;
+                        $deposit4->order_id = $order_detail->order_id;
+                        $deposit4->deposit_amount = ($profit * 37.5) / 100;
+                        $deposit4->save();
+
+                    }
+
+                    $order_detail->commission_splitting_status = 'done';
+                    $order_detail->update();
+                    return redirect()->back();
+
+
+
+
+
+
+
+
             }
 
             $order->grand_total = $subtotal + $tax + $shipping;

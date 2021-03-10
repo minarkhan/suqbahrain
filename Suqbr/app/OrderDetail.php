@@ -9,7 +9,7 @@ class OrderDetail extends Model
 {
 
     protected $fillable = [
-        'order_id', 'seller_id','product_id','variation','price','tax','shipping_cost','quantity','payment_status','delivery_status','shipping_type','pickup_point_id','product_referral_code','created_at','updated_at','category_id','profit','user_id'
+        'order_id', 'seller_id','product_id','variation','price','tax','shipping_cost','quantity','payment_status','delivery_status','shipping_type','pickup_point_id','product_referral_code','created_at','updated_at','category_id','profit', 'club_point', 'user_id'
     ];
 
     public function order()
