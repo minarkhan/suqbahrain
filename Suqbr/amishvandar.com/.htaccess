@@ -1,0 +1,48 @@
+
+# BEGIN WordPress
+# The directives (lines) between `BEGIN WordPress` and `END WordPress` are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+
+RewriteCond %{HTTP_REFERER} !^http://amishvandar.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://amishvandar.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://amishvandar.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://amishvandar.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://mainshop.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://mainshop.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.amishvandar.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.amishvandar.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.amishvandar.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.amishvandar.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.mainshop.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.mainshop.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://amishvandar.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://amishvandar.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://amishvandar.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://amishvandar.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://mainshop.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://mainshop.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.amishvandar.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.amishvandar.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.amishvandar.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.amishvandar.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.mainshop.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.mainshop.suqbahrain.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.suqbahrain.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.suqbahrain.com$      [NC]
+RewriteRule .*\.(jpg|jpeg|gif|png|bmp)$ - [F,NC]

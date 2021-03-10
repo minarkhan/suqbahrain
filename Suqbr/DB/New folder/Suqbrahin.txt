@@ -1,0 +1,35 @@
+Middleware:
+   1)IsUser---line(19)
+   2)EnsureEmailIsVerified-----line(22-24)
+
+
+Controller:
+   1)HomeController------line(68,116-118, 113)
+   2)
+
+
+
+Route:
+   1)admin.php------line(17)
+   2)
+
+
+
+Model:
+   1)
+   2)
+
+
+View: 
+   1)distributor
+         -create
+         -edit
+         -index
+   2)inc
+      -admin_sidenav------line(644-661)
+
+
+Database New column add:
+     1)User
+        -distributor_id
+        -is_merchant
