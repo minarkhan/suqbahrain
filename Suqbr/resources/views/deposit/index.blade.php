@@ -51,7 +51,7 @@
                                         <button class="btn dropdown-toggle dropdown-toggle-icon btn-success disabled">
                                             {{ __('Done') }}
                                         </button>
-                                        @elseif($order_detail->payment_status == 'paid' && $order_detail->delivery_status == 'delivered' )
+                                        @elseif($order_detail->payment_status == 'paid' && $order_detail->delivery_status == 'delivered' && \Carbon\Carbon::now()->diffInDays($order_detail->created_at) > 7)
                                         <button class="btn dropdown-toggle dropdown-toggle-icon btn-primary">
                                             {{ __('Splitting') }}
                                             </button>

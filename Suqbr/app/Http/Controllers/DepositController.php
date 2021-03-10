@@ -58,7 +58,7 @@ class DepositController extends Controller
         $suqbahrain = User::where( 'email', 'info@suqbahrain.com')->where('user_type', 'admin')->first();
         $profit = $order_detail->profit;
 
-        if($order_detail->user->is_merchant == 1 && Carbon::now()->diffInDays($order_detail->created_at) > 6 ){
+        if($order_detail->user->is_merchant == 1 && Carbon::now()->diffInDays($order_detail->created_at) > 7 ){
 
             //Marcent profit 50%
             $deposit1 = new Deposit();
