@@ -60,13 +60,14 @@
                     <div class="small-box bg-info">
 
                         <div class="inner">
-                            <h3>{{ $bdo_profit }} BHD</h3>
-                            <p>Total Earning (2.50%)</p>
+                            {{-- <h3>{{ $bdo_profit }} BHD</h3> --}}
+                            <h3>{{ $depositProfit }} BHD</h3>
+                            <p>Today Earning ( 00.00 BHD )</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="#" class="small-box-footer bg-danger">Withdrow ({{ $depositProfit }} BHD) <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
@@ -75,9 +76,10 @@
                     <!-- small box -->
                     <div class="small-box bg-dark">
                         <div class="inner">
-                            <h3>{{ $bdo_today_profit }} BHD</h3>
+                            {{-- <h3>{{ $bdo_today_profit }} BHD</h3> --}}
+                            <h3>{{ $depositPoint }} Points</h3>
 
-                            <p>Today Earning (2.50%)</p>
+                            <p>Today Earning ( 00.00 Point(s) )</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
@@ -117,7 +119,7 @@
                         <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Referral  Code</span>
+                            <span class="info-box-text">Your Referral  Code</span>
                             <span class="info-box-number">{{ \Illuminate\Support\Facades\Auth::user()->referral_code }}</span>
                         </div>
                         <!-- /.info-box-content -->
