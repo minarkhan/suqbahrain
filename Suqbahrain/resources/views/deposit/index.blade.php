@@ -25,7 +25,7 @@
                 </thead>
                <tbody>
                 @foreach($order_details as $key => $order_detail)
-                    @if($order_detail != null)
+                    @if($order_detail != null && ($order_detail->user->is_merchant ?? '0') == 1  )
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $order_detail->product->name ?? $order_detail->product_id }}</td>
@@ -43,24 +43,24 @@
                             </td>
                             <td>
                                 <div class="btn-group dropdown">
-                                    <form action="{{ route('deposit.store') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="order_detail_id" value="{{$order_detail->id}}">
-
-                                        @if ($order_detail->commission_splitting_status == 'done')
+                                    @if ($order_detail->commission_splitting_status == 'done')
                                         <button class="btn dropdown-toggle dropdown-toggle-icon btn-success disabled">
                                             {{ __('Done') }}
                                         </button>
-                                        @elseif($order_detail->payment_status == 'paid' && $order_detail->delivery_status == 'delivered' && \Carbon\Carbon::now()->diffInDays($order_detail->created_at) > 7)
-                                        <button class="btn dropdown-toggle dropdown-toggle-icon btn-primary">
-                                            {{ __('Splitting') }}
+                                    @elseif($order_detail->payment_status == 'paid' && $order_detail->delivery_status == 'delivered' && \Carbon\Carbon::now()->diffInDays($order_detail->created_at) >= 7)
+                                        <form action="{{ route('deposit.store') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="order_detail_id" value="{{$order_detail->id}}">
+
+                                            <button class="btn dropdown-toggle dropdown-toggle-icon btn-primary">
+                                                {{ __('Splitting') }}
                                             </button>
-                                        @else
-                                        <button class="btn dropdown-toggle dropdown-toggle-icon btn-warning disabled">
+                                        </form>
+                                    @else
+                                        <button class="btn dropdown-toggle dropdown-toggle-icon btn-warning disabled" aria-disabled="false">
                                         {{ __('Splitting') }}
                                         </button>
-                                        @endif
-                                    </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

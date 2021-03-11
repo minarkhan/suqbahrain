@@ -19,7 +19,9 @@ class DepositController extends Controller
      */
     public function index()
     {
-        $order_details = DB::table('order_details')->orderBy('created_at', 'DESC')->get();
+        // $order_details = DB::table('order_details')->with('users')->orderBy('created_at', 'DESC')->get();
+
+        $order_details = OrderDetail::with('user')->orderBy('created_at', 'DESC')->get();
         return view('deposit.index', compact('order_details'));
     }
 
@@ -58,7 +60,7 @@ class DepositController extends Controller
         $suqbahrain = User::where( 'email', 'info@suqbahrain.com')->where('user_type', 'admin')->first();
         $profit = $order_detail->profit;
 
-        if($order_detail->user->is_merchant == 1 && Carbon::now()->diffInDays($order_detail->created_at) > 7 ){
+        if($order_detail->user->is_merchant == 1 && $order_detail->user->user_type == 'customer' && Carbon::now()->diffInDays($order_detail->created_at) >= 7 ){
 
             //Marcent profit 50%
             $deposit1 = new Deposit();
@@ -92,6 +94,14 @@ class DepositController extends Controller
             $deposit4->deposit_amount = ($profit * 37.5) / 100;
             $deposit4->save();
 
+        } else {
+            //Suq Bahrain profit
+            // $deposit = new Deposit();
+            // $deposit->user_id = $suqbahrain->id;
+            // $deposit->product_id = $order_detail->product_id;
+            // $deposit->order_id = $order_detail->order_id;
+            // $deposit->deposit_amount = $profit;
+            // $deposit->save();
         }
 
         $order_detail->commission_splitting_status = 'done';

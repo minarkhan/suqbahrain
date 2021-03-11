@@ -136,7 +136,7 @@
 								<td class="gry-color">
                                     {{-- {{ $orderDetail->product->user($orderDetail->seller_id)->name }} --}}
                                     {{-- App\Models\OrderDetail::find(342)->product->user::find(58) --}}
-                                    {{$orderDetail->seller->user->name}}
+                                    {{$orderDetail->seller->user->name ?? '' }}
                                 </td>
 								<td class="gry-color">{{ $orderDetail->quantity }}</td>
 								<td class="gry-color currency">{{ single_price($orderDetail->price/$orderDetail->quantity) }}</td>
