@@ -114,14 +114,26 @@
         <div class="container-fluid">
             <!-- Info boxes -->
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
+                <div class="col-12 col-sm-6 col-md-6">
                     <div class="info-box mb-3">
                         <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Your Referral  Code</span>
-                            <span class="info-box-number">{{ \Illuminate\Support\Facades\Auth::user()->referral_code }}</span>
+                            <span class="info-box-text">
+                                Your Referral Code : <b>{{ \Illuminate\Support\Facades\Auth::user()->referral_code }} </b> <button   class="btn btn-primary float-right"value="copy" onclick="copyToClipboard()">Copy Shareable link!</button>
+                            </span>
+                            <span class="info-box-number">
+                                <input class="form-control" type="text" id="copy_refcode" value="{{ 'https://suqbahrain.com/users/registration?ref=' .\Illuminate\Support\Facades\Auth::user()->referral_code }}" readonly>
+                            </span>
                         </div>
+
+
+
+
+
+
+
+
                         <!-- /.info-box-content -->
                     </div>
                     <!-- /.info-box -->
@@ -190,4 +202,11 @@
         </div><!--/. container-fluid -->
     </section>
     <!-- /.content -->
+    <script>
+        function copyToClipboard() {
+            document.getElementById("copy_refcode").select();
+            document.execCommand('copy');
+        }
+    </script>
+
 @endsection

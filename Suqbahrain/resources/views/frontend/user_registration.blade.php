@@ -16,6 +16,9 @@
                                 <div class="">
                                     <form class="form-default" role="form" action="{{ route('register') }}" method="POST">
                                         @csrf
+                                        {{-- //if get referral code from url with hidden
+                                        <input type="hidden" value="{{  Request::get('ref') ? Request::get('ref') : '' }}" name="referral_code"> --}}
+
                                         <div class="form-group">
                                             <div class="input-group input-group--style-1">
                                                 <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" placeholder="{{ __('Name') }}" name="name">
@@ -105,7 +108,7 @@
 
                                         <div class="form-group">
                                             <div class="input-group input-group--style-1">
-                                                <input type="text" class="form-control{{ $errors->has('referral_code') ? ' is-invalid' : '' }}" value="{{ old('referral_code') }}" placeholder="{{ __('Merchant referral code') }}" name="referral_code">
+                                                <input type="text" class="form-control{{ $errors->has('referral_code') ? ' is-invalid' : '' }}" value="{{  Request::get('ref') ? Request::get('ref') : old('referral_code') }}" placeholder="{{ __('Merchant referral code') }}" name="referral_code">
                                                 <span class="input-group-addon">
                                                     <i class="text-md la la-users"></i>
                                                 </span>
