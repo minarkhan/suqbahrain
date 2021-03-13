@@ -47,6 +47,31 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item has-treeview {{$merchant_manu ? 'menu-open' : ''}}">
+                @php
+                    if (Request::is('bankinfo')) {
+                        $bank_url = Request::is('bankinfo');
+                    } else {
+                        $bank_url = Request::is('bankinfo/*');
+                    }
+                @endphp
+                <a href="{{route('bankinfo.index')}}"  class="nav-link {{$bank_url ? 'active' : ''}}">
+                    <i class="nav-icon fa fa-university"></i>
+                    <p>
+                        Bank Information
+                        {{-- <i class="fas fa-angle-left right"></i> --}}
+                    </p>
+                </a>
+                {{-- <ul class="nav nav-treeview">
+
+                    <li class="nav-item">
+                        <a href="{{route('distributor.index')}}" class="nav-link {{$merchant_url ? 'active' : ''}}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>All Distributor</p>
+                        </a>
+                    </li>
+                </ul> --}}
+            </li>
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

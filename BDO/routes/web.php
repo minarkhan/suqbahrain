@@ -25,6 +25,11 @@ Route::group(['middleware'=> 'bdo'], function (){
     Route::put('profile_update', 'ProfileController@update')->name('profile.update');
     Route::get('change-password', 'ChangePasswordController@index')->name('password');
     Route::put('change-password', 'ChangePasswordController@store')->name('change.password');
+    //bank Info
+    Route::resource('bankinfo', 'BankInfoController');
+    //amount withdraw
+    Route::resource('withdraw', 'WithdrawController');
+
 });
 
 
