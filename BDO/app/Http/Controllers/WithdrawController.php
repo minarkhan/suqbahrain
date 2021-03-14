@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\withdraw;
+use App\Withdraw;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Brian2694\Toastr\Facades\Toastr;
 
 class WithdrawController extends Controller
 {
@@ -14,7 +17,9 @@ class WithdrawController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $withdraws = Withdraw::where('user_id', $user->id)->orderBy('id', 'DESC')->get();
+        return view('bdo.withdraw.index', compact('withdraws'));
     }
 
     /**
@@ -35,7 +40,25 @@ class WithdrawController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->withdraw_amount > 4){
+            $validator = Validator::make($request->all(), [
+                // 'agree_term' => 'required'
+            ]);
+
+            if ($validator->passes()) {
+                $withdraw = new Withdraw;
+                $withdraw->user_id = Auth::user()->id;
+                $withdraw->bank_info_id = $request->bank_info_id;
+                $withdraw->withdraw_amount = $request->withdraw_amount;
+                if($withdraw->save()){
+                    return response()->json(['success'=>'Your withdraw request has been successfully submitted.']);
+                }
+            }
+            return response()->json(['error'=>$validator->errors()]);
+        }
+
+        return response()->json(['error'=> 'Your withdrawable amount minimun $5 BHD.']);
+
     }
 
     /**
@@ -78,8 +101,16 @@ class WithdrawController extends Controller
      * @param  \App\withdraw  $withdraw
      * @return \Illuminate\Http\Response
      */
-    public function destroy(withdraw $withdraw)
+    public function destroy($id)
     {
-        //
+        $withdraw = Withdraw::findOrFail($id);
+        try {
+            $withdraw->destroy($withdraw->id);
+            Toastr::warning('message', 'Distributor Delete Successfully');
+            return redirect()->route('withdraw.index');
+        } catch (Exception $exception) {
+            Toastr::error('message', 'Something went wrong');
+            return redirect()->back();
+        }
     }
 }

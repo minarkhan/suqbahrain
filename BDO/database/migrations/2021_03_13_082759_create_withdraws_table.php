@@ -16,9 +16,11 @@ class CreateWithdrawsTable extends Migration
         Schema::create('withdraws', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->nullable();
-            $table->string('withdraw_amount')->nullable();
+            $table->integer('bank_info_id')->nullable();
+            $table->double('withdraw_amount', 8, 2)->nullable();
             $table->double('deposit_club_point', 8, 2)->default(0);
             $table->enum( 'status', ['pending', 'accepted', 'completed'])->default('pending');
+            $table->integer('agree_term')->default(1);
             $table->timestamps();
         });
     }

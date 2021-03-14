@@ -29,7 +29,7 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ $total_distributor }}</h3>
+                            <h3>{{ $total_distributor }} Distributor(s)</h3>
 
                             <p>Distributor Registrations</p>
                         </div>
@@ -61,13 +61,17 @@
 
                         <div class="inner">
                             {{-- <h3>{{ $bdo_profit }} BHD</h3> --}}
-                            <h3>{{ $depositProfit }} BHD</h3>
+                            <h3>{{ $availbleProfit }} BHD</h3>
                             <p>Today Earning ( 00.00 BHD )</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer bg-danger">Withdrow ({{ $depositProfit }} BHD) <i class="fas fa-arrow-circle-right"></i></a>
+                        <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer bg-danger">
+
+                            Withdrow ({{ $availbleProfit }} BHD) <i class="fas fa-arrow-circle-right"></i>
+
+                        </a>
                     </div>
                 </div>
 
@@ -208,5 +212,9 @@
             document.execCommand('copy');
         }
     </script>
+
+    <!-- Provider Register Modal -->
+ @include('bdo.modal._withdraw')
+ <!-- /Provider Register Modal -->
 
 @endsection

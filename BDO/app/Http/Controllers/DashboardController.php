@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BankInfo;
 use App\OrderDetail;
 use App\User;
 use Carbon\Carbon;
@@ -15,19 +16,23 @@ class DashboardController extends Controller
         return view('bdo.login');
     }
     public function dashboard(){
-        $total_distributor = User::where('bdo_id', Auth::user()->id)->where('user_type', 'distributor')->where('is_distributor', 1)->count();
+
+        $user = Auth::user();
+        $total_distributor = User::where('bdo_id', $user->id)->where('user_type', 'distributor')->where('is_distributor', 1)->count();
 
         /*$merchant_today = User::where('distributor_id', Auth::user()->id)
             ->whereDate('created_at',Carbon::today())->count();
         $total_merchant = User::where('distributor_id', Auth::user()->id)->count();*/
 
-        $merchants = User::where('bdo_id', Auth::user()->id)
+
+        $merchants = User::where('bdo_id', $user->id)
                       ->where('is_distributor', 1)->get();
 
 
         $bdo_profit = 0;
         $depositProfit = 0;
         $depositPoint = 0;
+        $withdrawamount =0;
         $bdo_today_profit = 0;
         foreach ($merchants as $merchant){
 
@@ -35,6 +40,8 @@ class DashboardController extends Controller
 
 
             $depositProfit += DB::table('deposits')->where('user_id', $merchant->id)->sum('deposit_amount');
+
+            // $withdrawamount += DB::table('withdraws')->where('user_id', $merchant->id)->sum('withdraw_amount');
 
             $depositPoint += DB::table('deposits')->where('user_id', $merchant->id)->sum('deposit_club_point');
 
@@ -47,7 +54,14 @@ class DashboardController extends Controller
 
 
         }
+        $bankinfo = BankInfo::select('id', 'ac_holder', 'ac_no', 'bank_name', 'iban_number')->where('user_id', $user->id)->where('status', 'primary')->first();
 
-        return view('bdo.dashboard', compact('total_distributor', 'bdo_profit', 'bdo_today_profit', 'depositProfit', 'depositPoint'));
+        $withdrawamount = DB::table('withdraws')->where('user_id', $user->id)->sum('withdraw_amount');
+        $availbleProfit = ($depositProfit - $withdrawamount);
+
+
+        // return $withdrawamount;
+
+        return view('bdo.dashboard', compact('total_distributor', 'bdo_profit', 'bdo_today_profit', 'availbleProfit', 'depositPoint', 'bankinfo', 'withdrawamount'));
     }
 }

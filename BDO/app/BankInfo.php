@@ -15,4 +15,16 @@ class BankInfo extends Model
         'address',
         'routing_no'
     ];
+
+
+
+    /**
+     * Get all of the withdraw for the BankInfo
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function withdraw()
+    {
+        return $this->hasMany(Withdraw::class, 'bank_info_id', 'id');
+    }
 }

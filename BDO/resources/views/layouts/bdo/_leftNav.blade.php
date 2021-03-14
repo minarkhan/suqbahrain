@@ -72,6 +72,30 @@
                     </li>
                 </ul> --}}
             </li>
+            <li class="nav-item has-treeview {{$merchant_manu ? 'menu-open' : ''}}">
+                @php
+                    if (Request::is('withdraw')) {
+                        $bank_url = Request::is('withdraw');
+                    } else {
+                        $bank_url = Request::is('withdraw/*');
+                    }
+                @endphp
+                <a href="{{route('withdraw.index')}}"  class="nav-link {{$bank_url ? 'active' : ''}}">
+                    <i class="nav-icon fa fa-money-check-alt"></i>
+                    <p>
+                        Amount Withdraw
+                    </p>
+                </a>
+                {{-- <ul class="nav nav-treeview">
+
+                    <li class="nav-item">
+                        <a href="{{route('distributor.index')}}" class="nav-link {{$merchant_url ? 'active' : ''}}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>All Distributor</p>
+                        </a>
+                    </li>
+                </ul> --}}
+            </li>
         </ul>
     </nav>
     <!-- /.sidebar-menu -->
