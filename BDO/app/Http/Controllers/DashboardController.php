@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BankInfo;
 use App\OrderDetail;
 use App\User;
+use App\Withdraw;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,11 +58,16 @@ class DashboardController extends Controller
         $bankinfo = BankInfo::select('id', 'ac_holder', 'ac_no', 'bank_name', 'iban_number')->where('user_id', $user->id)->where('status', 'primary')->first();
 
         $withdrawamount = DB::table('withdraws')->where('user_id', $user->id)->sum('withdraw_amount');
-        $availbleProfit = ($depositProfit - $withdrawamount);
+        $availbleProfit = number_format(($depositProfit-$withdrawamount), 2);
 
+        //Last Withdraw avialble date.
+        $lastwithdraw = Withdraw::select('created_at')->where('user_id', $user->id)->orderBy('created_at', 'DESC')->first();
+        if(!$lastwithdraw > 0){
+            $lastwithdraw = $user;
+        }
 
-        // return $withdrawamount;
+        // $nextWithdrawAvailable =  $lastwithdraw->created_at->addDays(30);
 
-        return view('bdo.dashboard', compact('total_distributor', 'bdo_profit', 'bdo_today_profit', 'availbleProfit', 'depositPoint', 'bankinfo', 'withdrawamount'));
+        return view('bdo.dashboard', compact('total_distributor', 'bdo_profit', 'bdo_today_profit', 'availbleProfit', 'depositPoint', 'bankinfo', 'withdrawamount', 'lastwithdraw'));
     }
 }

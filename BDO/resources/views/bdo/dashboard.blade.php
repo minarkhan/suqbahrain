@@ -29,7 +29,7 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ $total_distributor }} Distributor(s)</h3>
+                            <h3>0{{ $total_distributor }}</h3>
 
                             <p>Distributor Registrations</p>
                         </div>
@@ -67,11 +67,22 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer bg-danger">
 
-                            Withdrow ({{ $availbleProfit }} BHD) <i class="fas fa-arrow-circle-right"></i>
 
-                        </a>
+
+
+                        @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30)
+                            <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer bg-danger">
+                            withdrawable ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                        @else
+                            <a style="cursor: not-allowed;" class="small-box-footer bg-danger">
+                            withdrawable ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                        @endif
+
+
+
                     </div>
                 </div>
 
@@ -91,14 +102,15 @@
                         <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                {{-- <!-- ./col -->
+                <!-- ./col -->
                  <div class="col-lg-3 col-6">
                      <!-- small box -->
                      <div class="small-box bg-warning">
                          <div class="inner">
-                             <h3>50<sup style="font-size: 20px">%</sup></h3>
+                             {{-- <h3>50<sup style="font-size: 20px">%</sup></h3> --}}
+                             <h3>{{ $lastwithdraw->created_at->addDays(30)->format('j F Y')}}</h3>
 
-                             <p>Commission Rate</p>
+                             <p>Next Withdrawable date </p>
                          </div>
                          <div class="icon">
                              <i class="ion ion-stats-bars"></i>
@@ -107,7 +119,7 @@
                      </div>
                  </div>
 
-                 <!-- ./col -->--}}
+                 <!-- ./col -->
             </div>
 
         </div><!-- /.container-fluid -->

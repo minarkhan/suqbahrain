@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Carbon;
 
 class WithdrawController extends Controller
 {
@@ -40,7 +41,13 @@ class WithdrawController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->withdraw_amount > 4){
+
+        $user = Auth::user();
+        $lastwithdraw = Withdraw::select('created_at')->where('user_id', $user->id)->orderBy('created_at', 'DESC')->first();
+        if(!$lastwithdraw > 0){
+            $lastwithdraw = $user;
+        }
+        if($request->withdraw_amount > 0 && Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30){
             $validator = Validator::make($request->all(), [
                 // 'agree_term' => 'required'
             ]);
@@ -57,7 +64,7 @@ class WithdrawController extends Controller
             return response()->json(['error'=>$validator->errors()]);
         }
 
-        return response()->json(['error'=> 'Your withdrawable amount minimun $5 BHD.']);
+        return response()->json(['error'=> 'Sorry. Try again after next withdrawable date']);
 
     }
 
