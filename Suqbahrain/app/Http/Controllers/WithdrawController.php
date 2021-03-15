@@ -14,7 +14,8 @@ class WithdrawController extends Controller
      */
     public function index()
     {
-        //
+        $withdraws = Withdraw::orderBy('id', 'DESC')->get();
+        return view('withdraw.index', compact('withdraws'));
     }
 
     /**
@@ -67,9 +68,19 @@ class WithdrawController extends Controller
      * @param  \App\Withdraw  $withdraw
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Withdraw $withdraw)
+    public function update(Request $request, $id)
     {
-        //
+
+        $withdraw = Withdraw::findOrFail($id);
+        if($request->status == 'pending'){
+            $withdraw->status = 'accepted';
+            $withdraw->update();
+            return redirect()->back();
+        } elseif($request->status == 'accepted'){
+            $withdraw->status = 'completed';
+            $withdraw->update();
+            return redirect()->back();
+        }
     }
 
     /**

@@ -16,16 +16,16 @@ use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\WalletController;
 use App\CustomerPackage;
 use App\Http\Controllers\CustomerPackageController;
-session_start();
+// session_start();
 class BenefitController extends Controller
 
 {
     protected $msg = array();
-	
+
 	protected $logger;
     protected $AES_IV="PGKEYENCDECIVSPC"; //For Encryption/Decryption
 	protected $AES_METHOD="AES-256-CBC";
-	
+
 	const countryArray = array(
 	'Afghanistan'=>array('name'=>'Afghanistan','code'=>'004'),
 'Ã…land Islands'=>array('name'=>'Ã…land Islands','code'=>'248'),
@@ -268,7 +268,7 @@ class BenefitController extends Controller
 'Uruguay'=>array('name'=>'Uruguay','code'=>'858'),
 'Uzbekistan'=>array('name'=>'Uzbekistan','code'=>'860'),
 	);
-	
+
 	const currencyArray = array(
 	'AFA'=>array('name'=>'Afghanistan Afghani','code'=>'004'),
 	'ALL'=>array('name'=>'Albanian Lek','code'=>'008'),
@@ -303,10 +303,10 @@ class BenefitController extends Controller
 	'BAM'=>array('name'=>'Convertible Marks','code'=>'977'),
 	'BWP'=>array('name'=>'Pula','code'=>'072'),
 	'NOK'=>array('name'=>'Norwegian Krone','code'=>'578'),
-	'BRL'=>array('name'=>'Brazil Real','code'=>'986'),	
+	'BRL'=>array('name'=>'Brazil Real','code'=>'986'),
 	'BND'=>array('name'=>'Brunei Dollar','code'=>'096'),
 	'BGL'=>array('name'=>'Lev','code'=>'100'),
-	'BGN'=>array('name'=>'Bulgarian Lev','code'=>'975'),	
+	'BGN'=>array('name'=>'Bulgarian Lev','code'=>'975'),
 	'BIF'=>array('name'=>'Burundi Franc','code'=>'108'),
 	'KHR'=>array('name'=>'Cambodian Riel','code'=>'116'),
 	'XAF'=>array('name'=>'CFA Franc (BEAC)','code'=>'950'),
@@ -319,13 +319,13 @@ class BenefitController extends Controller
 	'CLF'=>array('name'=>'Unidates de fomento','code'=>'990'),
 	'CNY'=>array('name'=>'Yuan Renminbi','code'=>'156'),
 	'HKD'=>array('name'=>'Hong Kong Dollar','code'=>'344'),
-	'MOP'=>array('name'=>'Pataca','code'=>'446'),	
+	'MOP'=>array('name'=>'Pataca','code'=>'446'),
 	'COP'=>array('name'=>'Colombian Peso','code'=>'170'),
 	'KMF'=>array('name'=>'Comoro Franc','code'=>'174'),
 	'XAF'=>array('name'=>'CFA Franc (BEAC)','code'=>'950'),
 	'CDF'=>array('name'=>'Franc Congolais','code'=>'976'),
 	'NZD'=>array('name'=>'New Zealand Dollar','code'=>'554'),
-	'CRC'=>array('name'=>'Costa Rican Colon','code'=>'188'),	
+	'CRC'=>array('name'=>'Costa Rican Colon','code'=>'188'),
 	'HRK'=>array('name'=>'Croatian Kuna','code'=>'191'),
 	'CUP'=>array('name'=>'Cuban Peso','code'=>'192'),
 	'CYP'=>array('name'=>'Cyprus Pound','code'=>'196'),
@@ -363,16 +363,16 @@ class BenefitController extends Controller
 	'GRD'=>array('name'=>'Drachma','code'=>'300'),
 	'DKK'=>array('name'=>'Danish Krone','code'=>'208'),
 	'XCD'=>array('name'=>'East Caribbean Dollar','code'=>'951'),
-	'FRF'=>array('name'=>'French Franc','code'=>'250'),	
+	'FRF'=>array('name'=>'French Franc','code'=>'250'),
 	'GTQ'=>array('name'=>'Guatemalan Quetzal','code'=>'320'),
 	'GNF'=>array('name'=>'Guinea Franc','code'=>'324'),
-	'GWP'=>array('name'=>'Guinea-Bissau Peso','code'=>'624'),	
+	'GWP'=>array('name'=>'Guinea-Bissau Peso','code'=>'624'),
 	'GYD'=>array('name'=>'Guyana Dollar','code'=>'328'),
-	'HTG'=>array('name'=>'Haiti Gourde','code'=>'332'),		
+	'HTG'=>array('name'=>'Haiti Gourde','code'=>'332'),
 	'ITL'=>array('name'=>'Italian Lira','code'=>'380'),
 	'HNL'=>array('name'=>'Honduran Lempira','code'=>'340'),
 	'HUF'=>array('name'=>'Forint','code'=>'348'),
-	'ISK'=>array('name'=>'Iceland Krona','code'=>'352'),	
+	'ISK'=>array('name'=>'Iceland Krona','code'=>'352'),
 	'IDR'=>array('name'=>'Indonesian Rupiah','code'=>'360'),
 	'XDR'=>array('name'=>'SDR','code'=>'960'),
 	'IRR'=>array('name'=>'Iranian Rial','code'=>'364'),
@@ -384,7 +384,7 @@ class BenefitController extends Controller
 	'JPY'=>array('name'=>'Yen','code'=>'392'),
 	'JOD'=>array('name'=>'Jordanian Dinar','code'=>'400'),
 	'KZT'=>array('name'=>'Kazakhstan Tenge','code'=>'398'),
-	'KES'=>array('name'=>'Kenyan Shilling','code'=>'404'),	
+	'KES'=>array('name'=>'Kenyan Shilling','code'=>'404'),
 	'KPW'=>array('name'=>'North Korean Won','code'=>'408'),
 	'KRW'=>array('name'=>'South Korean Won','code'=>'410'),
 	'KWD'=>array('name'=>'Kuwaiti Dinar','code'=>'414'),
@@ -403,13 +403,13 @@ class BenefitController extends Controller
 	'MGF'=>array('name'=>'Malagasy Franc','code'=>'450'),
 	'MWK'=>array('name'=>'Kwacha','code'=>'454'),
 	'MYR'=>array('name'=>'Malaysian Ringgit','code'=>'458'),
-	'MVR'=>array('name'=>'Maldives Rufiyaa','code'=>'462'),	
-	'MTL'=>array('name'=>'Maltese Lira','code'=>'470'),	
+	'MVR'=>array('name'=>'Maldives Rufiyaa','code'=>'462'),
+	'MTL'=>array('name'=>'Maltese Lira','code'=>'470'),
 	'FRF'=>array('name'=>'French Franc','code'=>'250'),
 	'MRO'=>array('name'=>'Mauritanian Ouguiya','code'=>'478'),
 	'MUR'=>array('name'=>'Mauritius Rupee','code'=>'480'),
 	'MXN'=>array('name'=>'Mexican Peso','code'=>'484'),
-	'MXV'=>array('name'=>'Mexican Unidad de Inversion (UDI)','code'=>'979'),	
+	'MXV'=>array('name'=>'Mexican Unidad de Inversion (UDI)','code'=>'979'),
 	'MDL'=>array('name'=>'Moldovan Leu','code'=>'498'),
 	'FRF'=>array('name'=>'French Franc','code'=>'250'),
 	'MNT'=>array('name'=>'Mongolian Tugrik','code'=>'496'),
@@ -418,18 +418,18 @@ class BenefitController extends Controller
 	'MZM'=>array('name'=>'Mozambique Metical','code'=>'508'),
 	'MMK'=>array('name'=>'Myanmar Kyat','code'=>'104'),
 	'ZAR'=>array('name'=>'Rand','code'=>'710'),
-	'NAD'=>array('name'=>'Namibia Dollar','code'=>'516'),	
+	'NAD'=>array('name'=>'Namibia Dollar','code'=>'516'),
 	'NPR'=>array('name'=>'Nepalese Rupee','code'=>'524'),
 	'ANG'=>array('name'=>'Netherlands Antillian Guilder','code'=>'532'),
 	'NLG'=>array('name'=>'Netherlands Gulder','code'=>'528'),
 	'XPF'=>array('name'=>'CFP Franc','code'=>'953'),
 	'NZD'=>array('name'=>'New Zealand Dollar','code'=>'554'),
-	'NIO'=>array('name'=>'Nicaraguan Cordoba Oro','code'=>'558'),	
+	'NIO'=>array('name'=>'Nicaraguan Cordoba Oro','code'=>'558'),
 	'NGN'=>array('name'=>'Nigerian Naira','code'=>'566'),
-	'NZD'=>array('name'=>'New Zealand Dollar','code'=>'554'),	
+	'NZD'=>array('name'=>'New Zealand Dollar','code'=>'554'),
 	'NOK'=>array('name'=>'Norwegian Krone','code'=>'578'),
 	'OMR'=>array('name'=>'Rial Omani','code'=>'512'),
-	'PKR'=>array('name'=>'Pakistan Rupee','code'=>'586'),	
+	'PKR'=>array('name'=>'Pakistan Rupee','code'=>'586'),
 	'PAB'=>array('name'=>'Balboa','code'=>'590'),
 	'PGK'=>array('name'=>'Papua New Guinea Kina','code'=>'598'),
 	'PYG'=>array('name'=>'Paraguay Guarani','code'=>'600'),
@@ -453,7 +453,7 @@ class BenefitController extends Controller
 	'WST'=>array('name'=>'Tala','code'=>'882'),
 	'ITL'=>array('name'=>'Italian Lira','code'=>'380'),
 	'STD'=>array('name'=>'Sao Tome and Principe Dobra','code'=>'678'),
-	'SAR'=>array('name'=>'Saudi Riyal','code'=>'682'),	
+	'SAR'=>array('name'=>'Saudi Riyal','code'=>'682'),
 	'SCR'=>array('name'=>'Seychelles Rupee','code'=>'690'),
 	'SLL'=>array('name'=>'Sierra Leone Leone','code'=>'694'),
 	'SGD'=>array('name'=>'Singapore Dollar','code'=>'702'),
@@ -474,13 +474,13 @@ class BenefitController extends Controller
 	'TWD'=>array('name'=>'New Taiwan Dollar','code'=>'901'),
 	'TJR'=>array('name'=>'Tajik Ruble','code'=>'762'),
 	'TZS'=>array('name'=>'Tanzanian Shilling','code'=>'834'),
-	'THB'=>array('name'=>'Thai Baht','code'=>'764'),	
+	'THB'=>array('name'=>'Thai Baht','code'=>'764'),
 	'NZD'=>array('name'=>'New Zealand Dollar','code'=>'554'),
 	'TOP'=>array('name'=>'Tonga Paanga','code'=>'776'),
 	'TTD'=>array('name'=>'Trinidad and Tobago Dollar','code'=>'780'),
 	'TND'=>array('name'=>'Tunisian Dinar','code'=>'788'),
 	'TRL'=>array('name'=>'Turkish Lira','code'=>'792'),
-	'TMM'=>array('name'=>'Manat','code'=>'795'),		
+	'TMM'=>array('name'=>'Manat','code'=>'795'),
 	'UGX'=>array('name'=>'Ugandan Shilling','code'=>'800'),
 	'UAH'=>array('name'=>'Hryvnia','code'=>'980'),
 	'AED'=>array('name'=>'UAE Dirham','code'=>'784'),
@@ -489,14 +489,14 @@ class BenefitController extends Controller
 	'UZS'=>array('name'=>'Uzbekistan Sum','code'=>'860'),
 	'VUV'=>array('name'=>'Vanuatu Vatu','code'=>'548'),
 	'VEB'=>array('name'=>'Venezuela Bolivar','code'=>'862'),
-	'VND'=>array('name'=>'Viet Nam Dong','code'=>'704'),	
+	'VND'=>array('name'=>'Viet Nam Dong','code'=>'704'),
 	'XPF'=>array('name'=>'CFP Franc','code'=>'953'),
 	'MAD'=>array('name'=>'Moroccan Dirham','code'=>'504'),
 	'YER'=>array('name'=>'Yemeni Rial','code'=>'886'),
 	'YUN'=>array('name'=>'Yugoslavian Dinar','code'=>'891'),
 	'ZRN'=>array('name'=>'Unknown','code'=>'180'),
 	'ZMK'=>array('name'=>'Zambia Kwacha','code'=>'894'),
-	'ZWD'=>array('name'=>'Zimbabwe Dollar','code'=>'716')	
+	'ZWD'=>array('name'=>'Zimbabwe Dollar','code'=>'716')
 	);
    public function pay($request){
        if(Session::has('payment_type')){
@@ -512,28 +512,28 @@ class BenefitController extends Controller
                    $endPoint = 'https://www.benefit-gateway.bh/payment/PaymentHTTP.htm?param=paymentInit';
                }
                 $order = Order::findOrFail(Session::get('order_id'));
-       
+
               $redirect_url='https://suqbahrain.com/benefit/done/?wc-api=1';
-      
+
                $error_url='https://suqbahrain.com/benefit/fail/?wc-api=1';
                 $order = Order::findOrFail(Session::get('order_id'));
                $transportalId= env('BENEFIT_TRANSPORTAL_ID');
-        
+
                $transportalPass=env('BENEFIT_TRANSPORTAL_PASSWORD');
                $terminialKey=env('BENEFIT_TERMINAL_KEY');
                $currency='USD';
               $email= Session::get('shipping_info')['email'];
-      
+
               $firstname=Session::get('shipping_info')['name'];
          $phone=Session::get('shipping_info')['phone'];
                $baddress = Session::get('shipping_info')['address'];
                $saddress =$baddress;
-                                                         
+
                $country= self::countryArray[Session::get('shipping_info')['country']];
-    
-      
-          
-               $currency = self::currencyArray['KWD'];	
+
+
+
+               $currency = self::currencyArray['KWD'];
                $order_id=Session::get('order_id');
                $order_id = $order_id.'_'.date("ymd");
             //$roder_total=convert_to_usd($order->grand_total);
@@ -547,56 +547,56 @@ class BenefitController extends Controller
 		     $ReqTranportalPassword = "password=".$transportalPass."&";
             $ReqCurrency = "currencycode=048&";
             $ReqLangid = "langid=USA&";
-            
-           
+
+
 		$Reqship_To_Postalcd = "ship_To_Postalcd=".Session::get('shipping_info')['postal_code']."&";
 		$Reqship_To_Address = "ship_To_Address=".$saddress."&";
 		$Reqship_To_LastName = "ship_To_LastName=".$firstname."&";
 		$Reqship_To_FirstName = "ship_To_FirstName=".$firstname."&";
 		$Reqship_To_Phn_Num = "ship_To_Phn_Num=".$phone."&";
-		$Reqship_To_CountryCd = "ship_To_CountryCd=048&";//.$country['code']."&"; 
-	
+		$Reqship_To_CountryCd = "ship_To_CountryCd=048&";//.$country['code']."&";
+
 		$Reqcard_PostalCd = "card_PostalCd=".Session::get('shipping_info')['postal_code']."&";
 		$Reqcard_Address = "card_Address=".$baddress."&";
 		$Reqcard_Phn_Num = "card_Phn_Num=".$phone."&";
 		$Reqcust_email = "cust_email=".$email."&";
-		
+
 		$ReqResponseUrl = "&responseURL=".$redirect_url."&";
 		$ReqErrorUrl = "&errorURL=".$error_url."&";
-	
-	
-	
-		$ReqUdf1 = "udf1=Test1&";	// UDF1 values 
-		$ReqUdf2 = "udf2="."Test2"."&";	// UDF2 values 
-		$ReqUdf3 = "udf3="."Test3"."&";	// UDF3 values 
+
+
+
+		$ReqUdf1 = "udf1=Test1&";	// UDF1 values
+		$ReqUdf2 = "udf2="."Test2"."&";	// UDF2 values
+		$ReqUdf3 = "udf3="."Test3"."&";	// UDF3 values
 		$ReqUdf5 = "udf5="."Test5"."&"; // UDF5 values to be set with udf4 values of configuration
-		
+
 		$ReqUdf4 = "udf4="."WooCommerce3.6.1_Wordpress5.1.1_PHP7.2&";	// UDF4 is a fixed value for tracking
-				
+
 	$TranRequest=$ReqAmount.$ReqAction.$ReqResponseUrl.$ReqErrorUrl.$ReqTrackId.$ReqCurrency.$ReqLangid.$ReqTranportalId.$ReqTranportalPassword.$Reqship_To_Postalcd.$Reqship_To_Address.$Reqship_To_LastName.$Reqship_To_FirstName.$Reqship_To_Phn_Num.$Reqship_To_CountryCd.$Reqcard_PostalCd.
 		$Reqcard_Address.$Reqcard_Phn_Num.$Reqcust_email.$ReqUdf1.$ReqUdf2.$ReqUdf3.$ReqUdf4.$ReqUdf5;
-	
-		//echo  $TranRequest ;		 
+
+		//echo  $TranRequest ;
 		$req='';
 		$req = "&trandata=".$this->encryptAES($TranRequest,$terminialKey);
-		
-     
+
+
 		$req = $req.$ReqErrorUrl.$ReqResponseUrl."&tranportalId=".$transportalId;
 		$redirectUrl=$endPoint.$req;
 	//		var_dump(	$redirectUrl   );
       // die;
 		return Redirect::to( $redirectUrl );
-     
+
            }
        }
-       
-	
+
+
  }
 
 //encrypt
 
-function encryptAES($str,$key) {		
-		$str = $this->pkcs5_pad($str); 
+function encryptAES($str,$key) {
+		$str = $this->pkcs5_pad($str);
 		$encrypted = openssl_encrypt($str, $this->AES_METHOD, $key, OPENSSL_ZERO_PADDING, $this->AES_IV);
 		$encrypted = base64_decode($encrypted);
 		$encrypted = unpack('C*', ($encrypted));
@@ -606,9 +606,9 @@ function encryptAES($str,$key) {
 	}
 //dycrypt
 
-function decryptAES($code,$key) { 		
+function decryptAES($code,$key) {
 		$code = $this->hex2ByteArray(trim($code));
-		$code= $this->byteArray2String($code);	  
+		$code= $this->byteArray2String($code);
 		$code = base64_encode($code);
 		$decrypted = openssl_decrypt($code, $this->AES_METHOD, $key, OPENSSL_ZERO_PADDING, $this->AES_IV);
 		return $this->pkcs5_unpad($decrypted);
@@ -623,7 +623,7 @@ function pkcs5_pad ($text) {
 function pkcs5_unpad($text) {
 		$pad = ord($text{strlen($text)-1});
 		if ($pad > strlen($text)) {
-			return false;	
+			return false;
 		}
 		if (strspn($text, chr($pad), strlen($text) - $pad) != $pad) {
 			return false;
@@ -636,19 +636,19 @@ function byteArray2Hex($byteArray) {
 		$bin = join($chars);
 		return bin2hex($bin);
 	}
-	
+
 	function hex2ByteArray($hexString) {
 		$string = hex2bin($hexString);
 		return unpack('C*', $string);
 	}
-	
+
 	function byteArray2String($byteArray) {
 		$chars = array_map("chr", $byteArray);
 		return join($chars);
 	}
-	
+
 	// TDES Functions start
-	function encryptTDES($payload, $key) {  
+	function encryptTDES($payload, $key) {
 		$chiper = "des-ede3";  //Algorthim used to encrypt
 		if((strlen($payload)%8)!=0) {
 			//Perform right padding
@@ -656,10 +656,10 @@ function byteArray2Hex($byteArray) {
 		}
 		$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($chiper));
 		$encrypted = openssl_encrypt($payload, $chiper, $key,OPENSSL_RAW_DATA,$iv);
-		
+
 		$encrypted=unpack('C*', ($encrypted));
 		$encrypted=$this->byteArray2Hex($encrypted);
-		return strtoupper($encrypted);  
+		return strtoupper($encrypted);
 	}
 	//decrypt tdes
 	function decryptTDES($data, $key) {
@@ -670,14 +670,14 @@ function byteArray2Hex($byteArray) {
 		$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($chiper));
 		$decrypted = openssl_decrypt($data, $chiper, $key, OPENSSL_ZERO_PADDING,$iv);
 		return $decrypted;
-	} 
+	}
 	//padzerors
 	function rightPadZeros($Str) {
 		if(null == $Str){
 			return null;
 		}
 		$PadStr = $Str;
-		
+
 		for ($i = strlen($Str);($i%8)!=0; $i++) {
 			$PadStr .= "^";
 		}
@@ -691,7 +691,7 @@ function byteArray2Hex($byteArray) {
          $ResErrorText=$request->get('ErrorText');
          $ResPaymentId=$request->get('PaymentID');
            $ResWcApi=$request->get('wc-api');
-         
+
         //$request->session()->forget('order_id');
         //$request->session()->forget('payment_data');
         flash(__('Error'.$ResWcApi.$ResPaymentId.$ResErrorText))->success();
@@ -700,12 +700,12 @@ function byteArray2Hex($byteArray) {
         	return Redirect::to( 'https://suqbahrain.com/' );
     }
     // success
-    
-    
+
+
     public function done(Request $request)
     {
-        
-       
+
+
        echo "REDIRECT=YOUR_URL";
        //$decrytedData=$this->decryptAES($ResTranData,$this->termresourcekey);
     }

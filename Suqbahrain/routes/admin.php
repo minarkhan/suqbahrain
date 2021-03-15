@@ -18,7 +18,11 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::resource('bdo','BDOController');
     Route::post('changeStatus', 'BDOController@changeStatus')->name('change.status');
     // Route::resource('profit_distribution','ProfitDistributionController');
+    //profit Diposit with distributor and others
     Route::resource('deposit','DepositController');
+
+    //Withdraw request
+	Route::resource('withdraw','WithdrawController');
 
 
 

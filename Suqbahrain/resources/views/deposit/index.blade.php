@@ -27,9 +27,14 @@
                 @foreach($order_details as $key => $order_detail)
                     @if($order_detail != null && ($order_detail->user->is_merchant ?? '0') == 1  )
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $loop->iteration }}
+                                @if($order_detail->commission_splitting_status == 'pending')
+                                    <span class="pull-right badge badge-info">{{ __('Pending') }}</span>
+                                @endif
+                            </td>
+
                             <td>{{ $order_detail->product->name ?? $order_detail->product_id }}</td>
-                            <td>{{ $order_detail->sellers->name ?? $order_detail->seller_id }}</td>
+                            <td>{{ $order_detail->user->name ?? 'no data' }}</td>
                             <td>{{ $order_detail->price }}</td>
                             <td>{{ $order_detail->delivery_status }}</td>
                             <td>{{ $order_detail->shipping_type }}</td>

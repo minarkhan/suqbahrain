@@ -680,18 +680,60 @@
 
 
                         {{-- <!--Start Profit Distributions manu--> --}}
+                        @php
+                            $order_details = App\OrderDetail::all();
+                            $count = 0;
+                        @endphp
+                        @foreach($order_details as $key => $order_detail)
+                            @if($order_detail != null && ($order_detail->user->is_merchant ?? '0') == 1  && $order_detail->commission_splitting_status == 'pending')
+                                @php
+                                    $count++;
+                                @endphp
+                            @endif
+                        @endforeach
                         @if(Auth::user()->user_type == 'admin')
-
                             <li>
                                 <a href="{{ route('deposit.index') }}">
-                                    <i class="fa fa-money"></i>
-                                    <span class="menu-title">{{__('Deposit Distributions ')}}</span>
+                                    <i class="fa fa-gift"></i>
+                                    <span class="menu-title">
+                                        {{__('Deposit Distributions ')}}
+                                        @if($count > 0)
+                                        <span class="pull-right badge badge-info">{{ $count }}</span>
+                                        @endif
+                                    </span>
 
                                 </a>
 
                             </li>
                         @endif
-                    {{-- <!--End Profit Distributions manu--> --}}
+                        {{-- <!--End Profit Distributions manu--> --}}
+
+                        {{-- <!--Start Withdraw Request manu--> --}}
+                        @php
+                            $withdraws = App\Withdraw::all();
+                            $count = 0;
+                        @endphp
+                        @foreach($withdraws as $key => $withdraw)
+                            @if($withdraw != null && $withdraw->status == 'pending')
+                                @php
+                                    $count++;
+                                @endphp
+                            @endif
+                        @endforeach
+                        @if(Auth::user()->user_type == 'admin')
+                            <li>
+                                <a href="{{ route('withdraw.index') }}">
+                                    <i class="fa fa-money"></i>
+                                    <span class="menu-title">
+                                        {{__('Withdraw Request')}}
+                                        @if($count > 0)
+                                        <span class="pull-right badge badge-info">{{ $count }}</span>
+                                        @endif
+                                    </span>
+                                </a>
+                            </li>
+                        @endif
+                        {{-- <!--End Withdraw Request manu--> --}}
 
                         @if(Auth::user()->user_type == 'admin' || in_array('15', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="{{ areActiveRoutes(['addons.index', 'addons.create'])}}">
@@ -701,7 +743,6 @@
                                 </a>
                             </li>
                         @endif
-
                     </ul>
                 </div>
             </div>

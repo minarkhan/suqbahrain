@@ -68,14 +68,16 @@
                                 {{ ($key+1) + ($orders->currentPage() - 1)*$orders->perPage() }}
                             </td>
                             <td>
-                                {{ $order->code }} @if($order->viewed == 0) <span class="pull-right badge badge-info">{{ __('New') }}</span> @endif
+                                {{ $order->code }}
+                                @if($order->viewed == 0)
+                                <span class="pull-right badge badge-info">{{ __('New') }}</span> @endif
                             </td>
                             <td>
                                 {{ count($order->orderDetails->where('seller_id', $admin_user_id)) }}
                             </td>
                             <td>
                                 @if ($order->user_id != null)
-                                     {{ $order->user->name }}
+                                     {{ $order->user->name ?? 'No data available' }}
                                 @else
                                     Guest ({{ $order->guest_id }})
                                 @endif
