@@ -29,6 +29,8 @@ Route::group(['middleware'=> 'bdo'], function (){
     Route::resource('bankinfo', 'BankInfoController');
     //amount withdraw
     Route::resource('withdraw', 'WithdrawController');
+    //Point convert to BDH
+    Route::resource('pointconvert', 'Point_convertController');
 
 });
 

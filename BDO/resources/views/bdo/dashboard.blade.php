@@ -57,31 +57,26 @@
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
-                    <div class="small-box bg-info">
+                    <div class="small-box bg-danger">
 
                         <div class="inner">
                             {{-- <h3>{{ $bdo_profit }} BHD</h3> --}}
-                            <h3>{{ $availbleProfit }} BHD</h3>
-                            <p>Today Earning ( 00.00 BHD )</p>
+                            <h3>{{ number_format($availbleProfit, 2) }} BHD</h3>
+                            <p>Your Total Earning BHD</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
 
-
-
-
                         @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30)
-                            <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer bg-danger">
-                            withdrawable ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                            <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer">
+                            withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @else
-                            <a style="cursor: not-allowed;" class="small-box-footer bg-danger">
-                            withdrawable ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                            <a style="cursor: not-allowed;" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
+                            Withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @endif
-
-
 
                     </div>
                 </div>
@@ -94,12 +89,29 @@
                             {{-- <h3>{{ $bdo_today_profit }} BHD</h3> --}}
                             <h3>{{ $depositPoint }} Points</h3>
 
-                            <p>Today Earning ( 00.00 Point(s) )</p>
+                            {{-- <p>Today Earning ( 00.00 Point(s) )</p> --}}
+                            <p>Total Earning Point(s) </p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
+                        @if ( $depositPoint >= 2000 )
+                            <a href="{{ route('pointconvert.index')}}" class="small-box-footer btn">
+                            Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }} <i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                        @else
+                            <a style="cursor: not-allowed;" class="small-box-footer btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After 2000 Points You Can Convert to BDH" >
+                            Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }}<i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                        @endif
+
+
+
+
+
+
+
                     </div>
                 </div>
                 <!-- ./col -->
@@ -142,13 +154,6 @@
                                 <input class="form-control" type="text" id="copy_refcode" value="{{ 'https://suqbahrain.com/users/registration?ref=' .\Illuminate\Support\Facades\Auth::user()->referral_code }}" readonly>
                             </span>
                         </div>
-
-
-
-
-
-
-
 
                         <!-- /.info-box-content -->
                     </div>
