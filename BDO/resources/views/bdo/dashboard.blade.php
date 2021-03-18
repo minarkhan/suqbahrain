@@ -80,7 +80,6 @@
 
                     </div>
                 </div>
-
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -105,13 +104,6 @@
                             Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }}<i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @endif
-
-
-
-
-
-
-
                     </div>
                 </div>
                 <!-- ./col -->
@@ -121,8 +113,7 @@
                          <div class="inner">
                              {{-- <h3>50<sup style="font-size: 20px">%</sup></h3> --}}
                              <h3>{{ $lastwithdraw->created_at->addDays(30)->format('j F Y')}}</h3>
-
-                             <p>Next Withdrawable date </p>
+                             <p>Next Withdrawable date</p>
                          </div>
                          <div class="icon">
                              <i class="ion ion-stats-bars"></i>
@@ -130,7 +121,6 @@
                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                      </div>
                  </div>
-
                  <!-- ./col -->
             </div>
 
@@ -230,8 +220,8 @@
         }
     </script>
 
-    <!-- Provider Register Modal -->
+<!-- _withdraw Modal -->
  @include('bdo.modal._withdraw')
- <!-- /Provider Register Modal -->
+ <!-- /_withdraw Modal -->
 
 @endsection

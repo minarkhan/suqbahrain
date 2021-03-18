@@ -24,6 +24,50 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+
+                        <div class="inner">
+                            {{-- <h3>{{ $distributor_profit }} BHD</h3> --}}
+                            <h3>{{ number_format($availbleProfit, 2) }} BHD</h3>
+                            <p>Your Total Earning BHD</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+
+                        @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30)
+                            <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer">
+                            withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                        @else
+                            <a style="cursor: not-allowed;" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
+                            Withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                        @endif
+
+                    </div>
+                </div>
+                <!-- ./col -->
+                 <!-- ./col -->
+                 <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            {{-- <h3>50<sup style="font-size: 20px">%</sup></h3> --}}
+                            <h3>{{ $lastwithdraw->created_at->addDays(30)->format('j F Y')}}</h3>
+
+                            <p>Next Withdrawable date </p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                 <!-- ./col -->
 
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -54,7 +98,37 @@
                     </div>
                 </div>
                 <!-- ./col -->
+
+
                 <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-dark">
+                        <div class="inner">
+                            {{-- <h3>{{ $distributor_today_profit }} BHD</h3> --}}
+                            <h3>{{ $depositPoint }} Points</h3>
+
+                            {{-- <p>Today Earning ( 00.00 Point(s) )</p> --}}
+                            <p>Total Earning Point(s) </p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+
+                        @if ( $depositPoint >= 2000 )
+                            <a href="{{ route('pointconvert.index')}}" class="small-box-footer btn">
+                            Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }} <i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                        @else
+                            <a style="cursor: not-allowed;" class="small-box-footer btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After 2000 Points You Can Convert to BDH" >
+                            Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }}<i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+                <!-- ./col -->
+
+                {{-- <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-info">
@@ -71,6 +145,7 @@
                 </div>
 
                 <!-- ./col -->
+
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-dark">
@@ -84,7 +159,7 @@
                         </div>
                         <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
+                </div> --}}
                 {{-- <!-- ./col -->
                  <div class="col-lg-3 col-6">
                      <!-- small box -->
@@ -188,4 +263,9 @@
         </div><!--/. container-fluid -->
     </section>
     <!-- /.content -->
+
+    <!-- _withdraw Modal -->
+    @include('distributor.modal._withdraw')
+    <!-- /_withdraw Modal -->
+
 @endsection
