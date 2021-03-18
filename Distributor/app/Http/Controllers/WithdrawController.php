@@ -113,7 +113,7 @@ class WithdrawController extends Controller
         $withdraw = Withdraw::findOrFail($id);
         try {
             $withdraw->destroy($withdraw->id);
-            Toastr::warning('message', 'Distributor Delete Successfully');
+            Toastr::warning('message', 'Withdraw cancel Successfully');
             return redirect()->route('withdraw.index');
         } catch (Exception $exception) {
             Toastr::error('message', 'Something went wrong');

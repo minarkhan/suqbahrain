@@ -38,14 +38,20 @@
                             <i class="ion ion-bag"></i>
                         </div>
 
-                        @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30)
-                            <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer">
-                            withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                        @if (!$bankinfo > 0)
+                        <a href="{{ route('bankinfo.create')}}" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Before withdraw you should must add your bank information, Click Here">
+                            Add Bank Information <i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @else
-                            <a style="cursor: not-allowed;" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
-                            Withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
-                            </a>
+                            @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30)
+                                <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer">
+                                withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            @else
+                                <a style="cursor: not-allowed;" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
+                                Withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            @endif
                         @endif
 
                     </div>

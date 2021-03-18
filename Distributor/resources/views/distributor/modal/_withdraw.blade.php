@@ -21,31 +21,31 @@
                     <tbody>
                       <tr>
                         <th scope="row">Account Name :</th>
-                        <td>{{$bankinfo->ac_holder}}</td>
+                        <td>{{$bankinfo->ac_holder ?? ''}}</td>
                       </tr>
                       <tr>
                         <th scope="row">Bank Name :</th>
-                        <td>{{$bankinfo->bank_name}}</td>
+                        <td>{{$bankinfo->bank_name  ?? ''}}</td>
                       </tr>
                       <tr>
                         <th scope="row">Account No. :</th>
-                        <td>{{$bankinfo->ac_no}}</td>
+                        <td>{{$bankinfo->ac_no ?? ''}}</td>
                       </tr>
                       <tr>
                         <th scope="row">IBAN No. :</th>
-                        <td class="text-danger">{{$bankinfo->iban_number}}</td>
+                        <td class="text-danger">{{$bankinfo->iban_number ?? ''}}</td>
                       </tr>
                       <tr>
                         <th scope="row">Withdrawable Amount :</th>
-                        <td class="text-danger">{{ floor($availbleProfit) }}</td>
+                        <td class="text-danger">{{ floor($availbleProfit ?? '') }}</td>
                       </tr>
                     </tbody>
                   </table>
                 {{-- <form method="POST" action="{{ route('withdraw.store') }}"> --}}
                 <form>
                     {{ csrf_field() }}
-                    <input type="hidden" name="bank_info_id" value="{{ $bankinfo->id }}">
-                    <input type="hidden" name="withdraw_amount" value="{{ floor($availbleProfit) }}">
+                    <input type="hidden" name="bank_info_id" value="{{ $bankinfo->id  ?? ''}}">
+                    <input type="hidden" name="withdraw_amount" value="{{ floor($availbleProfit)  ?? ''}}">
 
                     {{-- <div class="form-group">
                         <div class="custom-control custom-control-xs custom-checkbox">
