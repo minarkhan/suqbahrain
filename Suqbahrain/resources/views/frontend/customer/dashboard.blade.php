@@ -53,6 +53,26 @@
                                     </a>
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="dashboard-widget text-center red-widget mt-4 c-pointer">
+                                    <a href="javascript:;" class="d-block">
+                                        <i class="fa fa-heart"></i>
+                                        <span class="d-block title">{{ number_format($availbleProfit, 2) }}</span>
+                                        <span class="d-block sub-title">{{__('Total Profit')}}</span>
+                                    </a>
+                                </div>
+                                @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30)
+                                    <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer">
+                                    withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                                    </a>
+                                @else
+                                    <a style="cursor: not-allowed;" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
+                                    Withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
+                                    </a>
+                                @endif
+                            </div>
+
                             <div class="col-md-4">
                                 <div class="dashboard-widget text-center yellow-widget mt-4 c-pointer">
                                     <a href="javascript:;" class="d-block">

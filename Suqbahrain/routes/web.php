@@ -159,6 +159,16 @@ Route::group(['middleware' => ['user', 'verified']], function(){
 	Route::post('/customer_products/status', 'CustomerProductController@updateStatus')->name('customer_products.update.status');
 
 	Route::get('digital_purchase_history', 'PurchaseHistoryController@digital_index')->name('digital_purchase_history.index');
+
+    //bank Info
+    Route::resource('bankinfo', 'BankInfoController');
+    //amount withdraw
+    Route::resource('withdraw_amount', 'WithdrawAmountController');
+    //Point convert to BDH
+    Route::resource('pointconvert', 'Point_convertController');
+
+
+
 });
 
 Route::get('/customer_products/destroy/{id}', 'CustomerProductController@destroy')->name('customer_products.destroy');

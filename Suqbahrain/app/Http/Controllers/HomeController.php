@@ -25,6 +25,7 @@ use App\BusinessSetting;
 use App\Http\Controllers\SearchController;
 use ImageOptimizer;
 use Cookie;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -108,12 +109,28 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        if(Auth::user()->user_type == 'seller'){
+
+        $user = Auth::user();
+
+        if($user->user_type == 'seller'){
             return view('frontend.seller.dashboard');
         }
-        elseif(Auth::user()->user_type == 'customer'){
-            if (Auth::user()->status == 1) {
-                return view('frontend.customer.dashboard');
+        elseif($user->user_type == 'customer'){
+            if ($user->status == 1) {
+
+                //Last Withdraw avialble date.
+                $lastwithdraw = DB::table('withdraws')->select('created_at')->where('user_id', $user->id)->orderBy('created_at', 'DESC')->first();
+                if(!$lastwithdraw > 0){
+                    $lastwithdraw = $user;
+                }
+                $depositProfit = DB::table('deposits')->where('user_id', $user->id)->sum('deposit_amount');
+                //Total earn points
+                $depositPoint = DB::table('deposits')->where('user_id', $user->id)->sum('deposit_club_point');
+                //Available profit amount
+                $withdrawamount = DB::table('withdraws')->where('user_id', $user->id)->sum('withdraw_amount');
+                $availbleProfit = $depositProfit-$withdrawamount;
+
+                return view('frontend.customer.dashboard', compact('availbleProfit', 'lastwithdraw'));
             } else {
                 Auth::logout();
                 return view('frontend.user_login');

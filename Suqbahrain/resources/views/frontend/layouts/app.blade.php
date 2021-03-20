@@ -17,6 +17,7 @@
 <meta name="keywords" content="@yield('meta_keywords', $seosetting->keyword)">
 <meta name="author" content="{{ $seosetting->author }}">
 <meta name="sitemap_link" content="{{ $seosetting->sitemap_link }}">
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 
 @yield('meta')
 
@@ -216,6 +217,16 @@
 <!-- App JS -->
 <script src="{{ asset('../frontend/js/active-shop.js') }}"></script>
 <script src="{{ asset('../frontend/js/main.js') }}"></script>
+
+
+<script type="text/javascript">
+$.ajaxSetup({
+    headers: {
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+</script>
+
 
 <script>
 

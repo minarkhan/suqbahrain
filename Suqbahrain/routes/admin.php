@@ -22,7 +22,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::resource('deposit','DepositController');
 
     //Withdraw request
-	Route::resource('withdraw','WithdrawController');
+	// Route::resource('withdraw','WithdrawController');
 
 
 
