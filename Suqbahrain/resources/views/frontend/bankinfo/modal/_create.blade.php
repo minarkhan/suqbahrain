@@ -13,7 +13,6 @@
                     <form>
                     @method('PUT')
                     @csrf
-                    {{ $bankinfo->id}}
                     <div class="form-group">
                         <label for="exampleInputEmail1">A/C Holder Name</label>
                         <input type="text" name="c_ac_holder" class="form-control" id="ac_holder" placeholder="Enter A/C holer name">

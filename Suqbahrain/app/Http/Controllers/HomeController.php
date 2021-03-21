@@ -26,6 +26,7 @@ use App\Http\Controllers\SearchController;
 use ImageOptimizer;
 use Cookie;
 use Illuminate\Support\Facades\DB;
+use App\Withdraw;
 
 class HomeController extends Controller
 {
@@ -118,11 +119,20 @@ class HomeController extends Controller
         elseif($user->user_type == 'customer'){
             if ($user->status == 1) {
 
+               //bdo bank info
+                $bankinfo = DB::table('bank_infos')->select('id', 'ac_holder', 'ac_no', 'bank_name', 'iban_number')->where('user_id', $user->id)->where('status', 'primary')->first();
+
                 //Last Withdraw avialble date.
-                $lastwithdraw = DB::table('withdraws')->select('created_at')->where('user_id', $user->id)->orderBy('created_at', 'DESC')->first();
-                if(!$lastwithdraw > 0){
-                    $lastwithdraw = $user;
+                $lastwith = Withdraw::select('created_at')->where('user_id', $user->id)->orderBy('created_at', 'DESC')->first();
+                // $lastwith;
+
+                if( !$lastwith == null ){
+                    $lastwithdraw = $lastwith->created_at->addDays(30)->format('j F Y');
+                } else {
+                    $lastwithdraw = $user->created_at->addDays(30)->format('j F Y');
+
                 }
+                //total deposite Profit amount
                 $depositProfit = DB::table('deposits')->where('user_id', $user->id)->sum('deposit_amount');
                 //Total earn points
                 $depositPoint = DB::table('deposits')->where('user_id', $user->id)->sum('deposit_club_point');
@@ -130,7 +140,7 @@ class HomeController extends Controller
                 $withdrawamount = DB::table('withdraws')->where('user_id', $user->id)->sum('withdraw_amount');
                 $availbleProfit = $depositProfit-$withdrawamount;
 
-                return view('frontend.customer.dashboard', compact('availbleProfit', 'lastwithdraw'));
+                return view('frontend.customer.dashboard', compact('availbleProfit', 'depositPoint', 'bankinfo', 'withdrawamount', 'lastwithdraw'));
             } else {
                 Auth::logout();
                 return view('frontend.user_login');

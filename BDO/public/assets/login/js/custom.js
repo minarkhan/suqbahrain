@@ -1,10 +1,10 @@
-$(document).on("nifty.ready", function () {
-    $(".editor").each(function (el) {
+$(document).on("nifty.ready", function() {
+    $(".editor").each(function(el) {
         var $this = $(this);
         var buttons = $this.data("buttons");
-        buttons = !buttons
-            ? "bold,underline,italic,hr,|,ul,ol,|,align,paragraph,|,image,table,link,undo,redo"
-            : buttons;
+        buttons = !buttons ?
+            "bold,underline,italic,hr,|,ul,ol,|,align,paragraph,|,image,table,link,undo,redo" :
+            buttons;
 
         var editor = new Jodit(this, {
             uploader: {
@@ -38,10 +38,11 @@ $(document).on("nifty.ready", function () {
     $(".color-var-select").select2({
         templateResult: colorCodeSelect,
         templateSelection: colorCodeSelect,
-        escapeMarkup: function (m) {
+        escapeMarkup: function(m) {
             return m;
         },
     });
+
     function colorCodeSelect(state) {
         var colorCode = $(state.element).val();
         if (!colorCode) return state.text;
@@ -109,10 +110,11 @@ $(document).on("nifty.ready", function () {
     $(".country-flag-select").select2({
         templateResult: countryCodeFlag,
         templateSelection: countryCodeFlag,
-        escapeMarkup: function (m) {
+        escapeMarkup: function(m) {
             return m;
         },
     });
+
     function countryCodeFlag(state) {
         var flagName = $(state.element).data("flag");
         if (!flagName) return state.text;
@@ -127,10 +129,11 @@ $(document).on("nifty.ready", function () {
     $(".pos-customer").select2({
         templateResult: posCustomerSelect,
         templateSelection: posCustomerSelect,
-        escapeMarkup: function (m) {
+        escapeMarkup: function(m) {
             return m;
         },
     });
+
     function posCustomerSelect(state) {
         var contact = $(state.element).data("contact");
         if (!contact) return state.text;
@@ -143,21 +146,20 @@ $(document).on("nifty.ready", function () {
         );
     }
     $('[data-toggle="tooltip"]').tooltip();
-    $(document).on("click", function (e) {
-        $('[data-toggle="popover"]').each(function () {
-            if (
-                !$(this).is(e.target) &&
+    $(document).on("click", function(e) {
+        $('[data-toggle="popover"]').each(function() {
+            if (!$(this).is(e.target) &&
                 $(this).has(e.target).length === 0 &&
                 $(".popover").has(e.target).length === 0
             ) {
                 (
                     ($(this).popover("hide").data("bs.popover") || {})
-                        .inState || {}
+                    .inState || {}
                 ).click = false; // fix for BS 3.3.6
             }
         });
     });
-    $(document).on('click', '.dropdown-menu', function (e) {
+    $(document).on('click', '.dropdown-menu', function(e) {
         e.stopPropagation();
     });
 });

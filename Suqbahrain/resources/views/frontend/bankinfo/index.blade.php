@@ -118,88 +118,13 @@
 </section>
 
 
-{{--
-<div class="modal fade" id="bankinfo_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size" role="document">
-        <div class="modal-content position-relative">
-            <div class="modal-header">
-                <h5 class="modal-title strong-600 heading-5">{{__('Create a bankinfo')}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body px-3 pt-3">
-                <form class="" action="{{ route('bankinfo.store') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">A/C Holder Name</label>
-                        <input type="text" name="ac_holder" class="form-control" id="ac_holder" placeholder="Enter A/C holer name" value="{{ old('ac_holder') }}">
-                        @error('ac_holder')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">A/C Number</label>
-                        <input type="text" name="ac_no" class="form-control" id="ac_no" placeholder="Enter A/C Number" value="{{ old('ac_no') }}">
-                        @error('ac_no')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">IBAN Number</label>
-                        <input type="text" name="iban_number" class="form-control" id="iban_number" placeholder="Enter IBAN Number" value="{{ old('iban_number') }}">
-                        @error('iban_number')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Bank Name</label>
-                        <input type="text" name="bank_name" class="form-control" id="bank_name" placeholder="Enter Bank Name" value="{{ old('bank_name') }}">
-                        @error('bank_name')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Bank Address (Optional)</label>
-                        <input type="text" name="address" class="form-control" id="address" placeholder="Enter Bank Address" value="{{ old('address') }}">
-                        @error('address')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Bank Routing No. (Optional)</label>
-                        <input type="text" name="routing_no" class="form-control" id="routing_no" placeholder="Enter Bank Routing Number" value="{{ old('routing_no') }}">
-                        @error('routing_no')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Status</label>
-                        <select class="form-control" name="status" id="status">
-                            <option value="">--- Select One ---</option>
-                            <option value="primary">Primary Account</option>
-                            <option value="secondary">Secondary Account</option>
-                        </select>
-                        @error('status')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="text-right mt-4">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('cancel')}}</button>
-                        <button type="submit" class="btn btn-base-1">{{__('Save')}}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> --}}
+@include('frontend.bankinfo.modal._create')
 
 @if(count($bankinfos) > 0)
  @include('frontend.bankinfo.modal._edit')
 @endif
 
-{{-- @if ( count($bankinfos) > 0) --}}
- @include('frontend.bankinfo.modal._create')
-{{-- @endif --}}
+
+
 
 @endsection

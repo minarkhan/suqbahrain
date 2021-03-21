@@ -55,25 +55,6 @@
                             </div>
 
                             <div class="col-md-4">
-                                <div class="dashboard-widget text-center red-widget mt-4 c-pointer">
-                                    <a href="javascript:;" class="d-block">
-                                        <i class="fa fa-heart"></i>
-                                        <span class="d-block title">{{ number_format($availbleProfit, 2) }}</span>
-                                        <span class="d-block sub-title">{{__('Total Profit')}}</span>
-                                    </a>
-                                </div>
-                                @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30)
-                                    <a style="cursor: pointer;"  data-toggle="modal" data-target="#_withdraw" class="small-box-footer">
-                                    withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
-                                    </a>
-                                @else
-                                    <a style="cursor: not-allowed;" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
-                                    Withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
-                                    </a>
-                                @endif
-                            </div>
-
-                            <div class="col-md-4">
                                 <div class="dashboard-widget text-center yellow-widget mt-4 c-pointer">
                                     <a href="javascript:;" class="d-block">
                                         <i class="fa fa-building"></i>
@@ -89,47 +70,85 @@
                                     </a>
                                 </div>
                             </div>
-                            @if(\Illuminate\Support\Facades\Auth::user()->is_merchant == 1 )
+                            {{-- Total BHD Earning --}}
                             <div class="col-md-4">
-                                <div class="dashboard-widget text-center bg-info mt-4 c-pointer">
+                                <div class="dashboard-widget text-center bg-primary mt-4 c-pointer">
                                     <a href="javascript:;" class="d-block">
                                         <i class="fa fa-shopping-bag"></i>
-                                        @php
-                                            /*$merchant_profits = \App\OrderDetail::where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->get();
-                                            $total = 0;
-                                            foreach ($merchant_profits as $key => $merchant_profit) {
-                                                $total += count($merchant_profit->profit);
-                                                $m_profit = $total * (50/100);
-                                            }*/
-                                           $total_profit = DB::table('order_details')->where('delivery_status', 'delivered')->where('user_id', Auth::user()->id)->sum('profit');
-                                           $merchant_profit = $total_profit * (50/100);
-                                        @endphp
-                                        <span class="d-block title">{{ $merchant_profit }} (BHD)  {{__('Total Earning')}}</span>
-                                        <span class="d-block sub-title">{{__('my profit (50%)')}}</span>
+                                        <span class="d-block title">{{ number_format($availbleProfit, 2) }} {{ __('(BHD) Total Earning')}}</span>
+                                        <span class="d-block sub-title">{{__('My Profit (50%)')}}</span>
                                     </a>
                                 </div>
                             </div>
+                            {{-- Total gain points --}}
                             <div class="col-md-4">
-                                    <div class="dashboard-widget text-center bg-dark mt-4 c-pointer">
-                                        <a href="javascript:;" class="d-block">
-                                            <i class="fa fa-shopping-bag"></i>
-                                            @php
-                                                /*$merchant_profits = \App\OrderDetail::where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->get();
-                                                $total = 0;
-                                                foreach ($merchant_profits as $key => $merchant_profit) {
-                                                    $total += count($merchant_profit->profit);
-                                                    $m_profit = $total * (50/100);
-                                                }*/
-
-                                               $today_profit = DB::table('order_details')->where('user_id', Auth::user()->id)->whereDate('created_at', DB::raw('CURDATE()'))->sum('profit');
-                                               $merchant_today_profit = $today_profit * (50/100);
-                                            @endphp
-                                            <span class="d-block title">{{ $merchant_today_profit }} (BHD)  {{__('Today Earning')}}</span>
-                                            <span class="d-block sub-title">{{__('my profit (50%)')}}</span>
-                                        </a>
-                                    </div>
+                                <div class="dashboard-widget text-center bg-dark mt-4 c-pointer">
+                                    <a href="javascript:;" class="d-block">
+                                        <i class="fa fa-diamond"></i>
+                                        <span class="d-block title">{{ $depositPoint }} {{__('Points(s) Gain')}}</span>
+                                        <span class="d-block sub-title">{{__('My Point (40%)')}}</span>
+                                    </a>
                                 </div>
-                            @endif
+                            </div>
+
+                        @if(\Illuminate\Support\Facades\Auth::user()->is_merchant == 1 )
+
+                            {{-- Profit withdraw section --}}
+                            <div class="col-md-4">
+                                <div class="dashboard-widget text-center bg-danger mt-4 c-pointer">
+                                    @if ($bankinfo == null)
+
+                                    <a href="javascript:;" data-toggle="modal" data-target="#bankinfocreate_modal" class="d-block">
+                                        <i class="fa fa-money" ></i>
+                                        <span class="d-block title">{{__('Click For Withdraw Ammount')}}</span>
+                                        <span class="d-block sub-title">
+                                            {{__('First add your bank information.')}}
+                                        </span>
+                                    </a>
+                                        @else
+                                            @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw) >= 30 )
+                                                <a href="javascript:;" data-toggle="modal" data-target="#_withdraw" class="d-block">
+                                                    <i class="fa fa-money" ></i>
+                                                    <span class="d-block title">{{__('Click For Withdraw Ammount')}}</span>
+                                                    <span class="d-block sub-title">
+                                                        {{__('Available after : ')}}{{ $lastwithdraw }}
+                                                    </span>
+                                                </a>
+                                            @else
+                                                <a href="javascript:;" data-toggle="tooltip"  class="d-block" title="You can withdraw your profit after {{ $lastwithdraw }} ">
+                                                    <i class="fa fa-money" ></i>
+                                                    <span class="d-block title">{{__('Withdraw Your Profit')}}</span>
+                                                    <span class="d-block sub-title">
+                                                        {{__('Available : ')}}{{ $lastwithdraw }}
+                                                    </span>
+                                                </a>
+
+                                            @endif
+                                        @endif
+                                </div>
+                            </div>
+                            {{-- Point convert section --}}
+                            <div class="col-md-4">
+                                    <div class="dashboard-widget text-center bg-secondary mt-4 c-pointer">
+
+                                    @if ( $depositPoint >= 2000 )
+
+                                        <a href="{{ route('pointconvert.index')}}" class="d-block">
+                                            <i class="fa fa-diamond"></i> => <i class="fa fa-money"></i>
+                                            <span class="d-block title">Convert {{ floor($depositPoint).'P' }} to {{ number_format($depositPoint *(1/2000), 2).'BDH ' }}</span>
+                                            <span class="d-block sub-title">{{__('Click for convert')}}</span>
+                                        </a>
+                                    @else
+                                        <a href="javascript:;" data-toggle="tooltip"  class="d-block" title="You can convert your point(s) after 2000 Points gain">
+                                            <i class="fa fa-diamond"></i> => <i class="fa fa-money"></i>
+                                            <span class="d-block title">Convert {{ floor($depositPoint).'P' }} to {{ number_format($depositPoint * (1/2000), 2).'BDH ' }}</span>
+                                            <span class="d-block sub-title">{{__('Refer & gain points')}}</span>
+                                        </a>
+
+                                    @endif
+                                    </div>
+                            </div>
+                        @endif
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -144,14 +163,24 @@
                                         <table>
                                             @if(\Illuminate\Support\Facades\Auth::user()->is_merchant == 1 )
                                             <tr>
-                                                <td><b>{{__('Referral Code')}}:</b></td>
-                                                @if(Auth::user()->referral_code != null)
-                                                    <td class="p-2"><b>{{ Auth::user()->referral_code }}</b></td>
-                                                @else
-                                                    <td class="p-2">Have no referral code</td>
-                                                @endif
+                                                <th>
+                                                    <button   class="btn btn-primary float-right"value="copy" onclick="copyToClipboard()">Copy Share Link!</button>
+                                                        {{-- {{ url('/users/registration?ref=' .\Illuminate\Support\Facades\Auth::user()->referral_code) }} --}}
+                                                </th>
+                                                <td>
+                                                    <input class="form-control" type="text" id="copy_refcode" value="{{ url('/users/registration?ref=' .\Illuminate\Support\Facades\Auth::user()->referral_code) }}" readonly>
+                                                </td>
                                             </tr>
-
+                                            <tr>
+                                                <th><b>{{__('Your Referral Code')}}:</b></th>
+                                                <td>
+                                                    @if(Auth::user()->referral_code != null)
+                                                    <b>{{ Auth::user()->referral_code }}</b>
+                                                    @else
+                                                        Have no referral code
+                                                    @endif
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td>{{__('Your listed customer')}}:</td>
                                                 @php
@@ -223,5 +252,21 @@
             </div>
         </div>
     </section>
+
+    <script>
+
+        function copyToClipboard() {
+            swal('Copied', 'Your Shareable Link', 'success');
+            document.getElementById("copy_refcode").select();
+            document.execCommand('copy');
+        }
+    </script>
+
+    <!-- _withdraw Modal -->
+    @if (!$bankinfo == null)
+    @include('frontend.customer.modal._withdraw');
+    @endif
+    <!-- /end _withdraw Modal -->
+    @include('frontend.bankinfo.modal._create')
 
 @endsection

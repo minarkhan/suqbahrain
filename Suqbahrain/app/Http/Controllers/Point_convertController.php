@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Withdraw;
+use App\Deposit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Brian2694\Toastr\Facades\Toastr;
 
-class WithdrawController extends Controller
+class Point_convertController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +19,22 @@ class WithdrawController extends Controller
      */
     public function index()
     {
-        $withdraws = Withdraw::orderBy('id', 'DESC')->get();
-        return view('withdraw.index', compact('withdraws'));
+        $user = Auth::user();
+        $depositPoint = DB::table('deposits')->where('user_id', $user->id)->sum('deposit_club_point');
+
+        if($depositPoint >= 2000){
+
+            $convertpoint = new Deposit;
+            $convertpoint->user_id = $user->id;
+            $convertpoint->deposit_amount = $depositPoint * (1/2000);
+            $convertpoint->deposit_club_point = $depositPoint * (-1);
+            if( $convertpoint->save() ){
+                flash('Your points successfully Converted into BDH')->success();
+                return redirect()->back();
+            }
+        }
+        flash('You can Convert your point after earn 2000 points')->error();
+        return redirect()->back();
     }
 
     /**
@@ -39,16 +55,18 @@ class WithdrawController extends Controller
      */
     public function store(Request $request)
     {
-        
+
+
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Withdraw  $withdraw
+     * @param
      * @return \Illuminate\Http\Response
      */
-    public function show(Withdraw $withdraw)
+    public function show($id)
     {
         //
     }
@@ -56,10 +74,10 @@ class WithdrawController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Withdraw  $withdraw
+     * @param
      * @return \Illuminate\Http\Response
      */
-    public function edit(Withdraw $withdraw)
+    public function edit($id)
     {
         //
     }
@@ -68,32 +86,22 @@ class WithdrawController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Withdraw  $withdraw
+     * @param
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-
-        $withdraw = Withdraw::findOrFail($id);
-        if($request->status == 'pending'){
-            $withdraw->status = 'accepted';
-            $withdraw->update();
-            return redirect()->back();
-        } elseif($request->status == 'accepted'){
-            $withdraw->status = 'completed';
-            $withdraw->update();
-            return redirect()->back();
-        }
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Withdraw  $withdraw
+     * @param
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Withdraw $withdraw)
+    public function destroy($id)
     {
-        //
+
     }
 }

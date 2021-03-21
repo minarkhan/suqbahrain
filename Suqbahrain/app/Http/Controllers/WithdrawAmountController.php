@@ -6,6 +6,8 @@ use App\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Toastr;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
 
 class WithdrawAmountController extends Controller
 {
@@ -36,7 +38,7 @@ class WithdrawAmountController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -47,7 +49,30 @@ class WithdrawAmountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        $lastwithdraw = Withdraw::select('created_at')->where('user_id', $user->id)->orderBy('created_at', 'DESC')->first();
+        if(!$lastwithdraw > 0){
+            $lastwithdraw = $user;
+        }
+        if($request->withdraw_amount > 0 && Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30){
+            $validator = Validator::make($request->all(), [
+                // 'agree_term' => 'required'
+            ]);
+
+            if ($validator->passes()) {
+                $withdraw = new Withdraw;
+                $withdraw->user_id = Auth::user()->id;
+                $withdraw->bank_info_id = $request->bank_info_id;
+                $withdraw->withdraw_amount = $request->withdraw_amount;
+                if($withdraw->save()){
+                    flash('Your withdraw request has been successfully submitted.')->success();
+                    return response()->json(['success'=>'Your withdraw request has been successfully submitted.']);
+                }
+            }
+            return response()->json(['error'=>$validator->errors()]);
+        }
+        flash('Sorry. Try again after next withdrawable date')->error();
+        return response()->json(['error'=> 'Sorry. Try again after next withdrawable date']);
     }
 
     /**
