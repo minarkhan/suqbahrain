@@ -115,7 +115,7 @@
                                                     </span>
                                                 </a>
                                             @else
-                                                <a href="javascript:;" data-toggle="tooltip"  class="d-block" title="You can withdraw your profit after {{ $lastwithdraw }} ">
+                                                <a href="javascript:;" onclick="swal('Sorry', 'You can withdraw your profit After {{ $lastwithdraw }}', 'error');" data-toggle="tooltip"  class="d-block" title="You can withdraw your profit After {{ $lastwithdraw }} ">
                                                     <i class="fa fa-money" ></i>
                                                     <span class="d-block title">{{__('Withdraw Your Profit')}}</span>
                                                     <span class="d-block sub-title">
@@ -139,7 +139,7 @@
                                             <span class="d-block sub-title">{{__('Click for convert')}}</span>
                                         </a>
                                     @else
-                                        <a href="javascript:;" data-toggle="tooltip"  class="d-block" title="You can convert your point(s) after 2000 Points gain">
+                                        <a href="javascript:;" onclick="swal('Sorry', 'You can convert your point(s) after 2000 Points gain', 'error');" data-toggle="tooltip"  class="d-block" title="You can convert your point(s) after 2000 Points gain">
                                             <i class="fa fa-diamond"></i> => <i class="fa fa-money"></i>
                                             <span class="d-block title">Convert {{ floor($depositPoint).'P' }} to {{ number_format($depositPoint * (1/2000), 2).'BDH ' }}</span>
                                             <span class="d-block sub-title">{{__('Refer & gain points')}}</span>
