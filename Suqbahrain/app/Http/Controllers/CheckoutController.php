@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
 use App\Category;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\InstamojoController;
@@ -19,6 +18,8 @@ use App\Coupon;
 use App\CouponUsage;
 use App\User;
 use Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -27,42 +28,42 @@ class CheckoutController extends Controller
     {
         //
     }
-    
-    
+
+
     public function sendSMS($userphone, $message)
     {
-        
+
         $username = "versatilo";
         $password = "versatilo548";
-        $mobile = $userphone; // format should be 973xxxxxxxx 
+        $mobile = $userphone; // format should be 973xxxxxxxx
         $message = $message;
         $sender = "SuqBahrain";
         $language = "1";
-        
+
         $curl = curl_init("http://api-server3.com/api/send.aspx?username=".$username."&password=".$password."&mobile=".$mobile."&message=".urlencode($message)."&sender=".$sender."&language=".$language);
 
         curl_setopt( $curl, CURLOPT_POST, true );
         curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
         $response = curl_exec( $curl );
         curl_close( $curl );
-        
-       
+
+
     }
 
     //check the selected payment gateway and redirect to that controller accordingly
     public function checkout(Request $request)
     {
-       
+
         $shippingInfo =  $request->session()->get('shipping_info');
-      
-     
-       
+
+
+
         if ($request->payment_option != null) {
 
             $orderController = new OrderController;
             $orderController->store($request);
-            
-            
+
+
 
             $request->session()->put('payment_type', 'cart_payment');
 
@@ -129,7 +130,7 @@ class CheckoutController extends Controller
                     $request->session()->forget('delivery_info');
                     $request->session()->forget('coupon_id');
                     $request->session()->forget('coupon_discount');
-                    
+
 
                     flash(__('Your order has been placed successfully. Please submit payment information from purchase history'))->success();
                 	return redirect()->route('order_confirmed');
@@ -195,8 +196,8 @@ class CheckoutController extends Controller
         Session::forget('coupon_discount');
 
         flash(__('Payment completed'))->success();
- 
-        
+
+
         return redirect()->route('order_confirmed');
     }
 
@@ -302,6 +303,7 @@ class CheckoutController extends Controller
 
     public function get_payment_info(Request $request)
     {
+        $user = Auth::user();
         $subtotal = 0;
         $tax = 0;
         $shipping = 0;
@@ -316,8 +318,10 @@ class CheckoutController extends Controller
         if(Session::has('coupon_discount')){
                 $total -= Session::get('coupon_discount');
         }
+        $availbleProfit = DB::table('deposits')->where('user_id', $user->id)->sum('deposit_amount');
 
-        return view('frontend.payment_select', compact('total'));
+
+        return view('frontend.payment_select', compact('total', 'availbleProfit'));
     }
 
     public function apply_coupon_code(Request $request){
@@ -397,16 +401,16 @@ class CheckoutController extends Controller
         return back();
     }
 
-    public function order_confirmed(){       
-                    
+    public function order_confirmed(){
+
         $order = Order::findOrFail(Session::get('order_id'));
-        
+
         $shippingInfo =  Session::get('shipping_info');
-        
+
         $message = "Your order has been placed and Order Code is: ". $order->code;
-        
+
         self::sendSMS($shippingInfo['phone'], $message);
-        
+
         return view('frontend.order_confirmed', compact('order'));
     }
 }

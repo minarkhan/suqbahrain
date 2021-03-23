@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Brian2694\Toastr\Facades\Toastr;
+use App\Wallet;
 
 class Point_convertController extends Controller
 {
@@ -24,13 +25,38 @@ class Point_convertController extends Controller
 
         if($depositPoint >= 2000){
 
-            $convertpoint = new Deposit;
-            $convertpoint->user_id = $user->id;
-            $convertpoint->deposit_amount = $depositPoint * (1/2000);
-            $convertpoint->deposit_club_point = $depositPoint * (-1);
-            if( $convertpoint->save() ){
-                flash('Your points successfully Converted into BDH')->success();
-                return redirect()->back();
+            if(!$user->is_merchant == 1){
+
+                //for normal customer
+                $user->balance = $user->balance + ($depositPoint * (1/2000));
+                $user->update();
+                
+                $wallet = new Wallet;
+                $wallet->user_id = $user->id;
+                $wallet->amount = $depositPoint * (1/2000);
+                $wallet->payment_method = 'Club Point Convert';
+                $wallet->payment_details = 'Club Point Convert';
+                $wallet->approval = 1;
+                $wallet->save();
+
+                $convertpoint = new Deposit;
+                $convertpoint->user_id = $user->id;
+                $convertpoint->deposit_club_point = $depositPoint * (-1);
+                if( $convertpoint->save() ){
+                    flash('Your points successfully Converted into BDH')->success();
+                    return redirect()->back();
+                }
+            } else {
+
+                //for Merchent
+                $convertpoint = new Deposit;
+                $convertpoint->user_id = $user->id;
+                $convertpoint->deposit_amount = $depositPoint * (1/2000);
+                $convertpoint->deposit_club_point = $depositPoint * (-1);
+                if( $convertpoint->save() ){
+                    flash('Your points successfully Converted into BDH')->success();
+                    return redirect()->back();
+                }
             }
         }
         flash('You can Convert your point after earn 2000 points')->error();

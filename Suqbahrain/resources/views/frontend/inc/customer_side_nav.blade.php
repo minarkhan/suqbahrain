@@ -144,22 +144,25 @@
                         </span>
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('withdraw_amount.index') }}" class="{{ areActiveRoutesHome(['withdraw_amount.index'])}}">
-                        <i class="nav-icon fa fa-money"></i>
-                        <span class="category-name">
-                            {{__('Withdraw Amount')}}
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('bankinfo.index') }}" class="{{ areActiveRoutesHome(['bankinfo.index'])}}">
-                        <i class="nav-icon fa fa-university"></i>
-                        <span class="category-name">
-                            {{__('Bank Information')}}
-                        </span>
-                    </a>
-                </li>
+
+                @if(\Illuminate\Support\Facades\Auth::user()->is_merchant == 1 )
+                    <li>
+                        <a href="{{ route('withdraw_amount.index') }}" class="{{ areActiveRoutesHome(['withdraw_amount.index'])}}">
+                            <i class="nav-icon fa fa-money"></i>
+                            <span class="category-name">
+                                {{__('Withdraw Amount')}}
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('bankinfo.index') }}" class="{{ areActiveRoutesHome(['bankinfo.index'])}}">
+                            <i class="nav-icon fa fa-university"></i>
+                            <span class="category-name">
+                                {{__('Bank Information')}}
+                            </span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
         @if (\App\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)

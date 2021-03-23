@@ -125,3 +125,37 @@
         }
     });
 </script>
+
+{{-- <!-- Modal For Point Convert error --> --}}
+<div class="modal fade bd-example-modal-sm" id="withdraw_err" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-danger " id="exampleModalLongTitle"><i class="fas fa-exclamation-triangle"></i>&nbsp; Sorry!</h5>
+          </div>
+        <div class="modal-body">
+            After withdrawable date you can withdraw your earning.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- <!-- Modal For Point Convert error --> --}}
+<div class="modal fade bd-example-modal-sm" id="point_convert_err" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-danger " id="exampleModalLongTitle"><i class="fas fa-exclamation-triangle"></i>&nbsp; Sorry!</h5>
+          </div>
+        <div class="modal-body">
+            After 2000 Points Gain than You Can Convert to BDH.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>

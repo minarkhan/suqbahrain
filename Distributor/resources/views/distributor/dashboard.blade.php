@@ -48,7 +48,7 @@
                                 withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
                                 </a>
                             @else
-                                <a style="cursor: not-allowed;" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
+                            <a style="cursor: pointer;" class="small-box-footer" data-toggle="modal" data-target="#withdraw_err" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
                                 Withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
                                 </a>
                             @endif
@@ -126,7 +126,7 @@
                             Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }} <i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @else
-                            <a style="cursor: not-allowed;" class="small-box-footer btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After 2000 Points You Can Convert to BDH" >
+                            <a style="cursor: pointer;" class="small-box-footer btn" data-toggle="modal" data-target="#point_convert_err" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After 2000 Points Gain You Can Convert to BDH" >
                             Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }}<i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @endif
@@ -193,14 +193,22 @@
         <div class="container-fluid">
             <!-- Info boxes -->
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
+                <div class="col-12 col-sm-6 col-md-6">
                     <div class="info-box mb-3">
                         <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Referral  Code</span>
-                            <span class="info-box-number">{{ \Illuminate\Support\Facades\Auth::user()->referral_code }}</span>
+                            <span class="info-box-text">
+                                Your Referral Code : <b>{{ \Illuminate\Support\Facades\Auth::user()->referral_code }} </b>
+                            </span>
+                            <span>
+                                <button   class="btn btn-primary"value="copy" onclick="copyToClipboard()">Copy Shareable link!</button>
+                            </span>
+                            <span class="info-box-number">
+                                <input class="form-control" type="text" id="copy_refcode" value="{{ url('/').'/users/registration?ref=' .\Illuminate\Support\Facades\Auth::user()->referral_code }}" readonly>
+                            </span>
                         </div>
+
                         <!-- /.info-box-content -->
                     </div>
                     <!-- /.info-box -->
@@ -269,6 +277,14 @@
         </div><!--/. container-fluid -->
     </section>
     <!-- /.content -->
+
+    <script>
+        function copyToClipboard() {
+            toastr["success"]("Your Sharable Link", "Copied...");
+            document.getElementById("copy_refcode").select();
+            document.execCommand('copy');
+        }
+    </script>
 
     <!-- _withdraw Modal -->
     @include('distributor.modal._withdraw')

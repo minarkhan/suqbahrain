@@ -8,16 +8,21 @@ use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\PublicSslCommerzPaymentController;
 use App\Http\Controllers\InstamojoController;
 use App\Http\Controllers\PaytmController;
-use Auth;
-use Session;
+use Illuminate\Support\Facades\Auth;
 use App\Wallet;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class WalletController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $wallets = Wallet::where('user_id', Auth::user()->id)->paginate(9);
-        return view('frontend.wallet', compact('wallets'));
+
+        $availbleProfit = DB::table('deposits')->where('user_id', $user->id)->sum('deposit_amount');
+
+        return view('frontend.wallet', compact('wallets', 'availbleProfit'));
     }
 
     public function recharge(Request $request)
@@ -85,10 +90,12 @@ class WalletController extends Controller
     }
 
     public function offline_recharge(Request $request){
+        // return $request;
         $wallet = new Wallet;
         $wallet->user_id = Auth::user()->id;
         $wallet->amount = $request->amount;
-        $wallet->payment_method = $request->payment_option;
+        // $wallet->payment_method = $request->payment_option;
+        $wallet->payment_method = 'offline payment';
         $wallet->payment_details = $request->trx_id;
         $wallet->approval = 0;
         $wallet->offline_payment = 1;

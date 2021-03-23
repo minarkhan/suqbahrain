@@ -11,6 +11,12 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a {{--href="{{ route('bdo.dashboard') }}"--}}>Dashboard</a></li>
+                        <button onclick="minar()">minar</button>
+                        <script>
+                            function minar(){
+                                toastr["success"]("dfasdfasdfad", "Minar khan");
+                            }
+                        </script>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -73,7 +79,7 @@
                             withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @else
-                            <a style="cursor: not-allowed;" class="small-box-footer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
+                            <a style="cursor: pointer;" class="small-box-footer" data-toggle="modal" data-target="#withdraw_err" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After withdrawable date you can withdraw your earning">
                             Withdraw ({{ floor($availbleProfit) }} BHD) <i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @endif
@@ -100,7 +106,7 @@
                             Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }} <i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @else
-                            <a style="cursor: not-allowed;" class="small-box-footer btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After 2000 Points You Can Convert to BDH" >
+                            <a style="cursor: pointer;" class="small-box-footer btn" data-toggle="modal" data-target="#point_convert_err" data-bs-toggle="tooltip" data-bs-placement="bottom" title="After 2000 Points Gain than You Can Convert to BDH" >
                             Convert {{ floor($depositPoint).'P' }} = {{ number_format($depositPoint *(1/2000), 2).'BDH ' }}<i class="fas fa-arrow-circle-right"></i>
                             </a>
                         @endif
@@ -138,10 +144,13 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                Your Referral Code : <b>{{ \Illuminate\Support\Facades\Auth::user()->referral_code }} </b> <button   class="btn btn-primary float-right"value="copy" onclick="copyToClipboard()">Copy Shareable link!</button>
+                                Your Referral Code : <b>{{ \Illuminate\Support\Facades\Auth::user()->referral_code }} </b>
+                            </span>
+                            <span>
+                                <button   class="btn btn-primary"value="copy" onclick="copyToClipboard()">Copy Shareable link!</button>
                             </span>
                             <span class="info-box-number">
-                                <input class="form-control" type="text" id="copy_refcode" value="{{ 'https://suqbahrain.com/users/registration?ref=' .\Illuminate\Support\Facades\Auth::user()->referral_code }}" readonly>
+                                <input class="form-control" type="text" id="copy_refcode" value="{{ url('/').'/users/registration?ref=' .\Illuminate\Support\Facades\Auth::user()->referral_code }}" readonly>
                             </span>
                         </div>
 
@@ -215,6 +224,7 @@
     <!-- /.content -->
     <script>
         function copyToClipboard() {
+            toastr["success"]("Your Sharable Link", "Copied...");
             document.getElementById("copy_refcode").select();
             document.execCommand('copy');
         }

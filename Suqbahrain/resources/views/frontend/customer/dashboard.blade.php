@@ -70,66 +70,101 @@
                                     </a>
                                 </div>
                             </div>
-                            {{-- Total BHD Earning --}}
+
+                            @if(\Illuminate\Support\Facades\Auth::user()->is_merchant == 1 )
+
+                                {{-- Total BHD Earning --}}
+                                <div class="col-md-4">
+                                    <div class="dashboard-widget text-center bg-primary mt-4 c-pointer">
+                                        <a href="javascript:;" class="d-block">
+                                            <i class="fa fa-shopping-bag"></i>
+                                            <span class="d-block title">{{ number_format($availbleProfit, 2) }} {{ __('(BHD) Total Earning')}}</span>
+                                            <span class="d-block sub-title">{{__('My Profit (50%)')}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {{-- Total gain points --}}
+                                <div class="col-md-4">
+                                    <div class="dashboard-widget text-center bg-dark mt-4 c-pointer">
+                                        <a href="javascript:;" class="d-block">
+                                            <i class="fa fa-diamond"></i>
+                                            <span class="d-block title">{{ $depositPoint }} {{__('Points(s) Gain')}}</span>
+                                            <span class="d-block sub-title">{{__('My Point (40%)')}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {{-- Profit withdraw section --}}
+                                <div class="col-md-4">
+                                    <div class="dashboard-widget text-center bg-danger mt-4 c-pointer">
+                                        @if ($bankinfo == null)
+
+                                        <a href="javascript:;" data-toggle="modal" data-target="#bankinfocreate_modal" class="d-block">
+                                            <i class="fa fa-money" ></i>
+                                            <span class="d-block title">{{__('Click For Withdraw Ammount')}}</span>
+                                            <span class="d-block sub-title">
+                                                {{__('First add your bank information.')}}
+                                            </span>
+                                        </a>
+                                            @else
+                                                @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw) >= 30 )
+                                                    <a href="javascript:;" data-toggle="modal" data-target="#_withdraw" class="d-block">
+                                                        <i class="fa fa-money" ></i>
+                                                        <span class="d-block title">{{__('Click For Withdraw Ammount')}}</span>
+                                                        <span class="d-block sub-title">
+                                                            {{__('Available after : ')}}{{ $lastwithdraw }}
+                                                        </span>
+                                                    </a>
+                                                @else
+                                                    <a href="javascript:;" onclick="swal('Sorry!', 'You can withdraw your profit After {{ $lastwithdraw }}', 'error');" data-toggle="tooltip"  class="d-block" title="You can withdraw your profit After {{ $lastwithdraw }} ">
+                                                        <i class="fa fa-money" ></i>
+                                                        <span class="d-block title">{{__('Withdraw Your Profit')}}</span>
+                                                        <span class="d-block sub-title">
+                                                            {{__('Available : ')}}{{ $lastwithdraw }}
+                                                        </span>
+                                                    </a>
+
+                                                @endif
+                                            @endif
+                                    </div>
+                                </div>
+                                {{-- Point convert section --}}
+                                <div class="col-md-4">
+                                        <div class="dashboard-widget text-center bg-secondary mt-4 c-pointer">
+
+                                        @if ( $depositPoint >= 2000 )
+
+                                            <a href="{{ route('pointconvert.index')}}" class="d-block">
+                                                <i class="fa fa-diamond"></i> => <i class="fa fa-money"></i>
+                                                <span class="d-block title">Convert {{ floor($depositPoint).'P' }} to {{ number_format($depositPoint *(1/2000), 2).'BDH ' }}</span>
+                                                <span class="d-block sub-title">{{__('Click for convert')}}</span>
+                                            </a>
+                                        @else
+                                            <a href="javascript:;" onclick="swal('Sorry!', 'You can convert your point(s) after 2000 Points gain', 'error');" data-toggle="tooltip"  class="d-block" title="You can convert your point(s) after 2000 Points gain">
+                                                <i class="fa fa-diamond"></i> => <i class="fa fa-money"></i>
+                                                <span class="d-block title">Convert {{ floor($depositPoint).'P' }} to {{ number_format($depositPoint * (1/2000), 2).'BDH ' }}</span>
+                                                <span class="d-block sub-title">{{__('Refer & gain points')}}</span>
+                                            </a>
+
+                                        @endif
+                                        </div>
+                                </div>
+                        @else
+
+                            {{-- Total gain points --}}
                             <div class="col-md-4">
                                 <div class="dashboard-widget text-center bg-primary mt-4 c-pointer">
                                     <a href="javascript:;" class="d-block">
-                                        <i class="fa fa-shopping-bag"></i>
-                                        <span class="d-block title">{{ number_format($availbleProfit, 2) }} {{ __('(BHD) Total Earning')}}</span>
-                                        <span class="d-block sub-title">{{__('My Profit (50%)')}}</span>
-                                    </a>
-                                </div>
-                            </div>
-                            {{-- Total gain points --}}
-                            <div class="col-md-4">
-                                <div class="dashboard-widget text-center bg-dark mt-4 c-pointer">
-                                    <a href="javascript:;" class="d-block">
                                         <i class="fa fa-diamond"></i>
                                         <span class="d-block title">{{ $depositPoint }} {{__('Points(s) Gain')}}</span>
-                                        <span class="d-block sub-title">{{__('My Point (40%)')}}</span>
+                                        <span class="d-block sub-title">{{__('Buy & Gain Points')}}</span>
                                     </a>
                                 </div>
                             </div>
 
-                        @if(\Illuminate\Support\Facades\Auth::user()->is_merchant == 1 )
-
-                            {{-- Profit withdraw section --}}
                             <div class="col-md-4">
-                                <div class="dashboard-widget text-center bg-danger mt-4 c-pointer">
-                                    @if ($bankinfo == null)
-
-                                    <a href="javascript:;" data-toggle="modal" data-target="#bankinfocreate_modal" class="d-block">
-                                        <i class="fa fa-money" ></i>
-                                        <span class="d-block title">{{__('Click For Withdraw Ammount')}}</span>
-                                        <span class="d-block sub-title">
-                                            {{__('First add your bank information.')}}
-                                        </span>
-                                    </a>
-                                        @else
-                                            @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw) >= 30 )
-                                                <a href="javascript:;" data-toggle="modal" data-target="#_withdraw" class="d-block">
-                                                    <i class="fa fa-money" ></i>
-                                                    <span class="d-block title">{{__('Click For Withdraw Ammount')}}</span>
-                                                    <span class="d-block sub-title">
-                                                        {{__('Available after : ')}}{{ $lastwithdraw }}
-                                                    </span>
-                                                </a>
-                                            @else
-                                                <a href="javascript:;" onclick="swal('Sorry', 'You can withdraw your profit After {{ $lastwithdraw }}', 'error');" data-toggle="tooltip"  class="d-block" title="You can withdraw your profit After {{ $lastwithdraw }} ">
-                                                    <i class="fa fa-money" ></i>
-                                                    <span class="d-block title">{{__('Withdraw Your Profit')}}</span>
-                                                    <span class="d-block sub-title">
-                                                        {{__('Available : ')}}{{ $lastwithdraw }}
-                                                    </span>
-                                                </a>
-
-                                            @endif
-                                        @endif
-                                </div>
-                            </div>
-                            {{-- Point convert section --}}
-                            <div class="col-md-4">
-                                    <div class="dashboard-widget text-center bg-secondary mt-4 c-pointer">
+                                <div class="dashboard-widget text-center bg-info mt-4 c-pointer">
 
                                     @if ( $depositPoint >= 2000 )
 
@@ -139,15 +174,16 @@
                                             <span class="d-block sub-title">{{__('Click for convert')}}</span>
                                         </a>
                                     @else
-                                        <a href="javascript:;" onclick="swal('Sorry', 'You can convert your point(s) after 2000 Points gain', 'error');" data-toggle="tooltip"  class="d-block" title="You can convert your point(s) after 2000 Points gain">
+                                        <a href="javascript:;" onclick="swal('Sorry!', 'You can convert your point(s) after 2000 Points gain', 'error');" data-toggle="tooltip"  class="d-block" title="You can convert your point(s) after 2000 Points gain">
                                             <i class="fa fa-diamond"></i> => <i class="fa fa-money"></i>
                                             <span class="d-block title">Convert {{ floor($depositPoint).'P' }} to {{ number_format($depositPoint * (1/2000), 2).'BDH ' }}</span>
                                             <span class="d-block sub-title">{{__('Refer & gain points')}}</span>
                                         </a>
 
                                     @endif
-                                    </div>
+                                </div>
                             </div>
+
                         @endif
                         </div>
                         <div class="row">

@@ -159,7 +159,7 @@
                                                         </label>
                                                     </div>
                                                 @endif
-                                                
+
                                                 @if(\App\Addon::where('unique_identifier', 'paytm')->first() != null && \App\Addon::where('unique_identifier', 'paytm')->first()->activated)
                                                     <div class="col-6">
                                                         <label class="payment_option mb-4" data-toggle="tooltip" data-title="Paytm">
