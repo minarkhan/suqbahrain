@@ -129,25 +129,48 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
-            if(User::where('email', $request->email)->first() != null){
-                flash('EmailPhone already exists.');
+
+
+
+
+            if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+                if(User::where('email', $request->email)->first() != null){
+                    flash('EmailPhone already exists.');
+                    return back();
+                }
+            }
+            elseif (User::where('phone', '+'.$request->country_code.$request->phone)->first() != null) {
+                flash('Phone already exists.');
                 return back();
             }
-        }
-        elseif (User::where('phone', '+'.$request->country_code.$request->phone)->first() != null) {
-            flash('Phone already exists.');
-            return back();
-        }
 
-        $this->validator($request->all())->validate();
+            //validation for referral code
+            if($request->referral_code == null){
+                flash('Referral code can not be null', 'error');
+                return back();
+            } else{
+                $refUser = User::where('referral_code', $request->referral_code)->first();
 
-        event(new Registered($user = $this->create($request->all())));
+                if( $refUser == null){
+                    flash('Your entered Referral code is invalid', 'error');
+                    return back();
+                }elseif($refUser->is_merchant !=1){
+                    flash('Your entered Referral code is not match any Merchant', 'error');
+                    return back();
+                }
+            }
 
-        $this->guard()->login($user);
 
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
+            $this->validator($request->all())->validate();
+
+            event(new Registered($user = $this->create($request->all())));
+
+            $this->guard()->login($user);
+
+            return $this->registered($request, $user)
+                ?: redirect($this->redirectPath());
+
+
     }
 
     protected function registered(Request $request, $user)

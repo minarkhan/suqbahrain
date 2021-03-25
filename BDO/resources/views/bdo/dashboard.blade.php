@@ -12,11 +12,6 @@
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a {{--href="{{ route('bdo.dashboard') }}"--}}>Dashboard</a></li>
                         <button onclick="minar()">minar</button>
-                        <script>
-                            function minar(){
-                                toastr["success"]("dfasdfasdfad", "Minar khan");
-                            }
-                        </script>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
