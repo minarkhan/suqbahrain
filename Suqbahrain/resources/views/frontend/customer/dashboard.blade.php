@@ -97,6 +97,12 @@
 
                                 {{-- Profit withdraw section --}}
                                 <div class="col-md-4">
+                                    {{ \Carbon\Carbon::now()->diffInDays($lastwithdraw) }}
+                                    @if ( 30 <= 30)
+                                       {{'true'}}
+                                    @else
+                                        {{'false'}}
+                                    @endif
                                     <div class="dashboard-widget text-center bg-danger mt-4 c-pointer">
                                         @if ($bankinfo == null)
 
@@ -108,7 +114,7 @@
                                             </span>
                                         </a>
                                             @else
-                                                @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw) >= 30 )
+                                                @if ( \Carbon\Carbon::now()->diffInDays($lastwithdraw) >= 0 )
                                                     <a href="javascript:;" data-toggle="modal" data-target="#_withdraw" class="d-block">
                                                         <i class="fa fa-money" ></i>
                                                         <span class="d-block title">{{__('Click For Withdraw Ammount')}}</span>

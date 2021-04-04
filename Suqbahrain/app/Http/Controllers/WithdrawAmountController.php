@@ -12,12 +12,7 @@ use Illuminate\Support\Carbon;
 class WithdrawAmountController extends Controller
 {
 
-    public $user;
 
-    public function __construct()
-    {
-        $this->user = Auth::user()->id;
-    }
 
     /**
      * Display a listing of the resource.
@@ -26,8 +21,9 @@ class WithdrawAmountController extends Controller
      */
     public function index()
     {
-        // return $this->user;
-        $withdraws = Withdraw::orderBy('id', 'DESC')->where('user_id', $this->user)->get();
+        $user = Auth::user();
+        // return $user->id;
+        $withdraws = Withdraw::orderBy('id', 'DESC')->where('user_id', $user->id)->get();
         return view('frontend.withdraw.index', compact('withdraws'));
     }
 
@@ -49,12 +45,13 @@ class WithdrawAmountController extends Controller
      */
     public function store(Request $request)
     {
+
         $user = Auth::user();
         $lastwithdraw = Withdraw::select('created_at')->where('user_id', $user->id)->orderBy('created_at', 'DESC')->first();
         if(!$lastwithdraw > 0){
             $lastwithdraw = $user;
         }
-        if($request->withdraw_amount > 0 && Carbon::now()->diffInDays($lastwithdraw->created_at) >= 30){
+        if($request->withdraw_amount > 0 && Carbon::now()->diffInDays($lastwithdraw->created_at->addDays(30)) >= 0){
             $validator = Validator::make($request->all(), [
                 // 'agree_term' => 'required'
             ]);

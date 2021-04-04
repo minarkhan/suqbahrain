@@ -67,7 +67,7 @@
                      <button class="btn btn-info login-btn btn-submit">{{ __('Submit') }}</button>
 
 
-                     <a href="{{ route('dashboard')}}" class="text-white btn btn-danger">{{ __('Cancel') }}</a>
+                     <a href="{{ route('dashboard')}}"  data-dismiss="modal" class="text-white btn btn-danger">{{ __('Cancel') }}</a>
 
                      {{-- <button class="btn btn-info login-btn">{{ __('Submit') }}</button> --}}
                     </div>
