@@ -678,6 +678,26 @@
                         @endif
                         <!--End BDO manu-->
 
+                        <!--Start Commission and Club Point Settings manu-->
+                        @if(Auth::user()->user_type == 'admin')
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-user"></i>
+                                    <span class="menu-title">{{__('Commission and Club Point Settings')}}</span>
+                                    <i class="arrow"></i>
+                                </a>
+                                <ul class="collapse">
+                                    <li class="">
+                                        <a class="nav-link" href="{{ route('commissionSettings.index') }}">{{__('Commission Settings')}}</a>
+                                    </li>
+                                    <li class="">
+                                        <a class="nav-link" href="{{ route('pointSettings.index') }}">{{__('Club Point Settings')}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
+                        <!--End Commission and Club Point Settings manu-->
+
                         @if(Auth::user()->user_type == 'admin')
                             <li>
                                 <a href="{{ route('profit_settings.index') }}">
