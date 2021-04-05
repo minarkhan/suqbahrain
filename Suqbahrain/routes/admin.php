@@ -23,6 +23,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
     //Withdraw request
 	Route::resource('withdraw','WithdrawController');
+    //profit & club point settings
+	Route::resource('profit_settings','ProfitPointSettingsController');
 
 
 

@@ -678,6 +678,16 @@
                         @endif
                         <!--End BDO manu-->
 
+                        @if(Auth::user()->user_type == 'admin')
+                            <li>
+                                <a href="{{ route('profit_settings.index') }}">
+                                    <i class="fa fa-money"></i>
+                                    <span class="menu-title">
+                                        {{__('Club Point & Profit Settings')}}
+                                    </span>
+                                </a>
+                            </li>
+                        @endif
 
                         {{-- <!--Start Profit Distributions manu--> --}}
                         @php
