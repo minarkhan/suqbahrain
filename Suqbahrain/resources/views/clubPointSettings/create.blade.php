@@ -6,7 +6,9 @@
     <div class="col-lg-6">
         <div class="panel">
             <div class="panel-heading">
-                <h3 class="panel-title">{{__('Point Settings')}}</h3>
+                <h3 class="panel-title">{{__('Point Settings')}}
+                <small class="text-warning">Default: Per doller = 10 points, customer 50%, merchant 40%, Distributor 10%</small>
+                </h3>
             </div>
             <div class="panel-body">
                 <form class="form-horizontal" action="{{ route('pointSettings.store') }}" method="POST">
@@ -16,7 +18,7 @@
                             <label class="control-label">{{__('Point/per-doller')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" name="point_per_doller" value="{{  env('point_per_doller') }}" placeholder="Point for per doller">
+                            <input type="text" class="form-control" name="point_per_doller" value="{{  old('point_per_doller') }}" placeholder="Point for per doller">
                             @error('point_per_doller')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -27,7 +29,7 @@
                             <label class="control-label">{{__('Merchant (%)')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" name="marchant" value="{{  env('marchant') }}" placeholder="ex:10">
+                            <input type="text" class="form-control" name="marchant" value="{{  old('marchant') }}" placeholder="ex:10">
                             @error('marchant')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -38,7 +40,7 @@
                             <label class="control-label">{{__('Distributor (%)')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" name="distributor" value="{{  env('distributor') }}" placeholder="ex:10">
+                            <input type="text" class="form-control" name="distributor" value="{{  old('distributor') }}" placeholder="ex:10">
                             @error('distributor')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -49,7 +51,7 @@
                             <label class="control-label">{{__('Customer (%)')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" name="customer" value="{{  env('customer') }}" placeholder="ex:10">
+                            <input type="text" class="form-control" name="customer" value="{{  old('customer') }}" placeholder="ex:10">
                             @error('customer')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -60,7 +62,7 @@
                             <label class="control-label">{{__('Start Date')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="date" class="form-control" name="point_start" value="{{  env('point_start') }}" placeholder="ex:10">
+                            <input type="date" class="form-control" name="point_start" value="{{  old('point_start') }}" placeholder="ex:10">
                             @error('point_start')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -71,7 +73,7 @@
                             <label class="control-label">{{__('End Date')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="date" class="form-control" name="point_end" value="{{  env('point_end') }}" placeholder="ex:10">
+                            <input type="date" class="form-control" name="point_end" value="{{  old('point_end') }}" placeholder="ex:10">
                             @error('point_end')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

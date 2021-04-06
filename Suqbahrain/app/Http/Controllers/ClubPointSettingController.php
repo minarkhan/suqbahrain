@@ -15,7 +15,7 @@ class ClubPointSettingController extends Controller
      */
     public function index()
     {
-        $pointsettings = ClubPointSetting::all();
+        $pointsettings = ClubPointSetting::orderBy('id', 'DESC')->get();
         return view('clubPointSettings.create', compact('pointsettings'));
 
     }
@@ -47,6 +47,11 @@ class ClubPointSettingController extends Controller
             'point_end'=> 'required',
         ]);
 
+            $totalpercent = ($request->marchant + $request->distributor + $request->customer);
+            if($totalpercent != 100){
+                flash(__('You Must set 100%. not up or down'))->error();
+                return redirect()->back();
+            }
 
             $pointsettings = new ClubPointSetting();
             $pointsettings->point_per_doller  = $request->point_per_doller;
@@ -57,6 +62,7 @@ class ClubPointSettingController extends Controller
             $pointsettings->end_date = $request->point_end;
             $pointsettings->save();
 
+            flash(__('Your Point Setting successfully submitted'))->success();
             return $this->index();
 
     }

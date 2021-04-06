@@ -23,6 +23,7 @@ use Mail;
 use App\Mail\InvoiceEmailManager;
 use CoreComponentRepository;
 use App\Deposit;
+use App\ClubPointSetting;
 
 class OrderController extends Controller
 {
@@ -291,7 +292,14 @@ class OrderController extends Controller
                 $order_detail->product_referral_code = $cartItem['product_referral_code'];
                 $order_detail->category_id = $product->category_id;
                 $order_detail->profit = $profit;
-                $order_detail->club_point = $price * 10;
+
+                $pointsetting = ClubPointSetting::orderBy('id', 'DESC')->first();
+                if($pointsetting == null){
+                    $order_detail->club_point = $price * 10;
+                } else{
+                    $order_detail->club_point = $price * $pointsetting->point_per_doller;
+                }
+
                 $order_detail->user_id  =$order->user_id;
 
                 if ($cartItem['shipping_type'] == 'home_delivery') {
@@ -328,6 +336,31 @@ class OrderController extends Controller
 
                     $culb_point = $order_detail->club_point;
 
+                    if($pointsetting != null){
+                    //Customer Club Point 50%
+                    $deposit1 = new Deposit();
+                    $deposit1->user_id = $order_detail->user_id;
+                    $deposit1->product_id = $order_detail->product_id;
+                    $deposit1->order_id = $order_detail->order_id;
+                    $deposit1->deposit_club_point = ($culb_point * $pointsetting->customer_point) / 100;
+                    $deposit1->save();
+
+                    //Merchant Club Point 40%
+                    $deposit2 = new Deposit();
+                    $deposit2->user_id = $merchant->id;
+                    $deposit2->product_id = $order_detail->product_id;
+                    $deposit2->order_id = $order_detail->order_id;
+                    $deposit2->deposit_club_point = ($culb_point * $pointsetting->marchant_point) / 100;
+                    $deposit2->save();
+
+                    //Distributor Club Point 2.5%
+                    $deposit3 = new Deposit();
+                    $deposit3->user_id = $Distributor->id;
+                    $deposit3->product_id = $order_detail->product_id;
+                    $deposit3->order_id = $order_detail->order_id;
+                    $deposit3->deposit_club_point = ($culb_point * $pointsetting->distributor_point) / 100;
+                    $deposit3->save();
+                    } else {
                     //Customer Club Point 50%
                     $deposit1 = new Deposit();
                     $deposit1->user_id = $order_detail->user_id;
@@ -351,6 +384,7 @@ class OrderController extends Controller
                     $deposit3->order_id = $order_detail->order_id;
                     $deposit3->deposit_club_point = ($culb_point * 10) / 100;
                     $deposit3->save();
+                    }
                 }
 
 

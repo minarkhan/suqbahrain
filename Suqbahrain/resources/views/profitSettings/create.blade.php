@@ -92,7 +92,7 @@
 <!--===================================================-->
 <div class="panel">
     <div class="panel-heading bord-btm clearfix py-3">
-        <h3 class="panel-title pull-left pad-no">{{__('Club Point Histroy')}}</h3>
+        <h3 class="panel-title pull-left pad-no">{{__('Commission Histroy')}}</h3>
     </div>
     <div class="panel-body">
         <table class="table table-striped res-table mar-no" cellspacing="0" width="100%">

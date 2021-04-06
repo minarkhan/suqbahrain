@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ProfitSetting;
 use Illuminate\Http\Request;
+use App\ClubPointSetting;
 
 class ProfitSettingController extends Controller
 {
@@ -15,9 +16,8 @@ class ProfitSettingController extends Controller
     public function index()
     {
         $profitSettings = ProfitSetting::all();
-        $mk = new ProfitSetting;
+        $mk = new ClubPointSetting();
         $mk->suqbahrain_comission  = 8;
-
 
         return view('profitSettings.create', compact('profitSettings'));
 
@@ -41,7 +41,8 @@ class ProfitSettingController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // return $request;
+        $this->validate($request, [
             'suqbahrain' => 'required',
             'bdo'=> 'required',
             'marchant'=> 'required',
@@ -51,16 +52,17 @@ class ProfitSettingController extends Controller
             'profit_end'=> 'required',
         ]);
 
-            $profitsettings = new ProfitSetting();
-            $profitsettings->suqbahrain_comission  = '$request->suqbahrain';
-            // $profitsettings->bdo_comission  = $request->bdo;
-            // $profitsettings->marchant_comission = $request->marchant;
-            // $profitsettings->distributor_comission = $request->distributor;
-            // $profitsettings->start_date = $request->profit_start;
-            // $profitsettings->end_date = $request->profit_end;
-            $profitsettings->save();
+            $profitsetting = new ProfitSetting;
+            $profitsetting->suqbahrain_comission  = $request->suqbahrain;
+            $profitsetting->bdo_comission  = $request->bdo;
+            $profitsetting->marchant_comission = $request->marchant;
+            $profitsetting->distributor_comission = $request->distributor;
+            $profitsetting->start_date = $request->profit_start;
+            $profitsetting->end_date = $request->profit_end;
+            $profitsetting->save();
+            return 'success ' . $profitsetting->id;
 
-            return $this->index();
+            // return $this->index();
     }
 
     /**
