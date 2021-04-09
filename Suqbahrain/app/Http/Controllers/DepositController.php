@@ -65,70 +65,48 @@ class DepositController extends Controller
 
             $profitsetting = ProfitSetting::orderBy('id', 'DESC')->first();
             if($profitsetting == null){
-                //Marcent profit 50%
-                $deposit1 = new Deposit();
-                $deposit1->user_id = $order_detail->user_id;
-                $deposit1->product_id = $order_detail->product_id;
-                $deposit1->order_id = $order_detail->order_id;
-                $deposit1->deposit_amount = ($profit * 50) / 100;
-                $deposit1->save();
+                $merchantpro = ($profit * 50) / 100;
+                $distributorpro = ($profit * 10) / 100;
+                $bdopro = ($profit * 2.5) / 100;
+                $suqbahrainpro = ($profit * 37.5) / 100;
 
-                //Dristributor profit 10%
-                $deposit2 = new Deposit();
-                $deposit2->user_id = $Distributor->id;
-                $deposit2->product_id = $order_detail->product_id;
-                $deposit2->order_id = $order_detail->order_id;
-                $deposit2->deposit_amount = ($profit * 10) / 100;
-                $deposit2->save();
-
-                //BDO profit 2.5%
-                $deposit3 = new Deposit();
-                $deposit3->user_id = $BDO->id;
-                $deposit3->product_id = $order_detail->product_id;
-                $deposit3->order_id = $order_detail->order_id;
-                $deposit3->deposit_amount = ($profit * 2.5) / 100;
-                $deposit3->save();
-
-                //Suq Bahrain profit 37.5%
-                $deposit4 = new Deposit();
-                $deposit4->user_id = $suqbahrain->id;
-                $deposit4->product_id = $order_detail->product_id;
-                $deposit4->order_id = $order_detail->order_id;
-                $deposit4->deposit_amount = ($profit * 37.5) / 100;
-                $deposit4->save();
             } else {
-                //Marcent profit 50%
+                $merchantpro = ($profit * $profitsetting->marchant_comission) / 100;
+                $distributorpro = ($profit * $profitsetting->distributor_comission) / 100;
+                $bdopro = ($profit * $profitsetting->bdo_comission) / 100;
+                $suqbahrainpro = ($profit * $profitsetting->suqbahrain_comission) / 100;
+            }
+                //Marcent profit
                 $deposit1 = new Deposit();
                 $deposit1->user_id = $order_detail->user_id;
                 $deposit1->product_id = $order_detail->product_id;
                 $deposit1->order_id = $order_detail->order_id;
-                $deposit1->deposit_amount = ($profit * $profitsetting->marchant_comission) / 100;
+                $deposit1->deposit_amount = $merchantpro;
                 $deposit1->save();
 
-                //Dristributor profit 10%
+                //Dristributor profit
                 $deposit2 = new Deposit();
                 $deposit2->user_id = $Distributor->id;
                 $deposit2->product_id = $order_detail->product_id;
                 $deposit2->order_id = $order_detail->order_id;
-                $deposit2->deposit_amount = ($profit * $profitsetting->distributor_comission) / 100;
+                $deposit2->deposit_amount = $distributorpro;
                 $deposit2->save();
 
-                //BDO profit 2.5%
+                //BDO profit
                 $deposit3 = new Deposit();
                 $deposit3->user_id = $BDO->id;
                 $deposit3->product_id = $order_detail->product_id;
                 $deposit3->order_id = $order_detail->order_id;
-                $deposit3->deposit_amount = ($profit * $profitsetting->bdo_comission) / 100;
+                $deposit3->deposit_amount = $bdopro;
                 $deposit3->save();
 
-                //Suq Bahrain profit 37.5%
+                //Suq Bahrain profit
                 $deposit4 = new Deposit();
                 $deposit4->user_id = $suqbahrain->id;
                 $deposit4->product_id = $order_detail->product_id;
                 $deposit4->order_id = $order_detail->order_id;
-                $deposit4->deposit_amount = ($profit * $profitsetting->suqbahrain_comission) / 100;
+                $deposit4->deposit_amount = $suqbahrainpro;
                 $deposit4->save();
-            }
 
         } else {
             //Suq Bahrain profit
