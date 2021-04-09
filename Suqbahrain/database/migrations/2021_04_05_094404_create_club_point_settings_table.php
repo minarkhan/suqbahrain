@@ -15,10 +15,10 @@ class CreateClubPointSettingsTable extends Migration
     {
         Schema::create('club_point_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('point_per_doller')->nullable();
-            $table->integer('customer_point')->nullable();
-            $table->integer('marchant_point')->nullable();
-            $table->integer('distributor_point')->nullable();
+            $table->double('point_per_doller' , 8, 2)->nullable();
+            $table->double('customer_point' , 8, 2)->nullable();
+            $table->double('marchant_point' , 8, 2)->nullable();
+            $table->double('distributor_point' , 8, 2)->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();

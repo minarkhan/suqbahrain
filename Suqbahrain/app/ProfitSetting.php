@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProfitSetting extends Model
 {
-    protected $table = 'profit_settings';
+    // protected $table = 'profit_settings';
     protected $fillable = [
         'suqbahrain_comission',
         'bdo_comission',

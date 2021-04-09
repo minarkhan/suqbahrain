@@ -43,14 +43,20 @@ class ProfitSettingController extends Controller
     {
         // return $request;
         $this->validate($request, [
-            'suqbahrain' => 'required',
-            'bdo'=> 'required',
-            'marchant'=> 'required',
-            'distributor'=> 'required',
-            'customer'=> 'required',
+            'suqbahrain' => 'required | regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
+            'bdo'=> 'required | regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
+            'marchant'=> 'required | regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
+            'distributor'=> 'required | regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
             'profit_start'=> 'required',
             'profit_end'=> 'required',
         ]);
+
+            $totalpercent = ($request->suqbahrain + $request->bdo + $request->marchant + $request->distributor);
+            if($totalpercent != 100){
+                flash(__('You Must set Total 100%. not up or down'))->error();
+                return redirect()->back();
+            }
+
 
             $profitsetting = new ProfitSetting;
             $profitsetting->suqbahrain_comission  = $request->suqbahrain;
@@ -60,9 +66,9 @@ class ProfitSettingController extends Controller
             $profitsetting->start_date = $request->profit_start;
             $profitsetting->end_date = $request->profit_end;
             $profitsetting->save();
-            return 'success ' . $profitsetting->id;
 
-            // return $this->index();
+            flash(__('Your profit distribution successfully set'))->success();
+            return $this->index();
     }
 
     /**

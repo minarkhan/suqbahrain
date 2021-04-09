@@ -687,10 +687,10 @@
                                     <i class="arrow"></i>
                                 </a>
                                 <ul class="collapse">
-                                    <li class="">
+                                    <li class="{{ areActiveRoutes(['commissionSettings.index'])}}">
                                         <a class="nav-link" href="{{ route('commissionSettings.index') }}">{{__('Commission Settings')}}</a>
                                     </li>
-                                    <li class="">
+                                    <li class="{{ areActiveRoutes(['pointSettings.index'])}}">
                                         <a class="nav-link" href="{{ route('pointSettings.index') }}">{{__('Club Point Settings')}}</a>
                                     </li>
                                 </ul>
@@ -726,7 +726,7 @@
                                 <a href="{{ route('deposit.index') }}">
                                     <i class="fa fa-gift"></i>
                                     <span class="menu-title">
-                                        {{__('Deposit Distributions ')}}
+                                        {{__('Deposit Profit Distributions ')}}
                                         @if($count > 0)
                                         <span class="pull-right badge badge-info">{{ $count }}</span>
                                         @endif

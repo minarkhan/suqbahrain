@@ -15,10 +15,10 @@ class CreateProfitSettingsTable extends Migration
     {
         Schema::create('profit_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('suqbahrain_comission')->nullable();
-            $table->integer('bdo_comission')->nullable();
-            $table->integer('distributor_comission')->nullable();
-            $table->integer('marchant_comission')->nullable();
+            $table->double('suqbahrain_comission', 8, 2 )->nullable();
+            $table->double('bdo_comission', 8, 2)->nullable();
+            $table->double('distributor_comission', 8, 2)->nullable();
+            $table->double('marchant_comission', 8, 2)->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();

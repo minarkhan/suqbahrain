@@ -6,7 +6,9 @@
     <div class="col-lg-6">
         <div class="panel">
             <div class="panel-heading">
-                <h3 class="panel-title">{{__('Commission Settings')}}</h3>
+                <h3 class="panel-title">{{__('Commission Settings')}} <small class="text-warning">Default: Suqbahrain = 37.5%, BDO 2.5%, Merchant 50%, Distributor 10%</small>
+                </h3>
+
             </div>
             <div class="panel-body">
                 <form class="form-horizontal" action="{{ route('commissionSettings.store') }}" method="POST">
@@ -16,7 +18,7 @@
                             <label class="control-label">{{__('Suqbahrain (%)')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" name="suqbahrain" value="{{  env('point_per_doller') }}" placeholder="Point for per doller">
+                            <input type="text" class="form-control" name="suqbahrain" value="{{  old('suqbahrain') }}" placeholder="Point for per doller">
                             @error('suqbahrain')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -27,8 +29,8 @@
                             <label class="control-label">{{__('BDO (%)')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" name="bdo" value="{{  env('bdo') }}" placeholder="ex:10">
-                            @error('marchant')
+                            <input type="text" class="form-control" name="bdo" value="{{  old('bdo') }}" placeholder="ex:10">
+                            @error('bdo')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
@@ -38,7 +40,7 @@
                             <label class="control-label">{{__('Merchant (%)')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" name="marchant" value="{{  env('marchant') }}" placeholder="ex:10">
+                            <input type="text" class="form-control" name="marchant" value="{{  old('marchant') }}" placeholder="ex:10">
                             @error('marchant')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -49,7 +51,7 @@
                             <label class="control-label">{{__('Distributor (%)')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" name="distributor" value="{{  env('distributor') }}" placeholder="ex:10">
+                            <input type="text" class="form-control" name="distributor" value="{{  old('distributor') }}" placeholder="ex:10">
                             @error('distributor')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -60,7 +62,7 @@
                             <label class="control-label">{{__('Start Date')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="date" class="form-control" name="profit_start" value="{{  env('profit start') }}" placeholder="ex:10">
+                            <input type="date" class="form-control" name="profit_start" value="{{  old('profit_start') }}" placeholder="ex:10">
                             @error('profit_start')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -71,7 +73,7 @@
                             <label class="control-label">{{__('End Date')}}</label>
                         </div>
                         <div class="col-lg-6">
-                            <input type="date" class="form-control" name="profit_end" value="{{  env('Profit end') }}" placeholder="ex:10">
+                            <input type="date" class="form-control" name="profit_end" value="{{  old('profit_end') }}" placeholder="ex:10">
                             @error('profit_end')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -100,11 +102,11 @@
                 <tr>
                     <th>#</th>
                     <th>{{__('Suqbahrain (%)')}}</th>
-                    <th>{{__('customer (%)')}}</th>
-                    <th>{{__('marchant (%)')}}</th>
-                    <th>{{__('distributor (%)')}}</th>
-                    <th>{{__('start date')}}</th>
-                    <th>{{__('end date')}}</th>
+                    <th>{{__('BDO (%)')}}</th>
+                    <th>{{__('Marchant (%)')}}</th>
+                    <th>{{__('Distributor (%)')}}</th>
+                    <th>{{__('Start date')}}</th>
+                    <th>{{__('End date')}}</th>
                     <th width="10%">{{__('Action')}}</th>
                 </tr>
             </thead>
@@ -136,4 +138,4 @@
 
 
 @endsection
-4
+

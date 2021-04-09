@@ -337,53 +337,53 @@ class OrderController extends Controller
                     $culb_point = $order_detail->club_point;
 
                     if($pointsetting != null){
-                    //Customer Club Point 50%
-                    $deposit1 = new Deposit();
-                    $deposit1->user_id = $order_detail->user_id;
-                    $deposit1->product_id = $order_detail->product_id;
-                    $deposit1->order_id = $order_detail->order_id;
-                    $deposit1->deposit_club_point = ($culb_point * $pointsetting->customer_point) / 100;
-                    $deposit1->save();
+                        //Customer Club Point 50%
+                        $deposit1 = new Deposit();
+                        $deposit1->user_id = $order_detail->user_id;
+                        $deposit1->product_id = $order_detail->product_id;
+                        $deposit1->order_id = $order_detail->order_id;
+                        $deposit1->deposit_club_point = ($culb_point * $pointsetting->customer_point) / 100;
+                        $deposit1->save();
 
-                    //Merchant Club Point 40%
-                    $deposit2 = new Deposit();
-                    $deposit2->user_id = $merchant->id;
-                    $deposit2->product_id = $order_detail->product_id;
-                    $deposit2->order_id = $order_detail->order_id;
-                    $deposit2->deposit_club_point = ($culb_point * $pointsetting->marchant_point) / 100;
-                    $deposit2->save();
+                        //Merchant Club Point 40%
+                        $deposit2 = new Deposit();
+                        $deposit2->user_id = $merchant->id;
+                        $deposit2->product_id = $order_detail->product_id;
+                        $deposit2->order_id = $order_detail->order_id;
+                        $deposit2->deposit_club_point = ($culb_point * $pointsetting->marchant_point) / 100;
+                        $deposit2->save();
 
-                    //Distributor Club Point 2.5%
-                    $deposit3 = new Deposit();
-                    $deposit3->user_id = $Distributor->id;
-                    $deposit3->product_id = $order_detail->product_id;
-                    $deposit3->order_id = $order_detail->order_id;
-                    $deposit3->deposit_club_point = ($culb_point * $pointsetting->distributor_point) / 100;
-                    $deposit3->save();
+                        //Distributor Club Point 2.5%
+                        $deposit3 = new Deposit();
+                        $deposit3->user_id = $Distributor->id;
+                        $deposit3->product_id = $order_detail->product_id;
+                        $deposit3->order_id = $order_detail->order_id;
+                        $deposit3->deposit_club_point = ($culb_point * $pointsetting->distributor_point) / 100;
+                        $deposit3->save();
                     } else {
-                    //Customer Club Point 50%
-                    $deposit1 = new Deposit();
-                    $deposit1->user_id = $order_detail->user_id;
-                    $deposit1->product_id = $order_detail->product_id;
-                    $deposit1->order_id = $order_detail->order_id;
-                    $deposit1->deposit_club_point = ($culb_point * 50) / 100;
-                    $deposit1->save();
+                        //Customer Club Point 50%
+                        $deposit1 = new Deposit();
+                        $deposit1->user_id = $order_detail->user_id;
+                        $deposit1->product_id = $order_detail->product_id;
+                        $deposit1->order_id = $order_detail->order_id;
+                        $deposit1->deposit_club_point = ($culb_point * 50) / 100;
+                        $deposit1->save();
 
-                    //Merchant Club Point 40%
-                    $deposit2 = new Deposit();
-                    $deposit2->user_id = $merchant->id;
-                    $deposit2->product_id = $order_detail->product_id;
-                    $deposit2->order_id = $order_detail->order_id;
-                    $deposit2->deposit_club_point = ($culb_point * 40) / 100;
-                    $deposit2->save();
+                        //Merchant Club Point 40%
+                        $deposit2 = new Deposit();
+                        $deposit2->user_id = $merchant->id;
+                        $deposit2->product_id = $order_detail->product_id;
+                        $deposit2->order_id = $order_detail->order_id;
+                        $deposit2->deposit_club_point = ($culb_point * 40) / 100;
+                        $deposit2->save();
 
-                    //Distributor Club Point 2.5%
-                    $deposit3 = new Deposit();
-                    $deposit3->user_id = $Distributor->id;
-                    $deposit3->product_id = $order_detail->product_id;
-                    $deposit3->order_id = $order_detail->order_id;
-                    $deposit3->deposit_club_point = ($culb_point * 10) / 100;
-                    $deposit3->save();
+                        //Distributor Club Point 2.5%
+                        $deposit3 = new Deposit();
+                        $deposit3->user_id = $Distributor->id;
+                        $deposit3->product_id = $order_detail->product_id;
+                        $deposit3->order_id = $order_detail->order_id;
+                        $deposit3->deposit_club_point = ($culb_point * 10) / 100;
+                        $deposit3->save();
                     }
                 }
 

@@ -39,10 +39,10 @@ class ClubPointSettingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'point_per_doller' => 'required',
-            'marchant'=> 'required',
-            'distributor'=> 'required',
-            'customer'=> 'required',
+            'point_per_doller' => 'required | regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
+            'marchant'=> 'required | regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
+            'distributor'=> 'required | regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
+            'customer'=> 'required | regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
             'point_start'=> 'required',
             'point_end'=> 'required',
         ]);
