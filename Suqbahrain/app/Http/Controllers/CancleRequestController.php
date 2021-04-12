@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderDetail;
 use App\Order;
 use Illuminate\Http\Request;
 
@@ -72,8 +73,13 @@ class CancleRequestController extends Controller
         // return $request;
         $order = Order::find($id);
         $order->cancel_request = 1;
-        $order->viewed = 1;
+        $order->viewed = 0;
         $order->save();
+        $orderdetails = OrderDetail::where('order_id', $id)->get();
+        foreach($orderdetails as $key => $orderdetail){
+            $orderdetail->cancel_request = 1;
+            $orderdetail->save();
+        }
         return redirect()->back();
     }
 

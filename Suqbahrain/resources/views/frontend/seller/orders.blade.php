@@ -45,6 +45,7 @@
                                                 <th>{{__('Amount')}}</th>
                                                 <th>{{__('Delivery Status')}}</th>
                                                 <th>{{__('Payment Status')}}</th>
+                                                <th>{{__('Cancel')}}</th>
                                                 <th>{{__('Options')}}</th>
                                             </tr>
                                         </thead>
@@ -88,6 +89,16 @@
                                                                     <i class="bg-red"></i> {{__('Unpaid')}}
                                                                 @endif
                                                             </span>
+                                                        </td>
+                                                        <td>
+                                                            @if ($order->cancel_request == 0 )
+                                                                <span class="badge badge--2 mr-4">
+                                                                    {{__('None')}}
+                                                                </span>
+                                                            @else
+                                                                <span class="badge bg-danger badge--2 mr-4 px-1 text-white">{{__('Pending')}}</span>
+                                                            @endif
+
                                                         </td>
                                                         <td>
                                                             <div class="dropdown">

@@ -101,17 +101,17 @@
                                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="">
                                                                     <button onclick="show_purchase_history_details({{ $order->id }})" class="dropdown-item">{{__('Order Details')}}</button>
                                                                     <a href="{{ route('customer.invoice.download', $order->id) }}" class="dropdown-item">{{__('Download Invoice')}}</a>
-                                                                    {{-- <a href="{{ route('cancle_request.index') }}" class="dropdown-item">{{__('Cancel Request')}}</a> --}}
 
-
-                                                                     <a
-                                                                        class="dropdown-item"
-                                                                        href="{{ route('cancle_request.update', $order->id ) }}"
-                                                                        onclick="
-                                                                        event.preventDefault();
-                                                                        document.getElementById('cancel-form').submit();">
-                                                                        {{__('Cancel Request')}}
-                                                                    </a>
+                                                                    @if ( Carbon\Carbon::now()->diffInHours($order->created_at) <= 2 && $order->cancel_request == 0 )
+                                                                        <a
+                                                                            class="dropdown-item"
+                                                                            href="{{ route('cancle_request.update', $order->id ) }}"
+                                                                            onclick="
+                                                                            event.preventDefault();
+                                                                            document.getElementById('cancel-form').submit();">
+                                                                            {{__('Cancel Request')}}
+                                                                        </a>
+                                                                    @endif
 
                                                                     <form id="cancel-form" action="{{ route('cancle_request.update', $order->id) }}" method="POST" class="d-none">
                                                                         @method('PATCH')

@@ -66,6 +66,7 @@ class OrderController extends Controller
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
         $orders = DB::table('orders')
                     ->orderBy('code', 'desc')
+                    ->where('orders.cancel_request', '<', 3)
                     ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                     ->where('order_details.seller_id', $admin_user_id)
                     ->select('orders.id')
@@ -473,6 +474,33 @@ class OrderController extends Controller
         }
     }
 
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function order_cancel($id)
+    {
+        $order = Order::find($id);
+        $order->cancel_request = 3;
+        $order->viewed = 0;
+        $order->save();
+        if( $order->user->user_type == 'customer' && $order->user->is_merchant == 0 ){
+
+            $deposits = Deposit::where('order_id', $id)->get();
+            if( $deposits != null ){
+                foreach($deposits as $key => $deposit){
+                    $deposit->delete();
+                }
+            }
+        }
+        flash('Order has been Canceled successfully')->success();
+        return redirect()->back();
+
+    }
+
     /**
      * Display the specified resource.
      *
@@ -674,4 +702,43 @@ class OrderController extends Controller
         }
         return 1;
     }
+
+        /**
+     * Display a listing of the resource to admin.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function admin_orders_cancel(Request $request)
+    {
+        CoreComponentRepository::instantiateShopRepository();
+
+        $payment_status = null;
+        $delivery_status = null;
+        $sort_search = null;
+        $admin_user_id = User::where('user_type', 'admin')->first()->id;
+        $orders = DB::table('orders')
+                    ->orderBy('code', 'desc')
+                    ->where('orders.cancel_request', 3)
+                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                    ->where('order_details.seller_id', $admin_user_id)
+                    ->select('orders.id')
+                    ->distinct();
+
+        if ($request->payment_type != null){
+            $orders = $orders->where('order_details.payment_status', $request->payment_type);
+            $payment_status = $request->payment_type;
+        }
+        if ($request->delivery_status != null) {
+            $orders = $orders->where('order_details.delivery_status', $request->delivery_status);
+            $delivery_status = $request->delivery_status;
+        }
+        if ($request->has('search')){
+            $sort_search = $request->search;
+            $orders = $orders->where('code', 'like', '%'.$sort_search.'%');
+        }
+        $orders = $orders->paginate(15);
+        return view('orders_canceled.index', compact('orders','payment_status','delivery_status', 'sort_search', 'admin_user_id'));
+    }
+
+
 }

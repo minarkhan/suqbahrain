@@ -105,21 +105,7 @@
                                 </span>
                             </td>
                             <td>
-                                    @if ($order->cancel_request == 0 )
-                                        <span class="badge badge--2 mr-4">
-                                            {{__('None')}}
-                                        </span>
-                                    @else
-                                        <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Pending')}}</span>
-                                    @endif
-                                </span>
-                                {{-- <span class="badge badge--2 mr-4">
-                                    @if ($order->orderDetails->where('seller_id',  $admin_user_id)->first()->payment_status == 'paid')
-                                        <i class="bg-green"></i> Paid
-                                    @else
-                                        <i class="bg-red"></i> Unpaid
-                                    @endif
-                                </span> --}}
+                                <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Canceled')}}</span>
                             </td>
                             @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                 <td>
@@ -132,17 +118,14 @@
                             @endif
                             <td>
                                 <div class="btn-group dropdown">
-                                    <button class="btn btn-primary dropdown-toggle dropdown-toggle-icon" data-toggle="dropdown" type="button">
+                                    <button class="btn btn-primary dropdown-toggle dropdown-toggle-icon" data-toggle="dropdown" type="button" disabled>
                                         {{__('Actions')}} <i class="dropdown-caret"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        @if( $order->cancel_request == 1 )
-                                            <li><a class="bg-warning" href="{{ route('order_cancel.index.admin', $order->id) }}">{{__('Order Cancel')}}</a></li>
-                                        @endif
                                         <li><a href="{{ route('orders.show', encrypt($order->id)) }}">{{__('View')}}</a></li>
                                         <li><a href="{{ route('seller.invoice.download', $order->id) }}">{{__('Download Invoice')}}</a></li>
                                         <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Delete')}}</a></li>
-                                        <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Refund')}}</a></li>
+                                        {{-- <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Refund')}}</a></li> --}}
                                     </ul>
                                 </div>
                             </td>

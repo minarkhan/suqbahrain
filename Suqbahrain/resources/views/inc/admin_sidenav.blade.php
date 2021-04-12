@@ -201,6 +201,7 @@
                                 $orders = DB::table('orders')
                                             ->orderBy('code', 'desc')
                                             ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                                            ->where('orders.cancel_request', '<', 3)
                                             ->where('order_details.seller_id', \App\User::where('user_type', 'admin')->first()->id)
                                             ->where('orders.viewed', 0)
                                             ->select('orders.id')
@@ -223,6 +224,28 @@
                             </a>
                         </li>
                         @endif
+
+                         {{-- Canceled orders List --}}
+                         @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
+                         @php
+                             $orders = DB::table('orders')
+                                 ->orderBy('code', 'desc')
+                                 ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                                 ->where('orders.cancel_request', 3)
+                                 ->where('order_details.seller_id', \App\User::where('user_type', 'admin')->first()->id)
+                                 ->where('orders.viewed', 0)
+                                 ->select('orders.id')
+                                 ->distinct()
+                                 ->count();
+                         @endphp
+                     <li class="{{ areActiveRoutes(['orders_canceled.index.admin', 'orders.show'])}}">
+                         <a class="nav-link" href="{{ route('orders_canceled.index.admin') }}">
+                             <i class="fa fa-times-circle"></i>
+                             <span class="menu-title">{{__('Canceled Orders')}} @if($orders > 0)<span class="pull-right badge badge-info">{{ $orders }}</span>@endif</span>
+                         </a>
+                     </li>
+                     @endif
+
 
                         @if(Auth::user()->user_type == 'admin' || in_array('4', json_decode(Auth::user()->staff->role->permissions)))
                         <li class="{{ areActiveRoutes(['sales.index', 'sales.show'])}}">

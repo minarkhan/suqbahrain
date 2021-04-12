@@ -149,6 +149,9 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/sales/{id}/show', 'OrderController@sales_show')->name('sales.show');
 	Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
 	Route::get('/sales', 'OrderController@sales')->name('sales.index');
+	Route::get('/orders_canceled', 'OrderController@admin_orders_cancel')->name('orders_canceled.index.admin');
+	Route::get('/order_cancel/{id}', 'OrderController@order_cancel')->name('order_cancel.index.admin');
+
 
 	Route::resource('links','LinkController');
 	Route::get('/links/destroy/{id}', 'LinkController@destroy')->name('links.destroy');
