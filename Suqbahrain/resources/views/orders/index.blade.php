@@ -51,6 +51,7 @@
                     <th>{{__('Delivery Status')}}</th>
                     <th>{{__('Payment Method')}}</th>
                     <th>{{__('Payment Status')}}</th>
+                    <th>{{__('Cancel')}}</th>
                     @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                         <th>{{__('Refund')}}</th>
                     @endif
@@ -103,6 +104,23 @@
                                     @endif
                                 </span>
                             </td>
+                            <td>
+                                @if ($order->cancel_request == 0 )
+                                    <span class="badge badge--2 mr-4">
+                                        {{__('None')}}
+                                    </span>
+                                    @else
+                                        <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Pending')}}</span>
+                                    @endif
+                                </span>
+                                {{-- <span class="badge badge--2 mr-4">
+                                    @if ($order->orderDetails->where('seller_id',  $admin_user_id)->first()->payment_status == 'paid')
+                                        <i class="bg-green"></i> Paid
+                                    @else
+                                        <i class="bg-red"></i> Unpaid
+                                    @endif
+                                </span> --}}
+                            </td>
                             @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                 <td>
                                     @if (count($order->refund_requests) > 0)
@@ -121,6 +139,7 @@
                                         <li><a href="{{ route('orders.show', encrypt($order->id)) }}">{{__('View')}}</a></li>
                                         <li><a href="{{ route('seller.invoice.download', $order->id) }}">{{__('Download Invoice')}}</a></li>
                                         <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Delete')}}</a></li>
+                                        <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Refund')}}</a></li>
                                     </ul>
                                 </div>
                             </td>

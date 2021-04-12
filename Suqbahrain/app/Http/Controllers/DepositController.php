@@ -63,7 +63,7 @@ class DepositController extends Controller
 
         if($order_detail->user->is_merchant == 1 && $order_detail->user->user_type == 'customer' && Carbon::now()->diffInDays($order_detail->created_at) >= 7 ){
 
-            $profitsetting = ProfitSetting::orderBy('id', 'DESC')->first();
+            $profitsetting = ProfitSetting::where('start_date', '<=', $order_detail->created_at)->where('end_date', '>=', $order_detail->created_at)->orderBy('id', 'DESC')->first();
             if($profitsetting == null){
                 $merchantpro = ($profit * 50) / 100;
                 $distributorpro = ($profit * 10) / 100;

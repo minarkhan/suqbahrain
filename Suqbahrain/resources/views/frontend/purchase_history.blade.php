@@ -47,6 +47,7 @@
                                                 <th>{{__('Amount')}}</th>
                                                 <th>{{__('Delivery Status')}}</th>
                                                 <th>{{__('Payment Status')}}</th>
+                                                <th>{{__('Cancel')}}</th>
                                                 <th>{{__('Options')}}</th>
                                             </tr>
                                         </thead>
@@ -82,6 +83,16 @@
                                                             </span>
                                                         </td>
                                                         <td>
+                                                            <span class="badge badge--2 mr-4">
+                                                                @if ($order->cancel_request == 0 )
+                                                                    <i class="bg-green"></i> {{__('None')}}
+                                                                @else
+                                                                    <i class="bg-red"></i>
+                                                                    <span style="color:red"> {{__('Pending')}}</span>
+                                                                @endif
+                                                            </span>
+                                                        </td>
+                                                        <td>
                                                             <div class="dropdown">
                                                                 <button class="btn" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                     <i class="fa fa-ellipsis-v"></i>
@@ -90,6 +101,24 @@
                                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="">
                                                                     <button onclick="show_purchase_history_details({{ $order->id }})" class="dropdown-item">{{__('Order Details')}}</button>
                                                                     <a href="{{ route('customer.invoice.download', $order->id) }}" class="dropdown-item">{{__('Download Invoice')}}</a>
+                                                                    {{-- <a href="{{ route('cancle_request.index') }}" class="dropdown-item">{{__('Cancel Request')}}</a> --}}
+
+
+                                                                     <a
+                                                                        class="dropdown-item"
+                                                                        href="{{ route('cancle_request.update', $order->id ) }}"
+                                                                        onclick="
+                                                                        event.preventDefault();
+                                                                        document.getElementById('cancel-form').submit();">
+                                                                        {{__('Cancel Request')}}
+                                                                    </a>
+
+                                                                    <form id="cancel-form" action="{{ route('cancle_request.update', $order->id) }}" method="POST" class="d-none">
+                                                                        @method('PATCH')
+                                                                        @csrf
+                                                                    </form>
+
+
                                                                 </div>
                                                             </div>
                                                         </td>
