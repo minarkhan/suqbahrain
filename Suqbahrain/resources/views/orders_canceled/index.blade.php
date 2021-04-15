@@ -71,7 +71,8 @@
                             <td>
                                 {{ $order->code }}
                                 @if($order->viewed == 0)
-                                <span class="pull-right badge badge-info">{{ __('New') }}</span> @endif
+                                <span class="pull-right badge badge-danger">{{ __('New') }}</span>
+                                @endif
                             </td>
                             <td>
                                 {{ count($order->orderDetails->where('seller_id', $admin_user_id)) }}
@@ -118,7 +119,7 @@
                             @endif
                             <td>
                                 <div class="btn-group dropdown">
-                                    <button class="btn btn-primary dropdown-toggle dropdown-toggle-icon" data-toggle="dropdown" type="button" disabled>
+                                    <button class="btn btn-primary dropdown-toggle dropdown-toggle-icon" data-toggle="dropdown" type="button">
                                         {{__('Actions')}} <i class="dropdown-caret"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">

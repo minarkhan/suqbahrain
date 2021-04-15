@@ -153,6 +153,11 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/order_cancel/{id}', 'OrderController@order_cancel')->name('order_cancel.index.admin');
 
 
+    //order cancel settings
+	Route::get('/orders_cancel_settings', 'OrderController@admin_order_cancel_settings')->name('orders_cancel_settings.settings.admin');
+	Route::post('/orders_cancel_settings', 'OrderController@admin_settings_update')->name('orders_cancel_settings.settings_update.admin');
+
+
 	Route::resource('links','LinkController');
 	Route::get('/links/destroy/{id}', 'LinkController@destroy')->name('links.destroy');
 

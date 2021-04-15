@@ -15,7 +15,7 @@
                     $payment_status = $order->orderDetails->first()->payment_status;
                 @endphp
                 <div class="col-lg-offset-6 col-lg-3">
-                    <label for=update_payment_status"">{{__('Payment Status')}}</label>
+                    <label for="update_payment_status">{{__('Payment Status')}}</label>
                     <select class="form-control demo-select2"  data-minimum-results-for-search="Infinity" id="update_payment_status">
                         <option value="paid" @if ($payment_status == 'paid') selected @endif>{{__('Paid')}}</option>
                         <option value="unpaid" @if ($payment_status == 'unpaid') selected @endif>{{__('Unpaid')}}</option>
@@ -35,6 +35,11 @@
     		<div class="invoice-bill row">
     			<div class="col-sm-6 text-xs-center">
     				<address>
+                        @if ($order->cancel_request == 3)
+                            <strong class="badge badge-danger">{{ __('Order Canceled') }}</strong><br>
+                        @else ($order->cancel_request == 1)
+                            <strong class="badge badge-danger">{{ __('Order Cancel Request') }}</strong><br>
+                        @endif
         				<strong class="text-main">{{ json_decode($order->shipping_address)->name }}</strong><br>
                          {{ json_decode($order->shipping_address)->email }}<br>
                          {{ json_decode($order->shipping_address)->phone }}<br>

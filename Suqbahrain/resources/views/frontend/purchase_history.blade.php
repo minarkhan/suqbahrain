@@ -56,7 +56,13 @@
                                                 @if (count($order->orderDetails) > 0)
                                                     <tr>
                                                         <td>
-                                                            <a href="#{{ $order->code }}" onclick="show_purchase_history_details({{ $order->id }})">{{ $order->code }}</a>
+                                                            <a href="#{{ $order->code }}" onclick="show_purchase_history_details({{ $order->id }})">{{ $order->code }}
+                                                                @if($order->customer_view == 0 && $order->cancel_request < 3)
+                                                                    <span class="pull-right badge badge-success">{{ __('New') }}</span>
+                                                                @elseif($order->customer_view == 0 && $order->cancel_request == 3)
+                                                                    <span class="pull-right badge badge-danger">{{ __('Canceled') }}</span>
+                                                                @endif
+                                                            </a>
                                                         </td>
                                                         <td>{{ date('d-m-Y', $order->date) }}</td>
                                                         <td>
@@ -85,9 +91,12 @@
                                                         <td>
                                                             <span class="badge badge--2 mr-4">
                                                                 @if ($order->cancel_request == 0 )
-                                                                    <i class="bg-green"></i> {{__('None')}}
+                                                                    <i class="bg-secondary"></i> {{__('None')}}
+                                                                @elseif($order->cancel_request == 3)
+                                                                <i class="bg-red"></i>
+                                                                <span style="color:red"> {{__('Canceled')}}</span>
                                                                 @else
-                                                                    <i class="bg-red"></i>
+                                                                    <i class="bg-green"></i>
                                                                     <span style="color:red"> {{__('Pending')}}</span>
                                                                 @endif
                                                             </span>
@@ -102,7 +111,14 @@
                                                                     <button onclick="show_purchase_history_details({{ $order->id }})" class="dropdown-item">{{__('Order Details')}}</button>
                                                                     <a href="{{ route('customer.invoice.download', $order->id) }}" class="dropdown-item">{{__('Download Invoice')}}</a>
 
-                                                                    @if ( Carbon\Carbon::now()->diffInHours($order->created_at) <= 2 && $order->cancel_request == 0 )
+
+                                                                    @php
+                                                                    $cancelRemaining = DB::table('order_cancel_time_settings')
+                                                                        ->select('hours')
+                                                                        ->first();
+                                                                    @endphp
+
+                                                                    @if ( Carbon\Carbon::now()->diffInHours($order->created_at) <= $cancelRemaining->hours && $order->cancel_request == 0 )
                                                                         <a
                                                                             class="dropdown-item"
                                                                             href="{{ route('cancle_request.update', $order->id ) }}"

@@ -57,7 +57,7 @@
                                             $orderDetails = \App\OrderDetail::where('seller_id', Auth::user()->id)->get();
                                             $total = 0;
                                             foreach ($orderDetails as $key => $orderDetail) {
-                                                if($orderDetail->order->payment_status == 'paid'){
+                                                if(!empty($orderDetail->order->payment_status) == 'paid'){
                                                     $total += $orderDetail->price;
                                                 }
                                             }

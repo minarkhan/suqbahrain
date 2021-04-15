@@ -26,6 +26,63 @@
                     </a>
                 </li>
                 @php
+                    $canceled_orders = DB::table('order_details')
+                    ->orderBy('code', 'desc')
+                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                    ->where('order_details.seller_id', Auth::user()->id)
+                    ->where('order_details.seller_viewed', 0)
+                    ->where('order_details.cancel_request', 3)
+                    ->select('order_details.id')
+                    ->distinct()
+                    ->count();
+
+                    $orders = DB::table('order_details')
+                    ->orderBy('code', 'desc')
+                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                    ->where('order_details.seller_id', Auth::user()->id)
+                    ->where('order_details.seller_viewed', 0)
+                    ->where('order_details.cancel_request', '<', 3)
+                    ->select('order_details.id')
+                    ->distinct()
+                    ->count();
+
+
+                @endphp
+
+                @if ( $canceled_orders + $orders > 0 )
+                <li class="">
+                    <a id="notific" class="" href="{{ route('dashboard') }}" onclick="myFunction()" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-bell"></i>
+                        <span class="category-name">
+                            {{__('Notification(s)')}}
+                            <span class="ml-2 text-danger">
+                                <strong>({{ __( $canceled_orders + $orders ) }})</strong>
+                            </span>
+                        </span>
+                    </a>
+                    <script type="text/javascript">
+                        function myFunction(e) {
+                            var element = document.getElementById("notific");
+                            element.classList.add("active");
+                        }
+                    </script>
+                    <div class="dropdown-menu dropdown-menu-right" style="border-left: 3px solid #1abc9c">
+                        @if ($orders > 0)
+                        <a class="dropdown-item" href="{{ route('orders.index') }}">New Order(s) <span class="ml-2 text-success">
+                            <strong>({{ __($orders) }})</strong>
+                        </span></a>
+                        @endif
+
+                        @if ( $canceled_orders > 0 )
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('orders.index') }}">Canceled Order(s) <span class="ml-2 text-danger">
+                            <strong>({{ __($canceled_orders) }})</strong>
+                        </span></a>
+                        @endif
+                    </div>
+                </li>
+                @endif
+                @php
                     $delivery_viewed = App\Order::where('user_id', Auth::user()->id)->where('delivery_viewed', 0)->get()->count();
                     $payment_status_viewed = App\Order::where('user_id', Auth::user()->id)->where('payment_status_viewed', 0)->get()->count();
                     $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
@@ -264,7 +321,7 @@
                         $orderDetails = \App\OrderDetail::where('seller_id', Auth::user()->id)->where('created_at', '>=', date('-30d'))->get();
                         $total = 0;
                         foreach ($orderDetails as $key => $orderDetail) {
-                            if($orderDetail->order->payment_status == 'paid'){
+                            if(!empty($orderDetail->order->payment_status) == 'paid'){
                                 $total += $orderDetail->price;
                             }
                         }
@@ -278,7 +335,7 @@
                             $orderDetails = \App\OrderDetail::where('seller_id', Auth::user()->id)->get();
                             $total = 0;
                             foreach ($orderDetails as $key => $orderDetail) {
-                                if($orderDetail->order->payment_status == 'paid'){
+                                if(!empty($orderDetail->order->payment_status) == 'paid'){
                                     $total += $orderDetail->price;
                                 }
                             }
@@ -295,7 +352,7 @@
                             $orderDetails = \App\OrderDetail::where('seller_id', Auth::user()->id)->where('created_at', '>=', date('-60d'))->where('created_at', '<=', date('-30d'))->get();
                             $total = 0;
                             foreach ($orderDetails as $key => $orderDetail) {
-                                if($orderDetail->order->payment_status == 'paid'){
+                                if(!empty($orderDetail->order->payment_status) == 'paid'){
                                     $total += $orderDetail->price;
                                 }
                             }

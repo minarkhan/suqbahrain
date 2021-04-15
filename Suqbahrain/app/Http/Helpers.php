@@ -124,7 +124,6 @@ if (! function_exists('filter_customer_products')) {
     }
 }
 
-
 //highlights the selected navigation on admin panel
 if (! function_exists('areActiveRoutes')) {
     function areActiveRoutes(Array $routes, $output = "active-link")

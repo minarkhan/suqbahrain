@@ -740,5 +740,20 @@ class OrderController extends Controller
         return view('orders_canceled.index', compact('orders','payment_status','delivery_status', 'sort_search', 'admin_user_id'));
     }
 
+    public function admin_order_cancel_settings(){
+        $cancelRemaining = DB::table('order_cancel_time_settings')->first();
+        return view('orders_cancel_settings.index', compact('cancelRemaining'));
+    }
+
+    public function admin_settings_update(Request $request){
+
+        DB::table('order_cancel_time_settings')
+        ->where('id', $request->id)
+        ->update(['hours' => $request->hours]);
+
+        flash('Successfully Updated')->success();
+        return redirect()->back();
+    }
+
 
 }

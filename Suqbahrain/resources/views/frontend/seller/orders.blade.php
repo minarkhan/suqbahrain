@@ -60,7 +60,15 @@
                                                             {{ $key+1 }}
                                                         </td>
                                                         <td>
-                                                            <a href="#{{ $order->code }}" onclick="show_order_details({{ $order->id }})">{{ $order->code }}</a>
+                                                            <a href="#{{ $order->code }}" onclick="show_order_details({{ $order->id }})">{{ $order->code }}
+
+                                                                @if($order->seller_viewed == 0 && $order->cancel_request < 3)
+                                                                    <span class="pull-right badge badge-success">{{ __('New') }}</span>
+                                                                @elseif($order->seller_viewed == 0 && $order->cancel_request == 3)
+                                                                    <span class="pull-right badge badge-danger">{{ __('Canceled') }}</span>
+                                                                @endif
+
+                                                            </a>
                                                         </td>
                                                         <td>
                                                             {{ count($order->orderDetails->where('seller_id', Auth::user()->id)) }}
@@ -91,13 +99,17 @@
                                                             </span>
                                                         </td>
                                                         <td>
-                                                            @if ($order->cancel_request == 0 )
-                                                                <span class="badge badge--2 mr-4">
-                                                                    {{__('None')}}
-                                                                </span>
-                                                            @else
-                                                                <span class="badge bg-danger badge--2 mr-4 px-1 text-white">{{__('Pending')}}</span>
-                                                            @endif
+                                                            <span class="badge badge--2 mr-4">
+                                                                @if ($order->cancel_request == 0 )
+                                                                    <i class="bg-secondary"></i> {{__('None')}}
+                                                                @elseif($order->cancel_request == 3)
+                                                                <i class="bg-red"></i>
+                                                                <span style="color:red"> {{__('Canceled')}}</span>
+                                                                @else
+                                                                    <i class="bg-green"></i>
+                                                                    <span style="color:red"> {{__('Pending')}}</span>
+                                                                @endif
+                                                            </span>
 
                                                         </td>
                                                         <td>

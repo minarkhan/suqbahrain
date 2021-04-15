@@ -244,6 +244,12 @@
                              <span class="menu-title">{{__('Canceled Orders')}} @if($orders > 0)<span class="pull-right badge badge-info">{{ $orders }}</span>@endif</span>
                          </a>
                      </li>
+                     <li class="{{ areActiveRoutes(['orders_cancel_settings.settings.admin'])}}">
+                         <a class="nav-link" href="{{ route('orders_cancel_settings.settings.admin') }}">
+                             <i class="fa fa-gear"></i>
+                             <span class="menu-title">{{__('Order Cancel Settings')}}
+                         </a>
+                     </li>
                      @endif
 
 

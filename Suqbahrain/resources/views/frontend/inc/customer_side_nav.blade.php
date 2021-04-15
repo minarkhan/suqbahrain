@@ -22,6 +22,63 @@
                     </a>
                 </li>
 
+                @php
+                    $canceled_orders = DB::table('orders')
+                    ->orderBy('code', 'desc')
+                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                    ->where('orders.user_id', Auth::user()->id)
+                    ->where('orders.customer_view', 0)
+                    ->where('orders.cancel_request', 3)
+                    ->select('orders.id')
+                    ->distinct()
+                    ->count();
+
+                    $orders = DB::table('orders')
+                    ->orderBy('code', 'desc')
+                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                    ->where('orders.user_id', Auth::user()->id)
+                    ->where('orders.customer_view', 0)
+                    ->where('orders.cancel_request', '<', 3)
+                    ->select('orders.id')
+                    ->distinct()
+                    ->count();
+                @endphp
+
+                @if ( $canceled_orders + $orders > 0 )
+                <li class="">
+                    <a id="notific" class="" href="{{ route('dashboard') }}" onclick="myFunction()" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-bell"></i>
+                        <span class="category-name">
+                            {{__('Notification(s)')}}
+                            <span class="ml-2 text-danger">
+                                <strong>({{ __( $canceled_orders + $orders ) }})</strong>
+                            </span>
+                        </span>
+                    </a>
+                    <script type="text/javascript">
+                        function myFunction(e) {
+                            var element = document.getElementById("notific");
+                            element.classList.add("active");
+                        }
+                    </script>
+                    <div class="dropdown-menu dropdown-menu-right" style="border-left: 3px solid #1abc9c">
+                        @if ($orders > 0)
+                        <a class="dropdown-item" href="{{ route('purchase_history.index') }}">New Order(s) <span class="ml-2 text-success">
+                            <strong>({{ __($orders) }})</strong>
+                        </span></a>
+                        @endif
+
+                        @if ( $canceled_orders > 0 )
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('purchase_history.index') }}">Canceled Order(s) <span class="ml-2 text-danger">
+                            <strong>({{ __($canceled_orders) }})</strong>
+                        </span></a>
+                        @endif
+                    </div>
+                </li>
+                @endif
+
+
                 @if(\App\BusinessSetting::where('type', 'classified_product')->first()->value == 1)
                 <li>
                     <a href="{{ route('customer_products.index') }}" class="{{ areActiveRoutesHome(['customer_products.index', 'customer_products.create', 'customer_products.edit'])}}">
@@ -42,10 +99,17 @@
                     <a href="{{ route('purchase_history.index') }}" class="{{ areActiveRoutesHome(['purchase_history.index'])}}">
                         <i class="la la-file-text"></i>
                         <span class="category-name">
-                            {{__('Purchase History')}} @if($delivery_viewed > 0 || $payment_status_viewed > 0)<span class="ml-2" style="color:green"><strong>({{ __('New Notifications') }})</strong></span>@endif
+                            {{__('Purchase History')}}
+                            @if($delivery_viewed > 0 || $payment_status_viewed > 0)
+                                <span class="ml-2" style="color:green">
+                                    <strong>({{ __('New Notifications') }})</strong>
+                                </span>
+                            @endif
                         </span>
                     </a>
                 </li>
+
+
                 <li>
                     <a href="{{ route('digital_purchase_history.index') }}" class="{{ areActiveRoutesHome(['digital_purchase_history.index'])}}">
                         <i class="la la-download"></i>

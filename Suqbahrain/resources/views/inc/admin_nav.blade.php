@@ -52,6 +52,7 @@
                                 ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                                 ->where('order_details.seller_id', \App\User::where('user_type', 'admin')->first()->id)
                                 ->where('orders.viewed', 0)
+                                ->where('orders.cancel_request', '<', 3)
                                 ->select('orders.id')
                                 ->distinct()
                                 ->count();
@@ -110,6 +111,27 @@
                                             <a class="media" href="{{ route('sellers.index') }}">
                                                 <div class="media-body">
                                                     <p class="mar-no text-nowrap text-main text-semibold">{{__('New verification request(s)')}}</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @php
+                                        $order_cancels = DB::table('orders')
+                                            ->orderBy('code', 'desc')
+                                            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                                            ->where('order_details.seller_id', \App\User::where('user_type', 'admin')->first()->id)
+                                            ->where('orders.viewed', 0)
+                                            ->where('orders.cancel_request', 3)
+                                            ->select('orders.id')
+                                            ->distinct()
+                                            ->count();
+                                    @endphp
+                                    @if($order_cancels > 0)
+                                        <li>
+                                            <a class="media" href="{{ route('orders_canceled.index.admin') }}" style="position:relative">
+                                                <span class="badge badge-header badge-danger" style="right:auto;left:3px;"></span>
+                                                <div class="media-body">
+                                                    <p class="mar-no text-nowrap text-main text-semibold">{{ $order_cancels }} Order(s) Canceled</p>
                                                 </div>
                                             </a>
                                         </li>

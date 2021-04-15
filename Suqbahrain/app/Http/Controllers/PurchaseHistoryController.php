@@ -40,6 +40,7 @@ class PurchaseHistoryController extends Controller
         $order = Order::findOrFail($request->order_id);
         $order->delivery_viewed = 1;
         $order->payment_status_viewed = 1;
+        $order->customer_view = 1;
         $order->save();
         return view('frontend.partials.order_details_customer', compact('order'));
     }
