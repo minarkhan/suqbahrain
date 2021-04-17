@@ -1,5 +1,11 @@
 <div class="modal-header">
-    <h5 class="modal-title strong-600 heading-5">{{__('Order id')}}: {{ $order->code }}</h5>
+    <h5 class="modal-title strong-600 heading-5">{{__('Order id')}}: {{ $order->code }}
+        @if( $order->cancel_request == 1 )
+        <strong class="badge badge-danger">Order Cancel Rrequested</strong>
+        @elseif ( $order->cancel_request == 3 )
+        <strong class="badge badge-danger"> Order Canceled</strong>
+        @endif
+    </h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>

@@ -563,7 +563,7 @@ class OrderController extends Controller
     public function order_details(Request $request)
     {
         $order = Order::findOrFail($request->order_id);
-        //$order->viewed = 1;
+        $order->seller_viewed = 1;
         $order->save();
         return view('frontend.partials.order_details_seller', compact('order'));
     }

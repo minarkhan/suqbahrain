@@ -26,23 +26,24 @@
                     </a>
                 </li>
                 @php
-                    $canceled_orders = DB::table('order_details')
+
+                    $orders = DB::table('orders')
                     ->orderBy('code', 'desc')
-                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                     ->where('order_details.seller_id', Auth::user()->id)
-                    ->where('order_details.seller_viewed', 0)
-                    ->where('order_details.cancel_request', 3)
-                    ->select('order_details.id')
+                    ->where('orders.seller_viewed', 0)
+                    ->where('orders.cancel_request', '<', 3)
+                    ->select('orders.id')
                     ->distinct()
                     ->count();
 
-                    $orders = DB::table('order_details')
+                    $canceled_orders = DB::table('orders')
                     ->orderBy('code', 'desc')
-                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                     ->where('order_details.seller_id', Auth::user()->id)
-                    ->where('order_details.seller_viewed', 0)
-                    ->where('order_details.cancel_request', '<', 3)
-                    ->select('order_details.id')
+                    ->where('orders.seller_viewed', 0)
+                    ->where('orders.cancel_request', 3)
+                    ->select('orders.id')
                     ->distinct()
                     ->count();
 
