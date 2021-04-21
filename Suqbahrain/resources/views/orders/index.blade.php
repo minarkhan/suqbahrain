@@ -137,7 +137,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         @if( $order->cancel_request == 1 )
-                                            <li><a class="bg-warning" href="{{ route('order_cancel.index.admin', $order->id) }}">{{__('Order Cancel')}}</a></li>
+                                            <li><a class="bg-warning text-white" href="{{ route('order_cancel.index.admin', $order->id) }}">{{__('Order Cancel')}}</a></li>
                                         @endif
                                         <li><a href="{{ route('orders.show', encrypt($order->id)) }}">{{__('View')}}</a></li>
                                         <li><a href="{{ route('seller.invoice.download', $order->id) }}">{{__('Download Invoice')}}</a></li>

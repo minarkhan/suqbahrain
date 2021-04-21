@@ -486,7 +486,22 @@ class OrderController extends Controller
         $order = Order::find($id);
         $order->cancel_request = 3;
         $order->viewed = 0;
+        $order->customer_view = 0;
+        $order->seller_viewed = 0;
         $order->save();
+
+        if($order->payment_status == 'paid'){
+            if( $order->grand_total < Auth::user()->balance ){
+                $user = Auth::user();
+                $user->balance = $user->balance - $order->grand_total;
+                $user->save();
+
+                $customer = User::where('id', $order->user_id);
+                $customer->balance = $customer->balance + $order->grand_total;
+                $customer->save();
+            }
+        }
+
         if( $order->user->user_type == 'customer' && $order->user->is_merchant == 0 ){
 
             $deposits = Deposit::where('order_id', $id)->get();
@@ -498,6 +513,8 @@ class OrderController extends Controller
         }
         flash('Order has been Canceled successfully')->success();
         return redirect()->back();
+
+
 
     }
 
