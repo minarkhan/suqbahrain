@@ -114,11 +114,10 @@
 
                                                                     @php
                                                                     $cancelRemaining = DB::table('order_cancel_time_settings')
-                                                                        ->select('hours')
                                                                         ->first();
                                                                     @endphp
 
-                                                                    @if ( Carbon\Carbon::now()->diffInHours($order->created_at) <= $cancelRemaining->hours && $order->cancel_request == 0 )
+                                                                    @if ( Carbon\Carbon::now()->diffInHours($order->created_at) <= $cancelRemaining->cancel_hours && $order->cancel_request == 0 )
                                                                         <a
                                                                             class="dropdown-item"
                                                                             href="{{ route('cancle_request.update', $order->id ) }}"
@@ -133,7 +132,7 @@
                                                                         @method('PATCH')
                                                                         @csrf
                                                                     </form>
-
+                                                                    
 
                                                                 </div>
                                                             </div>

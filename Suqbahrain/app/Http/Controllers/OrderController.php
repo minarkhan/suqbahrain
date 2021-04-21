@@ -762,11 +762,21 @@ class OrderController extends Controller
         return view('orders_cancel_settings.index', compact('cancelRemaining'));
     }
 
-    public function admin_settings_update(Request $request){
+    public function admin_settings_update(Request $request)
+    {
+        // return $request;
+
+        $validated = $request->validate([
+            'hours' => 'required',
+            'days' => 'required',
+        ]);
 
         DB::table('order_cancel_time_settings')
         ->where('id', $request->id)
-        ->update(['hours' => $request->hours]);
+        ->update([
+            'cancel_hours' => $request->hours,
+            'return_days' => $request->days,
+            ]);
 
         flash('Successfully Updated')->success();
         return redirect()->back();

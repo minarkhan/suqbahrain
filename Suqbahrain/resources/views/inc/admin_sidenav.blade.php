@@ -247,7 +247,7 @@
                      <li class="{{ areActiveRoutes(['orders_cancel_settings.settings.admin'])}}">
                          <a class="nav-link" href="{{ route('orders_cancel_settings.settings.admin') }}">
                              <i class="fa fa-gear"></i>
-                             <span class="menu-title">{{__('Order Cancel Settings')}}
+                             <span class="menu-title">{{__('Order related Settings')}}
                          </a>
                      </li>
                      @endif

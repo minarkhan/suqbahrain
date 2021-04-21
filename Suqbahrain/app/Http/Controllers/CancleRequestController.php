@@ -70,7 +70,7 @@ class CancleRequestController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return $request;
+        return $request;
         $order = Order::find($id);
         $order->cancel_request = 1;
         $order->viewed = 0;
