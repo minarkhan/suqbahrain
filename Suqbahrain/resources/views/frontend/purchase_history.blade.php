@@ -114,7 +114,7 @@
 
                                                                     @php
                                                                     $cancelRemaining = DB::table('order_cancel_time_settings')
-                                                                        ->select('cancel_hours')
+                                                                        ->select('cancel_hours', 'return_days')
                                                                         ->first();
                                                                     @endphp
 
@@ -133,6 +133,13 @@
                                                                         @method('PATCH')
                                                                         @csrf
                                                                     </form>
+
+                                                                    @if ( Carbon\Carbon::now()->diffInDays($order->created_at) <= $cancelRemaining->return_days && $order->cancel_request == 0 )
+
+                                                                    <a class="dropdown-item" href="{{ route('purchase_return_request.customer', $order->id ) }}">
+                                                                            {{__('Return Request')}} </a>
+
+                                                                    @endif
 
 
                                                                 </div>

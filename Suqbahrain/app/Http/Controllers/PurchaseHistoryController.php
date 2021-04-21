@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Order;
 use App\OrderDetail;
-use Auth;
+use App\ProductReturn;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseHistoryController extends Controller
 {
@@ -109,5 +110,42 @@ class PurchaseHistoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function purchase_return_request($id)
+    {
+        // return $id;
+        $order = Order::where('id', $id)->first();
+        return view('frontend.purchase_return_request', compact('order'));
+    }
+
+    public function purchase_return_request_store(Request $request)
+    {
+        // return $request;
+        $validated = $request->validate([
+            'reason' => 'required | max:255',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+            // return ProductReturn::all();
+        $product_return = new ProductReturn();
+        $product_return->user_id = Auth::user()->id;
+        $product_return->order_id = $request->order_id;
+        $product_return->reason = $request->reason;
+        if($request->hasFile('image')){
+            $image = $request->file('image')->store('uploads/product_return');
+        }
+        $product_return->image = $image;
+        if( $product_return->save() ){
+            $order = Order::findOrFail($$request->order_id);
+            $order->return_request = 1;
+            $order->save();
+
+            flash('Your product return request has been successfully send');
+            return $this->index();
+        }
+
+        flash('Somethisg went wrong');
+        return redirect()->back();
+
     }
 }
