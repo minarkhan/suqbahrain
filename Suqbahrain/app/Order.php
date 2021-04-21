@@ -32,4 +32,9 @@ class Order extends Model
     {
         return $this->belongsTo(PickupPoint::class);
     }
+
+    public function return()
+    {
+        return $this->hasOne(ProductReturn::class, 'order_id', 'id');
+    }
 }

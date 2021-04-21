@@ -244,6 +244,26 @@
                              <span class="menu-title">{{__('Canceled Orders')}} @if($orders > 0)<span class="pull-right badge badge-info">{{ $orders }}</span>@endif</span>
                          </a>
                      </li>
+
+                     @php
+                            $orders_return = DB::table('orders')
+                                 ->orderBy('code', 'desc')
+                                 ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                                 ->where('orders.cancel_request', 0)
+                                 ->where('orders.return_request', 3)
+                                 ->where('order_details.seller_id', \App\User::where('user_type', 'admin')->first()->id)
+                                 ->where('orders.viewed', 0)
+                                 ->select('orders.id')
+                                 ->distinct()
+                                 ->count();
+                         @endphp
+
+                     <li class="{{ areActiveRoutes(['orders_return.index.admin'])}}">
+                         <a class="nav-link" href="{{ route('orders_return.index.admin') }}">
+                             <i class="fa fa-undo"></i>
+                             <span class="menu-title">{{__('Product Return')}} @if($orders_return > 0)<span class="pull-right badge badge-info">{{ $orders_return }}</span>@endif</span>
+                         </a>
+                     </li>
                      <li class="{{ areActiveRoutes(['orders_cancel_settings.settings.admin'])}}">
                          <a class="nav-link" href="{{ route('orders_cancel_settings.settings.admin') }}">
                              <i class="fa fa-gear"></i>

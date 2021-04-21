@@ -151,6 +151,9 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/sales', 'OrderController@sales')->name('sales.index');
 	Route::get('/orders_canceled', 'OrderController@admin_orders_cancel')->name('orders_canceled.index.admin');
 	Route::get('/order_cancel/{id}', 'OrderController@order_cancel')->name('order_cancel.index.admin');
+    
+	Route::get('/orders_return', 'OrderController@admin_orders_return')->name('orders_return.index.admin');
+	Route::get('/orders_return_app/{id}', 'OrderController@orders_return_app')->name('orders_return_app.update.admin');
 
 
     //order cancel settings

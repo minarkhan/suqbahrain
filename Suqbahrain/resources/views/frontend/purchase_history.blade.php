@@ -48,6 +48,7 @@
                                                 <th>{{__('Delivery Status')}}</th>
                                                 <th>{{__('Payment Status')}}</th>
                                                 <th>{{__('Cancel')}}</th>
+                                                <th>{{__('Return')}}</th>
                                                 <th>{{__('Options')}}</th>
                                             </tr>
                                         </thead>
@@ -102,6 +103,19 @@
                                                             </span>
                                                         </td>
                                                         <td>
+                                                            <span class="badge badge--2 mr-4">
+                                                                @if ($order->return_request == 0 )
+                                                                    <i class="bg-secondary"></i> {{__('None')}}
+                                                                @elseif($order->return_request == 3)
+                                                                <i class="bg-red"></i>
+                                                                <span style="color:red"> {{__('Canceled')}}</span>
+                                                                @else
+                                                                    <i class="bg-green"></i>
+                                                                    <span style="color:red"> {{__('Pending')}}</span>
+                                                                @endif
+                                                            </span>
+                                                        </td>
+                                                        <td>
                                                             <div class="dropdown">
                                                                 <button class="btn" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                     <i class="fa fa-ellipsis-v"></i>
@@ -134,7 +148,7 @@
                                                                         @csrf
                                                                     </form>
 
-                                                                    @if ( Carbon\Carbon::now()->diffInDays($order->created_at) <= $cancelRemaining->return_days && $order->cancel_request == 0 )
+                                                                    @if ( Carbon\Carbon::now()->diffInDays($order->created_at) <= $cancelRemaining->return_days && $order->cancel_request == 0 && $order->return_request == 0)
 
                                                                     <a class="dropdown-item" href="{{ route('purchase_return_request.customer', $order->id ) }}">
                                                                             {{__('Return Request')}} </a>

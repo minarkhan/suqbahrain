@@ -136,15 +136,15 @@ class PurchaseHistoryController extends Controller
         }
         $product_return->image = $image;
         if( $product_return->save() ){
-            $order = Order::findOrFail($$request->order_id);
+            $order = Order::findOrFail($request->order_id);
             $order->return_request = 1;
             $order->save();
 
-            flash('Your product return request has been successfully send');
-            return $this->index();
+            flash('Your product return request has been successfully send')->success();
+            return redirect()->route('purchase_history.index');
         }
 
-        flash('Somethisg went wrong');
+        flash('Somethisg went wrong')->error();
         return redirect()->back();
 
     }
