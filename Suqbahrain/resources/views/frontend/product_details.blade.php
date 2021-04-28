@@ -586,10 +586,127 @@
                                 </div>
                                 <div class="tab-pane" id="tab_default_4" style="{{ count($detailedProduct->reviews) <= 0  ? '' : 'height: 500px;overflow: scroll' }}">
                                     <div class="fluid-paragraph py-4">
+                                        @foreach ($detailedProduct->reviews as $key => $review)
+                                            <div class="block block-comment">
+                                                <div class="block-image">
+                                                    <img src="{{ asset('frontend/images/placeholder.jpg') }}" data-src="{{ asset($review->user->avatar_original) }}" class="rounded-circle lazyload">
+                                                </div>
+                                                <div class="block-body">
+                                                    <div class="block-body-inner">
+                                                        <div class="row no-gutters">
+                                                            <div class="col">
+                                                                <h3 class="heading heading-6">
+                                                                    <a href="javascript:;">{{ $review->user->name }}</a>
+                                                                </h3>
+                                                                <span class="comment-date">
+                                                                    {{ date('d-m-Y', strtotime($review->created_at)) }}
+                                                                </span>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="rating text-right clearfix d-block">
+                                                                    <span class="star-rating star-rating-sm float-right">
+                                                                        @for ($i=0; $i < $review->rating; $i++)
+                                                                            <i class="fa fa-star active"></i>
+                                                                        @endfor
+                                                                        @for ($i=0; $i < 5-$review->rating; $i++)
+                                                                            <i class="fa fa-star"></i>
+                                                                        @endfor
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <p class="comment-text">
+                                                            {{ $review->comment }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+
                                         @if(count($detailedProduct->reviews) <= 0)
-                                            <div class="text-center">
+                                            <div class="text-center border-bottom mb-4 pb-4">
                                                 {{ __('There have been no reviews for this product yet.') }}
                                             </div>
+                                        @endif
+
+                                        @if(Auth::check())
+                                            @php
+                                                $commentable = false;
+                                            @endphp
+                                            @foreach ($detailedProduct->orderDetails as $key => $orderDetail)
+                                                @if($orderDetail->order != null && $orderDetail->order->user_id == Auth::user()->id && $orderDetail->delivery_status == 'delivered' && \App\Review::where('user_id', Auth::user()->id)->where('product_id', $detailedProduct->id)->first() == null)
+                                                    @php
+                                                        $commentable = true;
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                            @if ($commentable)
+                                                <div class="leave-review">
+                                                    <div class="section-title section-title--style-1">
+                                                        <h3 class="section-title-inner heading-6 strong-600 text-uppercase">
+                                                            {{__('Write a review')}}
+                                                        </h3>
+                                                    </div>
+                                                    <form class="form-default" role="form" action="{{ route('reviews.store') }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{ $detailedProduct->id }}">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="" class="text-uppercase c-gray-light">{{__('Your name')}}</label>
+                                                                    <input type="text" name="name" value="{{ Auth::user()->name }}" class="form-control" disabled required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="" class="text-uppercase c-gray-light">{{__('Email')}}</label>
+                                                                    <input type="text" name="email" value="{{ Auth::user()->email }}" class="form-control" required disabled>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="c-rating mt-1 mb-1 clearfix d-inline-block">
+                                                                    <small style="color: red; float: right;">(Required)</small>
+                                                                    <input type="radio" id="star5" name="rating" value="5" required/>
+                                                                    <label class="star" for="star5" title="Awesome" aria-hidden="true"></label>
+
+                                                                    <input type="radio" id="star4" name="rating" value="4" required/>
+                                                                    <label class="star" for="star4" title="Great" aria-hidden="true"></label>
+                                                                    <input type="radio" id="star3" name="rating" value="3" required/>
+                                                                    <label class="star" for="star3" title="Very good" aria-hidden="true"></label>
+                                                                    <input type="radio" id="star2" name="rating" value="2" required/>
+                                                                    <label class="star" for="star2" title="Good" aria-hidden="true"></label>
+                                                                    <input type="radio" id="star1" name="rating" value="1" required/>
+                                                                    <label class="star" for="star1" title="Bad" aria-hidden="true"></label>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-sm-12">
+                                                                <textarea class="form-control" rows="4" name="comment" placeholder="{{__('Your review')}}" required></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="text-right">
+                                                            <button type="submit" class="btn btn-styled btn-base-1 btn-circle mt-4">
+                                                                {{__('Send review')}}
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        @else
+                                        <div class="leave-review">
+                                            <div class="section-title section-title--style-1">
+                                                <h3 class="section-title-inner heading-6 strong-600 text-uppercase">
+                                                    {{__('Write a review')}}
+                                                    <a href="{{ route('user.login') }}">Login</a>
+                                                </h3>
+                                            </div>
+                                        </div>
                                         @endif
                                     </div>
                                 </div>
