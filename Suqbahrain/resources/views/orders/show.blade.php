@@ -37,7 +37,7 @@
     				<address>
                         @if ($order->cancel_request == 3)
                             <strong class="badge badge-danger">{{ __('Order Canceled') }}</strong><br>
-                        @else ($order->cancel_request == 1)
+                        @elseif ($order->cancel_request == 1)
                             <strong class="badge badge-danger">{{ __('Order Cancel Request') }}</strong><br>
                         @endif
         				<strong class="text-main">{{ json_decode($order->shipping_address)->name }}</strong><br>

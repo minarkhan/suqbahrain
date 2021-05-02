@@ -106,7 +106,11 @@
                                 </span>
                             </td>
                             <td>
-                                <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Canceled')}}</span>
+                                @if( $order->cancel_request == 1 )
+                                    <span class="badge badge-warning badge--2 mr-4 text-white">{{__('Pending')}}</span>
+                                @else
+                                    <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Canceled')}}</span>
+                                @endif
                             </td>
                             @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                 <td>
@@ -123,6 +127,9 @@
                                         {{__('Actions')}} <i class="dropdown-caret"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
+                                        @if( $order->cancel_request == 1 )
+                                            <li><a class="bg-warning text-white" href="{{ route('order_cancel.index.admin', $order->id) }}">{{__('Order Cancel')}}</a></li>
+                                        @endif
                                         <li><a href="{{ route('orders.show', encrypt($order->id)) }}">{{__('View')}}</a></li>
                                         <li><a href="{{ route('seller.invoice.download', $order->id) }}">{{__('Download Invoice')}}</a></li>
                                         <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Delete')}}</a></li>

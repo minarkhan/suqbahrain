@@ -107,10 +107,10 @@
                                                                 @if ($order->return_request == 0 )
                                                                     <i class="bg-secondary"></i> {{__('None')}}
                                                                 @elseif($order->return_request == 3)
-                                                                <i class="bg-red"></i>
-                                                                <span style="color:red"> {{__('Canceled')}}</span>
+                                                                <i class="bg-green"></i>
+                                                                <span style="color:green"> {{__('Success')}}</span>
                                                                 @else
-                                                                    <i class="bg-green"></i>
+                                                                    <i class="bg-red"></i>
                                                                     <span style="color:red"> {{__('Pending')}}</span>
                                                                 @endif
                                                             </span>
@@ -122,16 +122,13 @@
                                                                 </button>
 
                                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="">
-                                                                    <button onclick="show_purchase_history_details({{ $order->id }})" class="dropdown-item">{{__('Order Details')}}</button>
+                                                                    <button onclick="show_purchase_history_details({{ $order->id }})" class="dropdown-item">{{_('Order Details')}}</button>
                                                                     <a href="{{ route('customer.invoice.download', $order->id) }}" class="dropdown-item">{{__('Download Invoice')}}</a>
 
 
                                                                     @php
                                                                     $cancelRemaining = DB::table('order_cancel_time_settings')
-<<<<<<< HEAD
-=======
                                                                         ->select('cancel_hours', 'return_days')
->>>>>>> new_branch
                                                                         ->first();
                                                                     @endphp
 
@@ -150,9 +147,7 @@
                                                                         @method('PATCH')
                                                                         @csrf
                                                                     </form>
-<<<<<<< HEAD
-                                                                    
-=======
+
 
                                                                     @if ( Carbon\Carbon::now()->diffInDays($order->created_at) <= $cancelRemaining->return_days && $order->cancel_request == 0 && $order->return_request == 0)
 
@@ -161,7 +156,6 @@
 
                                                                     @endif
 
->>>>>>> new_branch
 
                                                                 </div>
                                                             </div>

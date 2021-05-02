@@ -66,7 +66,7 @@ class OrderController extends Controller
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
         $orders = DB::table('orders')
                     ->orderBy('code', 'desc')
-                    ->where('orders.cancel_request', '<', 3)
+                    ->where('orders.cancel_request', 0)
                     ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                     ->where('order_details.seller_id', $admin_user_id)
                     ->select('orders.id')
@@ -735,7 +735,7 @@ class OrderController extends Controller
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
         $orders = DB::table('orders')
                     ->orderBy('code', 'desc')
-                    ->where('orders.cancel_request', 3)
+                    ->where('orders.cancel_request', '>', 0)
                     ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                     ->where('order_details.seller_id', $admin_user_id)
                     ->select('orders.id')

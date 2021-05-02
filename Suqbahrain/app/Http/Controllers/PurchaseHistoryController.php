@@ -46,12 +46,12 @@ class PurchaseHistoryController extends Controller
         return view('frontend.partials.order_details_customer', compact('order'));
     }
 
-    public function purchase_return_request($id)
-    {
-        return $id;
-        $orders = Order::where('id', $id)->first();
-        return view('frontend.purchase_return', compact('orders'));
-    }
+    // public function purchase_return_request($id)
+    // {
+    //     return $id;
+    //     $orders = Order::where('id', $id)->first();
+    //     return view('frontend.purchase_return', compact('orders'));
+    // }
 
     /**
      * Show the form for creating a new resource.
