@@ -584,7 +584,7 @@
                                         <span class="space-md-md"></span>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="tab_default_4">
+                                <div class="tab-pane" id="tab_default_4" style="{{ count($detailedProduct->reviews) <= 0  ? '' : 'height: 500px;overflow: scroll' }}">
                                     <div class="fluid-paragraph py-4">
                                         @foreach ($detailedProduct->reviews as $key => $review)
                                             <div class="block block-comment">
@@ -624,7 +624,7 @@
                                         @endforeach
 
                                         @if(count($detailedProduct->reviews) <= 0)
-                                            <div class="text-center">
+                                            <div class="text-center border-bottom mb-4 pb-4">
                                                 {{ __('There have been no reviews for this product yet.') }}
                                             </div>
                                         @endif
@@ -667,8 +667,10 @@
                                                         <div class="row">
                                                             <div class="col-sm-12">
                                                                 <div class="c-rating mt-1 mb-1 clearfix d-inline-block">
+                                                                    <small style="color: red; float: right;">(Required)</small>
                                                                     <input type="radio" id="star5" name="rating" value="5" required/>
                                                                     <label class="star" for="star5" title="Awesome" aria-hidden="true"></label>
+
                                                                     <input type="radio" id="star4" name="rating" value="4" required/>
                                                                     <label class="star" for="star4" title="Great" aria-hidden="true"></label>
                                                                     <input type="radio" id="star3" name="rating" value="3" required/>
@@ -677,6 +679,8 @@
                                                                     <label class="star" for="star2" title="Good" aria-hidden="true"></label>
                                                                     <input type="radio" id="star1" name="rating" value="1" required/>
                                                                     <label class="star" for="star1" title="Bad" aria-hidden="true"></label>
+
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -694,6 +698,15 @@
                                                     </form>
                                                 </div>
                                             @endif
+                                        @else
+                                        <div class="leave-review">
+                                            <div class="section-title section-title--style-1">
+                                                <h3 class="section-title-inner heading-6 strong-600 text-uppercase">
+                                                    {{__('Write a review')}}
+                                                    <a href="{{ route('user.login') }}">Login</a>
+                                                </h3>
+                                            </div>
+                                        </div>
                                         @endif
                                     </div>
                                 </div>

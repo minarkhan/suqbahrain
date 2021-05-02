@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @extends('frontend.layouts.app')
 
 @section('content')
@@ -155,3 +156,6 @@
     </section>
 
 @endsection
+=======
+dsaf
+>>>>>>> new_branch

@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
     <div class="row">
         <form class="form-horizontal" action="{{ route('orders_cancel_settings.settings_update.admin') }}" method="POST">
@@ -62,3 +61,4 @@
     </div>
 
 @endsection
+

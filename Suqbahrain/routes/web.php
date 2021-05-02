@@ -145,6 +145,9 @@ Route::group(['middleware' => ['user', 'verified']], function(){
 	Route::post('/purchase_history/details', 'PurchaseHistoryController@purchase_history_details')->name('purchase_history.details');
 	Route::get('/purchase_history/destroy/{id}', 'PurchaseHistoryController@destroy')->name('purchase_history.destroy');
 
+	Route::get('/purchase_return_request/{id}', 'PurchaseHistoryController@purchase_return_request')->name('purchase_return_request.customer');
+	Route::post('/purchase_return_request', 'PurchaseHistoryController@purchase_return_request_store')->name('purchase_return_request_store.customer');
+
     Route::resource('cancle_request', 'CancleRequestController');
 
 	Route::resource('wishlists','WishlistController');
