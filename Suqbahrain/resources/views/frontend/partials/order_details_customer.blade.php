@@ -138,19 +138,31 @@
                                         @endif
                                     </td>
                                     <td>{{ single_price($orderDetail->price) }}</td>
+
                                     @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                         @php
                                             $no_of_max_day = \App\BusinessSetting::where('type', 'refund_request_time')->first()->value;
                                             $last_refund_date = $orderDetail->created_at->addDays($no_of_max_day);
                                             $today_date = Carbon\Carbon::now();
+
+                                            // print_r($orderDetail->product);
                                         @endphp
                                         <td>
-                                            @if ($orderDetail->product != null && $orderDetail->product->refundable != 0 && $orderDetail->refund_request == null && $today_date <= $last_refund_date && $orderDetail->delivery_status == 'delivered')
-                                                <a href="{{route('refund_request_send_page', $orderDetail->id)}}" class="btn btn-styled btn-sm btn-base-1">{{ __('Send') }}</a>
+                                            @if ($orderDetail->product != null && $orderDetail->product->refundable != 0 && $orderDetail->refund_request == null &&
+                                            $today_date <= $last_refund_date &&
+                                            $orderDetail->delivery_status == 'delivered')
+
+                                            <a href="{{route('refund_request_send_page', $orderDetail->id)}}" class="btn btn-styled btn-sm btn-base-1">{{ __('Send') }}</a>
+
                                             @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 0)
                                                 <span class="strong-600">{{ __('Pending') }}</span>
                                             @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 1)
+
                                                 <span class="strong-600">{{ __('Approved') }}</span>
+
+                                            @elseif ($order->payment_status == 'paid' && $order->cancel_request == 3 && $order->canceled_by == 'seller' && $orderDetail->refund_request == null)
+                                                <a href="{{route('refund_form.customer', $orderDetail->id)}}" class="btn btn-styled btn-sm btn-base-1">{{ __('Send Request') }}</a>
+
                                             @elseif ($orderDetail->product->refundable != 0)
                                                 <span class="strong-600">{{ __('N/A') }}</span>
                                             @else
@@ -158,6 +170,7 @@
                                             @endif
                                         </td>
                                     @endif
+
                                 </tr>
                             @endforeach
                         </tbody>

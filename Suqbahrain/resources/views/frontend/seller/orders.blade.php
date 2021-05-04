@@ -120,7 +120,21 @@
 
                                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="">
                                                                     <button onclick="show_order_details({{ $order->id }})" class="dropdown-item">{{__('Order Details')}}</button>
-                                                                    <a href="{{ route('seller.invoice.download', $order->id) }}" class="dropdown-item">{{__('Download Invoice')}}</a>
+
+                                                                    <a href="{{ route('seller.invoice.download', $order->id) }}" class="dropdown-item">
+                                                                        {{__('Download Invoice')}}
+                                                                    </a>
+
+                                                                    @if ( $order->cancel_request == 0 )
+                                                                        {{-- <a href="{{ route('seller.invoice.download', $order->id) }}" class="dropdown-item">
+                                                                            {{__('Order Cancel')}}
+                                                                        </a> --}}
+                                                                        <a
+                                                                            class="dropdown-item"
+                                                                            href="{{ route('orders.order_cancel_seller', $order->id ) }}">
+                                                                            {{__('Order Cancel')}}
+                                                                        </a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </td>

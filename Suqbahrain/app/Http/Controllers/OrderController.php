@@ -830,5 +830,23 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
+    public function order_cancel_seller( $id )
+    {
+        // return $id;
+        $order = Order::findOrFail($id);
+        $order->cancel_request = 1;
+        $order->viewed = 0;
+        $order->seller_viewed = 0;
+        $order->customer_view = 0;
+        $order->canceled_by = 'seller';
+        $order->save();
+        $orderdetails = OrderDetail::where('order_id', $id)->get();
+        foreach($orderdetails as $key => $orderdetail){
+            $orderdetail->cancel_request = 1;
+            $orderdetail->save();
+        }
+        flash('Your order cancel successfully submitted');
+        return redirect()->back();
+    }
 
 }

@@ -153,8 +153,12 @@
 
                                                                     <a class="dropdown-item" href="{{ route('purchase_return_request.customer', $order->id ) }}">
                                                                             {{__('Return Request')}} </a>
-
                                                                     @endif
+
+                                                                    {{-- @if ($order->payment_status == 'paid' && $order->cancel_request == 3 &&$order->canceled_by == 'seller'
+                                                                    )
+                                                                        <a href="{{route('refund_form.customer', $order->id)}}" class="dropdown-item">{{ __('Refund Request') }}</a>
+                                                                    @endif --}}
 
 
                                                                 </div>

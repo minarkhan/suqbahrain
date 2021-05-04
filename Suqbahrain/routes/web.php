@@ -149,6 +149,9 @@ Route::group(['middleware' => ['user', 'verified']], function(){
 	Route::post('/purchase_return_request', 'PurchaseHistoryController@purchase_return_request_store')->name('purchase_return_request_store.customer');
 
     Route::resource('cancle_request', 'CancleRequestController');
+    Route::get('refund_request_customer/{id}', 'CancleRequestController@refund_request_send_page')->name('refund_form.customer');
+    Route::post('refund_send_customer/{id}', 'CancleRequestController@refund_send_customer')->name('refund_send_customer.customer');
+
 
 	Route::resource('wishlists','WishlistController');
 	Route::post('/wishlists/remove', 'WishlistController@remove')->name('wishlists.remove');
@@ -190,6 +193,8 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified']], func
 
 	Route::get('/reviews', 'ReviewController@seller_reviews')->name('reviews.seller');
 
+    Route::get('refund_reuest_vendor_pay/{id}', 'CancleRequestController@refund_reuest_vendor_pay')->name('vendor_refund_pay');
+
 	//digital Product
 	Route::get('/digitalproducts', 'HomeController@seller_digital_product_list')->name('seller.digitalproducts');
 	Route::get('/digitalproducts/upload', 'HomeController@show_digital_product_upload_form')->name('seller.digitalproducts.upload');
@@ -214,6 +219,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
 	Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
 	Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+	Route::get('/order_cancel/{id}', 'OrderController@order_cancel_seller')->name('orders.order_cancel_seller');
 
 	Route::resource('/reviews', 'ReviewController');
 

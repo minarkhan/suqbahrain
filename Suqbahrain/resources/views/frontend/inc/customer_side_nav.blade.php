@@ -92,8 +92,7 @@
                 @php
                 $delivery_viewed = App\Order::where('user_id', Auth::user()->id)->where('delivery_viewed', 0)->get()->count();
                 $payment_status_viewed = App\Order::where('user_id', Auth::user()->id)->where('payment_status_viewed', 0)->get()->count();
-                $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-                $club_point_addon = \App\Addon::where('unique_identifier', 'club_point')->first();
+
                 @endphp
                 <li>
                     <a href="{{ route('purchase_history.index') }}" class="{{ areActiveRoutesHome(['purchase_history.index'])}}">
@@ -102,7 +101,7 @@
                             {{__('Purchase History')}}
                             @if($delivery_viewed > 0 || $payment_status_viewed > 0)
                                 <span class="ml-2" style="color:green">
-                                    <strong>({{ __('New Notifications') }})</strong>
+                                    <strong>({{ __('New') }})</strong>
                                 </span>
                             @endif
                         </span>
@@ -119,6 +118,11 @@
                     </a>
                 </li>
 
+
+                @php
+                $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+                $club_point_addon = \App\Addon::where('unique_identifier', 'club_point')->first();
+                @endphp
                 @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                     <li>
                         <a href="{{ route('customer_refund_request') }}" class="{{ areActiveRoutesHome(['customer_refund_request'])}}">
