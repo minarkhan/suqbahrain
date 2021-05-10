@@ -158,13 +158,13 @@ class RefundRequestController extends Controller
      */
     public function request_approval_vendor(Request $request)
     {
-        return $request;
+        // return $request;
         $refund = RefundRequest::findOrFail($request->el);
 
         if( $refund->reason == null){
 
             $refund->seller_approval = 1;
-            $refund->refund_status = 1;
+            // $refund->refund_status = 1;
             if ($refund->save()) {
                 return 1;
             }
@@ -197,7 +197,7 @@ class RefundRequestController extends Controller
     {
         $refund = RefundRequest::findOrFail($request->el);
 
-        if( $refund->reason == null){
+        if( $refund->reason == null && $refund->refund_method !=  'Wallet'){
             if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
                 $refund->admin_approval = 1;
                 $refund->save();
@@ -237,7 +237,7 @@ class RefundRequestController extends Controller
             return 0;
         }
     }
-    
+
 
     /**
      * Show the form for creating a new resource.

@@ -73,9 +73,9 @@ class CancleRequestController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return $request;
+
         $order = Order::find($id);
-        $order->cancel_request = 3;
+        $order->cancel_request = 1;
         $order->viewed = 0;
         $order->save();
         $orderdetails = OrderDetail::where('order_id', $id)->get();
@@ -106,10 +106,26 @@ class CancleRequestController extends Controller
 
     public function refund_send_customer(Request $request, $id)
     {
-        // return $request;
-        $validated = $request->validate([
-            'method_details' => 'nullable|string|max:255',
-        ]);
+        // return $request->email;
+
+        if( $request->refund_method == 'Bank Account' ){
+            $request->validate([
+                // 'method_details' => 'nullable|string|max:255',
+                'ac_holder' => 'required',
+                'ac_no' => 'required',
+                'iban_number' => 'required',
+                'bank_name' => 'required',
+            ]);
+        } elseif( $request->refund_method == 'Benifit Pay' || $request->refund_method == 'Paypal' ) {
+            $validated = $request->validate([
+                'email' => 'required',
+            ]);
+        }
+        // } else{
+        //     $validated = $request->validate([
+        //         'method_details' => 'nullable|string|max:255',
+        //     ]);
+        // }
 
         $order_detail = OrderDetail::where('id', $id)->first();
         $refund = new RefundRequest;
@@ -124,7 +140,15 @@ class CancleRequestController extends Controller
         $refund->refund_amount = $order_detail->price + $order_detail->tax;
         $refund->refund_status = 0;
         $refund->refund_method = $request->refund_method;
-        $refund->method_details = $request->method_details;
+
+        if( $request->refund_method == 'Bank Account' ){
+            $request = $request->all();
+            $refund->method_details = json_encode($request);
+        } else {
+            $refund->method_details = $request->email;
+        }
+        // $refund->method_details = $request->method_details;
+
         if ($refund->save()) {
             flash("Refund Request has been sent successfully")->success();
             return redirect()->route('purchase_history.index');

@@ -26,10 +26,36 @@
                     <div class="form-group">
                         <label class="col-lg-3 control-label text-center">{{__('Method Details')}}</label>
                         <div class="col-lg-9">
-                            <p class="bord-all pad-all">{{ $refund->method_details }}</p>
+                            <p class="bord-all pad-all">
+                                @if ( $refund->refund_method == 'Bank Account' )
+                                    @php
+                                        $ac = json_decode($refund->method_details, true);
+                                    @endphp
+                                    @foreach($ac as $key => $val)
+                                        @if ( $key != '_token' && $key != 'name' && $key != 'code' &&$key != 'refund_method' )
+                                        {{ strtoupper($key) . ' : ' . strtoupper($val) }}
+                                        <br>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    {{ $refund->method_details }}
+                                @endif
+                            </p>
                         </div>
                     </div>
-                 @else
+                    @if( $refund->admin_approval == 1 && $refund->refund_status == 0 )
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label text-center">{{__('Payment Status')}}</label>
+                            <div class="col-lg-9">
+                                <p class="bord-all pad-all">
+                                    <a class="btn btn-primary" href="{{ route('vendor_refund_pay', $refund->id ) }}">
+                                        {{ 'PAID' }} <small>After payment complete than click.</small>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+                @else
                     <div class="form-group">
                         <label class="col-lg-3 control-label text-center">{{__('Reason')}}</label>
                         <div class="col-lg-9">

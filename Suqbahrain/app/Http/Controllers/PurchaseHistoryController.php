@@ -140,8 +140,8 @@ class PurchaseHistoryController extends Controller
         $product_return->reason = $request->reason;
         if($request->hasFile('image')){
             $image = $request->file('image')->store('uploads/product_return');
+            $product_return->image = $image;
         }
-        $product_return->image = $image;
         if( $product_return->save() ){
             $order = Order::findOrFail($request->order_id);
             $order->return_request = 1;

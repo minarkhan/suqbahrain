@@ -56,10 +56,35 @@
                                             <label>{{__('Return Reason')}}</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <textarea name="reason" class="form-control mb-3" placeholder="{{__('Enter product return reason...')}}"></textarea>
-                                            @error('reason')
-                                                <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="reason" id="inlineRadio1" value="Change of mind">
+                                                <label class="form-check-label" for="inlineRadio1">Change of mind</label>
+                                              </div>
+                                              <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="reason" id="inlineRadio2" value="Decided for alternative product">
+                                                <label class="form-check-label" for="inlineRadio2">Decided for alternative product</label>
+                                              </div>
+                                              <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="reason" id="inlineRadio3" value="Found cheaper elsewhere">
+                                                <label class="form-check-label" for="inlineRadio3">Found cheaper elsewhere</label>
+                                              </div>
+                                              <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="reason" id="inlineRadio3" value="Change payment method">
+                                                <label class="form-check-label" for="inlineRadio3">Change payment method</label>
+                                              </div>
+                                              <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="reason" id="inlineRadio3" value="Change/combine order">
+                                                <label class="form-check-label" for="inlineRadio3">Change/combine order</label>
+                                              </div>
+                                              <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="reason" id="inlineRadio3" value="Delivery time is too long">
+                                                <label class="form-check-label" for="inlineRadio3">Delivery time is too long</label>
+                                              </div>
+
+                                            {{-- <textarea name="reason" class="form-control mb-3" placeholder="{{__('Enter product return reason...')}}"></textarea> --}}
+                                                @error('reason')
+                                                    <div class="alert alert-danger">{{ $message }}</div>
+                                                @enderror
 
                                             {{-- <input type="text" class="form-control mb-3" placeholder="{{__('Your Name')}}" name="name" value="{{ Auth::user()->name }}"> --}}
                                         </div>

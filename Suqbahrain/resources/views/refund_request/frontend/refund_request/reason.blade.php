@@ -58,7 +58,20 @@
                                                 <label>{{__('Method Details')}} <span class="required-star">*</span></label>
                                             </div>
                                             <div class="col-md-10">
-                                                {{ $refund->method_details }}
+                                                @if ( $refund->refund_method == 'Bank Account' )
+                                                    @php
+                                                        $ac = json_decode($refund->method_details, true);
+                                                    @endphp
+                                                    @foreach($ac as $key => $val)
+                                                        @if ( $key != '_token' && $key != 'name' && $key != 'code' &&$key != 'refund_method' )
+                                                        {{ strtoupper($key) . ' : ' . strtoupper($val) }}
+                                                        <br>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    {{ $refund->method_details }}
+                                                @endif
+                                                {{-- {{ $refund->method_details }} --}}
                                             </div>
                                         </div>
                                     </div>
@@ -74,7 +87,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                @if($refund->seller_approval == 1 && $refund->refund_status == 0 )
+                                {{-- @if($refund->seller_approval == 1 && $refund->refund_status == 0 )
                                     <div class="form-box-content p-3">
                                         <div class="row">
                                             <div class="col-md-2">
@@ -84,17 +97,10 @@
                                                 <a class="btn btn-primary" href="{{ route('vendor_refund_pay', $refund->id ) }}">
                                                     {{ 'PAID' }}
                                                 </a>
-                                                {{-- <form action="{{ route('vendor_refund_pay') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="el" value="{{ $refund->id}}">
-                                                    <input class="btn btn-primary" type="submit" value="PAID">
-                                                    {{ $refund->reason }}
-
-                                                </form> --}}
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                                @endif --}}
                                 @if( $refund->refund_status == 1 )
                                     <div class="form-box-content p-3">
                                         <div class="row">

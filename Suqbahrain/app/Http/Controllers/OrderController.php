@@ -24,6 +24,7 @@ use App\Mail\InvoiceEmailManager;
 use CoreComponentRepository;
 use App\Deposit;
 use App\ClubPointSetting;
+use App\Wallet;
 
 class OrderController extends Controller
 {
@@ -64,6 +65,14 @@ class OrderController extends Controller
         $delivery_status = null;
         $sort_search = null;
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
+        // $orders = DB::table('orders')
+        //             ->orderBy('code', 'desc')
+        //             ->where('orders.cancel_request', 0)
+        //             ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+        //             ->where('order_details.seller_id', $admin_user_id)
+        //             ->select('orders.id')
+        //             ->distinct();
+
         $orders = DB::table('orders')
                     ->orderBy('code', 'desc')
                     ->where('orders.cancel_request', 0)
@@ -491,16 +500,23 @@ class OrderController extends Controller
         $order->save();
 
         if($order->payment_status == 'paid'){
-            if( $order->grand_total < Auth::user()->balance ){
-                $user = Auth::user();
-                $user->balance = $user->balance - $order->grand_total;
+            // if( $order->grand_total < Auth::user()->balance ){
+                // $user = Auth::user();
+                // $user->balance = $user->balance - $order->grand_total;
+                // $user->save();
+                // }
+                $wallet = new Wallet;
+                $wallet->user_id = $order->user_id;
+                $wallet->amount = $order->grand_total;
+                $wallet->payment_method = 'Refund';
+                $wallet->payment_details = 'Order cancel Money Refund';
+                $wallet->save();
+
+                $user = User::findOrFail($order->user_id);
+                $user->balance += $order->grand_total;
                 $user->save();
 
-                $customer = User::where('id', $order->user_id);
-                $customer->balance = $customer->balance + $order->grand_total;
-                $customer->save();
-            }
-        }
+                }
 
         if( $order->user->user_type == 'customer' && $order->user->is_merchant == 0 ){
 
@@ -834,7 +850,7 @@ class OrderController extends Controller
     {
         // return $id;
         $order = Order::findOrFail($id);
-        $order->cancel_request = 1;
+        $order->cancel_request = 3;
         $order->viewed = 0;
         $order->seller_viewed = 0;
         $order->customer_view = 0;
