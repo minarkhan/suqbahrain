@@ -4,6 +4,10 @@
         <strong class="badge badge-danger">Order Cancel Rrequested</strong>
         @elseif ( $order->cancel_request == 3 )
         <strong class="badge badge-danger"> Order Canceled</strong>
+        @elseif ( $order->return_request == 1 )
+        <strong class="badge badge-danger"> Order Return Request </strong>
+        @elseif ( $order->return_request == 3 )
+        <strong class="badge badge-danger"> Order Returned </strong>
         @endif
     </h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

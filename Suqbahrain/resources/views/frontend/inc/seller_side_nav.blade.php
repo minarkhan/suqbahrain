@@ -177,15 +177,26 @@
                         </span>
                     </a>
                 </li>
+                @php
+                $ots = DB::table('orders')
+                    ->orderBy('code', 'desc')
+                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                    ->where('order_details.seller_id', Auth::user()->id)
+                    ->where('orders.return_request', '>', 0)
+                    ->where('orders.seller_viewed', 0)
+                    ->select('orders.id')
+                    ->distinct()
+                    ->count();
+                @endphp
 
                 <li>
                     <a href="{{ route('return_list_seller.index') }}" class="{{ areActiveRoutesHome(['return_list_seller.index'])}}">
                         <i class="la la-file-text"></i>
                         <span class="category-name">
                             {{__('Return Request')}}
-                            @if($orders > 0)
+                            @if($ots > 0)
                             <span class="ml-2" style="color:green">
-                                <strong>({{ $orders }} {{ __('New') }})</strong>
+                                <strong>({{ $ots }} {{ __('New') }})</strong>
                             </span>
                             @endif
                         </span>

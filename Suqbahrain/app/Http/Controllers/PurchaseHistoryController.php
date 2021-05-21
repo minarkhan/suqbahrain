@@ -39,9 +39,14 @@ class PurchaseHistoryController extends Controller
     public function purchase_history_details(Request $request)
     {
         $order = Order::findOrFail($request->order_id);
-        $order->delivery_viewed = 1;
-        $order->payment_status_viewed = 1;
-        $order->customer_view = 1;
+
+        if(Auth::user()->user_type == 'customer'){
+            $order->delivery_viewed = 1;
+            $order->payment_status_viewed = 1;
+            $order->customer_view = 1;
+        } elseif(Auth::user()->user_type == 'seller'){
+            $order->seller_viewed = 1;
+        }
         $order->save();
         return view('frontend.partials.order_details_customer', compact('order'));
     }

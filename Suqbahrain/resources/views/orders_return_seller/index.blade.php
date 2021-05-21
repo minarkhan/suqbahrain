@@ -65,7 +65,7 @@
                                                     <tr>
                                                         <td>
                                                             <a href="#{{ $order->code }}" onclick="show_purchase_history_details({{ $order->id }})">{{ $order->code }}
-                                                                @if($order->viewed == 0)
+                                                                @if($order->seller_viewed == 0)
                                                             <span class="pull-right badge badge-danger">{{ __('New') }}</span>
                                                             @endif
                                                             </a>
@@ -98,7 +98,7 @@
                                                             {{ $order->return->reason }}
                                                         </td>
                                                         <td>
-                                                            <img src="{{ asset($order->return->image) ?? '-'}}" alt="">
+                                                            <img s src="{{ asset($order->return->image) ?? '-'}}" alt="">
                                                         </td>
                                                         @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                                             <td>

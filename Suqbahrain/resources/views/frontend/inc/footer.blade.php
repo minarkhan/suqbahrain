@@ -274,3 +274,8 @@
         </div>
     </div>
 </footer>
+<script type="text/javascript">
+    $('#order_details').on('hidden.bs.modal', function () {
+        location.reload();
+    })
+</script>
