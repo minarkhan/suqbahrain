@@ -195,6 +195,9 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified']], func
 
     Route::get('refund_reuest_vendor_pay/{id}', 'CancleRequestController@refund_reuest_vendor_pay')->name('vendor_refund_pay');
 
+    Route::get('return_list_seller', 'CancleRequestController@return_list_seller')->name('return_list_seller.index');
+    Route::get('return_list_seller_update/{id}', 'CancleRequestController@return_list_seller_update')->name('return_list_seller_update');
+
 	//digital Product
 	Route::get('/digitalproducts', 'HomeController@seller_digital_product_list')->name('seller.digitalproducts');
 	Route::get('/digitalproducts/upload', 'HomeController@show_digital_product_upload_form')->name('seller.digitalproducts.upload');

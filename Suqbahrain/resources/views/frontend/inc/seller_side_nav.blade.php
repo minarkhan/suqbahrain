@@ -178,6 +178,21 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('return_list_seller.index') }}" class="{{ areActiveRoutesHome(['return_list_seller.index'])}}">
+                        <i class="la la-file-text"></i>
+                        <span class="category-name">
+                            {{__('Return Request')}}
+                            @if($orders > 0)
+                            <span class="ml-2" style="color:green">
+                                <strong>({{ $orders }} {{ __('New') }})</strong>
+                            </span>
+                            @endif
+                        </span>
+
+                    </a>
+                </li>
+
                 @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                     <li>
                         <a href="{{ route('vendor_refund_request') }}" class="{{ areActiveRoutesHome(['vendor_refund_request'])}}">

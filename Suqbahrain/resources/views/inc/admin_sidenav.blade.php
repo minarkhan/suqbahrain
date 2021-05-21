@@ -231,7 +231,7 @@
                              $orders = DB::table('orders')
                                  ->orderBy('code', 'desc')
                                  ->join('order_details', 'orders.id', '=', 'order_details.order_id')
-                                 ->where('orders.cancel_request', 3)
+                                 ->where('orders.cancel_request', '>', 0)
                                  ->where('order_details.seller_id', \App\User::where('user_type', 'admin')->first()->id)
                                  ->where('orders.viewed', 0)
                                  ->select('orders.id')

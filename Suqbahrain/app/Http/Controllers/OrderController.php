@@ -336,6 +336,7 @@ class OrderController extends Controller
 
                 // $order_detail = OrderDetail::find($request->order_detail_id);
                 // return Carbon::now()->diffInDays($order_detail->created_at);
+
                 if($order_detail->user->user_type == 'customer' && $order_detail->user->is_merchant == 0){
                     //Merchant
                     $refMerchantCode = $order_detail->user->referred_by;
@@ -396,13 +397,6 @@ class OrderController extends Controller
                         $deposit3->save();
                     }
                 }
-
-
-
-
-
-
-
             }
 
             $order->grand_total = $subtotal + $tax + $shipping;
@@ -426,7 +420,8 @@ class OrderController extends Controller
                             'tempDir' => storage_path('logs/')
                         ])->loadView('invoices.customer_invoice', compact('order'));
             $output = $pdf->output();
-/*    		file_put_contents('public/invoices/'.'Order#'.$order->code.'.pdf', $output);*/
+
+            // file_put_contents('public/invoices/'.'Order#'.$order->code.'.pdf', $output);
 
             $array['view'] = 'emails.invoice';
             $array['subject'] = 'Order Placed - '.$order->code;
@@ -451,13 +446,15 @@ class OrderController extends Controller
                 }
             }
 
-            foreach($seller_products as $key => $seller_product){
+            // seller mail Off change by Minar
+
+           /* foreach($seller_products as $key => $seller_product){
                 try {
                     Mail::to(\App\User::find($key)->email)->queue(new InvoiceEmailManager($array));
                 } catch (\Exception $e) {
 
                 }
-            }
+            }*/
 
             if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated && \App\OtpConfiguration::where('type', 'otp_for_order')->first()->value){
                 try {
@@ -471,13 +468,15 @@ class OrderController extends Controller
             //sends email to customer with the invoice pdf attached
             if(env('MAIL_USERNAME') != null){
                 try {
-                    Mail::to($request->session()->get('shipping_info')['email'])->queue(new InvoiceEmailManager($array));
+                    // shipping address user mail Off change by Minar
+
+                   /* Mail::to($request->session()->get('shipping_info')['email'])->queue(new InvoiceEmailManager($array));*/
                     Mail::to(User::where('user_type', 'admin')->first()->email)->queue(new InvoiceEmailManager($array));
                 } catch (\Exception $e) {
 
                 }
             }
-/*            unlink($array['file']);*/
+            // unlink($array['file']);
 
             $request->session()->put('order_id', $order->id);
         }
