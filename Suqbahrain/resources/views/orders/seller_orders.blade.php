@@ -13,11 +13,11 @@
             <form class="" id="sort_orders" action="" method="GET">
                 <div class="box-inline pad-rgt pull-left">
                     <div class="select" style="min-width: 300px;">
-                        <select class="form-control demo-select2" name="payment_type" id="payment_type" onchange="sort_orders()">
+                        {{-- <select class="form-control demo-select2" name="payment_type" id="payment_type" onchange="sort_orders()">
                             <option value="">{{__('Filter by Payment Status')}}</option>
                             <option value="paid"  @isset($payment_status) @if($payment_status == 'paid') selected @endif @endisset>{{__('Paid')}}</option>
                             <option value="unpaid"  @isset($payment_status) @if($payment_status == 'unpaid') selected @endif @endisset>{{__('Un-Paid')}}</option>
-                        </select>
+                        </select> --}}
                     </div>
                 </div>
                 <div class="box-inline pad-rgt pull-left">
@@ -64,6 +64,7 @@
                         $order = \App\Order::find($order_id->id);
                     @endphp
                     @if($order != null)
+                    @if( $order->orderDetails != null)
                         <tr>
                             <td>
                                 {{ ($key+1) + ($orders->currentPage() - 1)*$orders->perPage() }}
@@ -71,10 +72,11 @@
                             <td>
                                 {{ $order->code }}
                                 @if($order->viewed == 0)
-                                <span class="pull-right badge badge-info">{{ __('New') }}</span> @endif
+                                <span class="pull-right badge badge-info">{{ __('New') }}</span>
+                                @endif
                             </td>
                             <td>
-                                {{ count($order->orderDetails->where('seller_id', $admin_user_id)) }}
+                                {{ count($order->orderDetails->where('order_id',  $order->id)) }}
                             </td>
                             <td>
                                 @if ($order->user_id != null)
@@ -84,49 +86,47 @@
                                 @endif
                             </td>
                             <td>
-                                {{ single_price($order->orderDetails->where('seller_id', $admin_user_id)->sum('price') + $order->orderDetails->where('seller_id', $admin_user_id)->sum('tax')) }}
+                                {{ single_price($order->orderDetails->where('order_id',  $order->id)->sum('price') + $order->orderDetails->where('order_id',  $order->id)->sum('tax')) }}
                             </td>
                             <td>
                                 @php
-                                    $status = $order->orderDetails->first()->delivery_status;
+                                    // $status = $order->orderDetails->first()->delivery_status;
                                 @endphp
-                                {{ ucfirst(str_replace('_', ' ', $status)) }}
+                                {{ ucfirst(str_replace('_', ' ', $order->orderDetails->first()->delivery_status ?? '-')) }}
                             </td>
                             <td>
                                 {{ ucfirst(str_replace('_', ' ', $order->payment_type)) }}
                             </td>
                             <td>
                                 <span class="badge badge--2 mr-4">
-                                    @if ($order->orderDetails->where('seller_id',  $admin_user_id)->first()->payment_status == 'paid')
-                                        <i class="bg-green"></i> Paid
-                                    @else
-                                        <i class="bg-red"></i> Unpaid
-                                    @endif
-                                </span>
-                            </td>
-                            <td>
-                                    @if ($order->cancel_request == 0 )
-                                        <span class="badge badge--2 mr-4">
-                                            {{__('None')}}
-                                        </span>
-                                    @else
-                                        <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Pending')}}</span>
-                                    @endif
+                                    {{ $paystatus =  $order->orderDetails->where('order_id',  $order->id)->first()->payment_status ?? '-'}}
                                 </span>
                                 {{-- <span class="badge badge--2 mr-4">
-                                    @if ($order->orderDetails->where('seller_id',  $admin_user_id)->first()->payment_status == 'paid')
+                                    @if ( $paystatus == 'paid' )
                                         <i class="bg-green"></i> Paid
                                     @else
                                         <i class="bg-red"></i> Unpaid
                                     @endif
                                 </span> --}}
                             </td>
+                            <td>
+                                    @if ($order->cancel_request == 0 )
+                                        <span class="badge badge--2 mr-4">
+                                            {{__('None')}}
+                                        </span>
+                                    @elseif( $order->cancel_request == 2)
+                                        <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Pending')}}</span>
+                                    @else
+                                        <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Canceled')}}</span>
+                                    @endif
+                                </span>
+                            </td>
                             @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                 <td>
                                     @if (count($order->refund_requests) > 0)
-                                        {{ count($order->refund_requests) }} Refund
+                                        Refund
                                     @else
-                                        No Refund
+                                        None
                                     @endif
                                 </td>
                             @endif
@@ -136,14 +136,15 @@
                                         {{__('Actions')}} <i class="dropdown-caret"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a href="{{ route('orders.show', encrypt($order->id)) }}">{{__('View')}}</a></li>
-                                        <li><a href="{{ route('seller.invoice.download', $order->id) }}">{{__('Download Invoice')}}</a></li>
-                                        <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Delete')}}</a></li>
-                                        <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Refund')}}</a></li>
+                                        <li><a href="{{ route('orders.seller_orders_show', encrypt($order->id)) }}">{{__('View')}}</a></li>
+                                        <li><a href="{{ route('seller.seller_orders_invoice_download', $order->id) }}">{{__('Download Invoice')}}</a></li>
+                                        {{-- <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Delete')}}</a></li>
+                                        <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Refund')}}</a></li> --}}
                                     </ul>
                                 </div>
                             </td>
                         </tr>
+                    @endif
                     @endif
                 @endforeach
             </tbody>

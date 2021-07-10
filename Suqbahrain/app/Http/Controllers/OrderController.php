@@ -24,6 +24,7 @@ use App\Mail\InvoiceEmailManager;
 use CoreComponentRepository;
 use App\Deposit;
 use App\ClubPointSetting;
+use App\Wallet;
 
 class OrderController extends Controller
 {
@@ -42,11 +43,11 @@ class OrderController extends Controller
                     ->distinct()
                     ->paginate(15);
 
-        foreach ($orders as $key => $value) {
-            $order = \App\Order::find($value->id);
-            $order->viewed = 1;
-            $order->save();
-        }
+        // foreach ($orders as $key => $value) {
+        //     $order = \App\Order::find($value->id);
+        //     $order->viewed = 1;
+        //     $order->save();
+        // }
 
         return view('frontend.seller.orders', compact('orders'));
     }
@@ -64,9 +65,17 @@ class OrderController extends Controller
         $delivery_status = null;
         $sort_search = null;
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
+        // $orders = DB::table('orders')
+        //             ->orderBy('code', 'desc')
+        //             ->where('orders.cancel_request', 0)
+        //             ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+        //             ->where('order_details.seller_id', $admin_user_id)
+        //             ->select('orders.id')
+        //             ->distinct();
+
         $orders = DB::table('orders')
                     ->orderBy('code', 'desc')
-                    ->where('orders.cancel_request', '<', 3)
+                    ->where('orders.cancel_request', 0)
                     ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                     ->where('order_details.seller_id', $admin_user_id)
                     ->select('orders.id')
@@ -86,6 +95,38 @@ class OrderController extends Controller
         }
         $orders = $orders->paginate(15);
         return view('orders.index', compact('orders','payment_status','delivery_status', 'sort_search', 'admin_user_id'));
+    }
+
+    public function admin_sellers_orders(Request $request)
+    {
+        CoreComponentRepository::instantiateShopRepository();
+
+        $payment_status = null;
+        $delivery_status = null;
+        $sort_search = null;
+        $admin_user_id = User::where('user_type', 'seller')->first()->id;
+        $orders = DB::table('orders')
+                    ->orderBy('code', 'desc')
+                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                    ->join('users','users.id','=','order_details.seller_id')
+                    ->Where('users.user_type', 'seller')
+                    ->select('orders.id')
+                    ->distinct();
+
+        if ($request->payment_type != null){
+            $orders = $orders->where('order_details.payment_status', $request->payment_type);
+            $payment_status = $request->payment_type;
+        }
+        if ($request->delivery_status != null) {
+            $orders = $orders->where('order_details.delivery_status', $request->delivery_status);
+            $delivery_status = $request->delivery_status;
+        }
+        if ($request->has('search')){
+            $sort_search = $request->search;
+            $orders = $orders->where('code', 'like', '%'.$sort_search.'%');
+        }
+        $orders = $orders->paginate(15);
+        return view('orders.seller_orders', compact('orders','payment_status','delivery_status', 'sort_search', 'admin_user_id'));
     }
 
     /**
@@ -327,6 +368,7 @@ class OrderController extends Controller
 
                 // $order_detail = OrderDetail::find($request->order_detail_id);
                 // return Carbon::now()->diffInDays($order_detail->created_at);
+
                 if($order_detail->user->user_type == 'customer' && $order_detail->user->is_merchant == 0){
                     //Merchant
                     $refMerchantCode = $order_detail->user->referred_by;
@@ -387,13 +429,6 @@ class OrderController extends Controller
                         $deposit3->save();
                     }
                 }
-
-
-
-
-
-
-
             }
 
             $order->grand_total = $subtotal + $tax + $shipping;
@@ -417,7 +452,8 @@ class OrderController extends Controller
                             'tempDir' => storage_path('logs/')
                         ])->loadView('invoices.customer_invoice', compact('order'));
             $output = $pdf->output();
-/*    		file_put_contents('public/invoices/'.'Order#'.$order->code.'.pdf', $output);*/
+
+            // file_put_contents('public/invoices/'.'Order#'.$order->code.'.pdf', $output);
 
             $array['view'] = 'emails.invoice';
             $array['subject'] = 'Order Placed - '.$order->code;
@@ -442,13 +478,15 @@ class OrderController extends Controller
                 }
             }
 
-            foreach($seller_products as $key => $seller_product){
+            // seller mail Off change by Minar
+
+           /* foreach($seller_products as $key => $seller_product){
                 try {
                     Mail::to(\App\User::find($key)->email)->queue(new InvoiceEmailManager($array));
                 } catch (\Exception $e) {
 
                 }
-            }
+            }*/
 
             if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated && \App\OtpConfiguration::where('type', 'otp_for_order')->first()->value){
                 try {
@@ -462,13 +500,15 @@ class OrderController extends Controller
             //sends email to customer with the invoice pdf attached
             if(env('MAIL_USERNAME') != null){
                 try {
-                    Mail::to($request->session()->get('shipping_info')['email'])->queue(new InvoiceEmailManager($array));
+                    // shipping address user mail Off change by Minar
+
+                   /* Mail::to($request->session()->get('shipping_info')['email'])->queue(new InvoiceEmailManager($array));*/
                     Mail::to(User::where('user_type', 'admin')->first()->email)->queue(new InvoiceEmailManager($array));
                 } catch (\Exception $e) {
 
                 }
             }
-/*            unlink($array['file']);*/
+            // unlink($array['file']);
 
             $request->session()->put('order_id', $order->id);
         }
@@ -491,16 +531,23 @@ class OrderController extends Controller
         $order->save();
 
         if($order->payment_status == 'paid'){
-            if( $order->grand_total < Auth::user()->balance ){
-                $user = Auth::user();
-                $user->balance = $user->balance - $order->grand_total;
+            // if( $order->grand_total < Auth::user()->balance ){
+                // $user = Auth::user();
+                // $user->balance = $user->balance - $order->grand_total;
+                // $user->save();
+                // }
+                $wallet = new Wallet;
+                $wallet->user_id = $order->user_id;
+                $wallet->amount = $order->grand_total;
+                $wallet->payment_method = 'Refund';
+                $wallet->payment_details = 'Order cancel Money Refund';
+                $wallet->save();
+
+                $user = User::findOrFail($order->user_id);
+                $user->balance += $order->grand_total;
                 $user->save();
 
-                $customer = User::where('id', $order->user_id);
-                $customer->balance = $customer->balance + $order->grand_total;
-                $customer->save();
-            }
-        }
+                }
 
         if( $order->user->user_type == 'customer' && $order->user->is_merchant == 0 ){
 
@@ -530,6 +577,14 @@ class OrderController extends Controller
         $order->viewed = 1;
         $order->save();
         return view('orders.show', compact('order'));
+    }
+
+    public function seller_orders_show($id)
+    {
+        $order = Order::findOrFail(decrypt($id));
+        $order->viewed = 1;
+        $order->save();
+        return view('orders.seller_orders_show', compact('order'));
     }
 
     /**
@@ -735,7 +790,7 @@ class OrderController extends Controller
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
         $orders = DB::table('orders')
                     ->orderBy('code', 'desc')
-                    ->where('orders.cancel_request', 3)
+                    ->where('orders.cancel_request', '>', 0)
                     ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                     ->where('order_details.seller_id', $admin_user_id)
                     ->select('orders.id')
@@ -830,5 +885,27 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
+    public function order_cancel_seller( $id )
+    {
+        // return $id;
+        $order = Order::findOrFail($id);
+        if($order->cancel_request == 1){
+            $order->canceled_by = 'customer';
+        }else{
+            $order->canceled_by = 'seller';
+        }
+        $order->cancel_request = 3;
+        $order->viewed = 0;
+        $order->seller_viewed = 0;
+        $order->customer_view = 0;
+        $order->save();
+        $orderdetails = OrderDetail::where('order_id', $id)->get();
+        foreach($orderdetails as $key => $orderdetail){
+            $orderdetail->cancel_request = 1;
+            $orderdetail->save();
+        }
+        flash('Your order cancel successfully submitted');
+        return redirect()->back();
+    }
 
 }

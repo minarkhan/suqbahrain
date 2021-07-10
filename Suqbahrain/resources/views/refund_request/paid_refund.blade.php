@@ -26,7 +26,7 @@
                 @foreach($refunds as $key => $refund)
                     <tr>
                         <td>{{ ($key+1) + ($refunds->currentPage() - 1)*$refunds->perPage() }}</td>
-                        <td>{{ $refund->order->code }}</td>
+                        <td>{{ $refund->order->code ?? '-' }}</td>
                         <td>
                             @if ($refund->seller != null)
                                 {{ $refund->seller->name }}

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('frontend.layouts.app')
 
 @section('content')
 @php
@@ -48,10 +48,9 @@
                     <th>{{__('Num. of Products')}}</th>
                     <th>{{__('Customer')}}</th>
                     <th>{{__('Amount')}}</th>
-                    <th>{{__('Delivery Status')}}</th>
-                    <th>{{__('Payment Method')}}</th>
-                    <th>{{__('Payment Status')}}</th>
-                    <th>{{__('Cancel')}}</th>
+                    <th>{{__('Return')}}</th>
+                    <th>{{__('Reason')}}</th>
+                    <th>{{__('Image')}}</th>
                     @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                         <th>{{__('Refund')}}</th>
                     @endif
@@ -66,12 +65,13 @@
                     @if($order != null)
                         <tr>
                             <td>
-                                {{ ($key+1) + ($orders->currentPage() - 1)*$orders->perPage() }}
+                                {{-- {{ ($key+1) + ($orders->currentPage() - 1)*$orders->perPage() }} --}}
                             </td>
                             <td>
                                 {{ $order->code }}
                                 @if($order->viewed == 0)
-                                <span class="pull-right badge badge-info">{{ __('New') }}</span> @endif
+                                <span class="pull-right badge badge-danger">{{ __('New') }}</span>
+                                @endif
                             </td>
                             <td>
                                 {{ count($order->orderDetails->where('seller_id', $admin_user_id)) }}
@@ -86,40 +86,20 @@
                             <td>
                                 {{ single_price($order->orderDetails->where('seller_id', $admin_user_id)->sum('price') + $order->orderDetails->where('seller_id', $admin_user_id)->sum('tax')) }}
                             </td>
+
                             <td>
-                                @php
-                                    $status = $order->orderDetails->first()->delivery_status;
-                                @endphp
-                                {{ ucfirst(str_replace('_', ' ', $status)) }}
+                                @if ( $order->return_request == 1 )
+                                    <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Pending')}}</span>
+                                @elseif($order->return_request == 3)
+                                    <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Success')}}</span>
+                                @endif
+
                             </td>
                             <td>
-                                {{ ucfirst(str_replace('_', ' ', $order->payment_type)) }}
+                                {{ $order->return->reason }}
                             </td>
                             <td>
-                                <span class="badge badge--2 mr-4">
-                                    @if ($order->orderDetails->where('seller_id',  $admin_user_id)->first()->payment_status == 'paid')
-                                        <i class="bg-green"></i> Paid
-                                    @else
-                                        <i class="bg-red"></i> Unpaid
-                                    @endif
-                                </span>
-                            </td>
-                            <td>
-                                    @if ($order->cancel_request == 0 )
-                                        <span class="badge badge--2 mr-4">
-                                            {{__('None')}}
-                                        </span>
-                                    @else
-                                        <span class="badge badge-danger badge--2 mr-4 text-white">{{__('Pending')}}</span>
-                                    @endif
-                                </span>
-                                {{-- <span class="badge badge--2 mr-4">
-                                    @if ($order->orderDetails->where('seller_id',  $admin_user_id)->first()->payment_status == 'paid')
-                                        <i class="bg-green"></i> Paid
-                                    @else
-                                        <i class="bg-red"></i> Unpaid
-                                    @endif
-                                </span> --}}
+                                <img src="{{ asset($order->return->image) ?? '-'}}" alt="">
                             </td>
                             @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                 <td>
@@ -136,10 +116,17 @@
                                         {{__('Actions')}} <i class="dropdown-caret"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            @if ( $order->return_request == 1 )
+                                                <a href="{{ route('orders_return_app.update.admin', $order->id) }}">{{__('Accept Return')}}</a>
+                                            @endif
+
+
+                                        </li>
                                         <li><a href="{{ route('orders.show', encrypt($order->id)) }}">{{__('View')}}</a></li>
                                         <li><a href="{{ route('seller.invoice.download', $order->id) }}">{{__('Download Invoice')}}</a></li>
                                         <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Delete')}}</a></li>
-                                        <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Refund')}}</a></li>
+                                        {{-- <li><a onclick="confirm_modal('{{route('orders.destroy', $order->id)}}');">{{__('Refund')}}</a></li> --}}
                                     </ul>
                                 </div>
                             </td>
@@ -150,7 +137,7 @@
         </table>
         <div class="clearfix">
             <div class="pull-right">
-                {{ $orders->appends(request()->input())->links() }}
+                {{-- {{ $orders->appends(request()->input())->links() }} --}}
             </div>
         </div>
     </div>

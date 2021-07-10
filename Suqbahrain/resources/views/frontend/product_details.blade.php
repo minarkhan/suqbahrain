@@ -589,7 +589,13 @@
                                         @foreach ($detailedProduct->reviews as $key => $review)
                                             <div class="block block-comment">
                                                 <div class="block-image">
-                                                    <img src="{{ asset('frontend/images/placeholder.jpg') }}" data-src="{{ asset($review->user->avatar_original) }}" class="rounded-circle lazyload">
+
+                                                    @if ($review->user->avatar_original != null)
+                                                        <img src="{{ asset('frontend/images/placeholder.jpg') }}" data-src="{{ asset($review->user->avatar_original) }}" class="rounded-circle lazyload">
+                                                    @else
+                                                        <img src="{{ asset('frontend/images/user.png') }}" class="image rounded-circle">
+                                                    @endif
+                                                    {{-- <img src="{{ asset('frontend/images/placeholder.jpg') }}" data-src="{{ asset($review->user->avatar_original) }}" class="rounded-circle lazyload"> --}}
                                                 </div>
                                                 <div class="block-body">
                                                     <div class="block-body-inner">

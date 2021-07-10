@@ -136,6 +136,78 @@
                                             </a>
                                         </li>
                                     @endif
+                                    @php
+                                        $seller_new_orders = DB::table('orders')
+                                            ->orderBy('code', 'desc')
+                                            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                                            ->join('users', 'users.id', '=', 'order_details.seller_id')
+                                            ->where('users.user_type', 'seller')
+                                            ->where('orders.viewed', 0)
+                                            ->where('orders.cancel_request', 0)
+                                            ->where('orders.return_request', 0)
+                                            ->select('orders.id')
+                                            ->distinct()
+                                            ->count();
+                                    @endphp
+
+                                    @if($seller_new_orders > 0)
+                                        <li>
+                                            <a class="media" href="{{ route('orders.admin_sellers_orders') }}" style="position:relative">
+                                                <span class="badge badge-header badge-success" style="right:auto;left:3px;"></span>
+                                                <div class="media-body">
+                                                    <p class="mar-no text-nowrap text-main text-semibold">{{ $seller_new_orders }} Seller new Order(s)</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @php
+                                        $seller_cancel_orders = DB::table('orders')
+                                            ->orderBy('code', 'desc')
+                                            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                                            ->join('users', 'users.id', '=', 'order_details.seller_id')
+                                            ->where('users.user_type', 'seller')
+                                            ->where('orders.viewed', 0)
+                                            ->where('orders.cancel_request', '>', 0)
+                                            ->where('orders.return_request', 0)
+                                            ->select('orders.id')
+                                            ->distinct()
+                                            ->count();
+                                    @endphp
+
+                                    @if($seller_cancel_orders > 0)
+                                        <li>
+                                            <a class="media" href="{{ route('orders.admin_sellers_orders') }}" style="position:relative">
+                                                <span class="badge badge-header badge-danger" style="right:auto;left:3px;"></span>
+                                                <div class="media-body">
+                                                    <p class="mar-no text-nowrap text-main text-semibold">{{ $seller_cancel_orders }} Seller Cancel Order(s)</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @php
+                                        $seller_refund_orders = DB::table('orders')
+                                            ->orderBy('code', 'desc')
+                                            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                                            ->join('users', 'users.id', '=', 'order_details.seller_id')
+                                            ->where('users.user_type', 'seller')
+                                            ->where('orders.viewed', 0)
+                                            ->where('orders.cancel_request', 0)
+                                            ->where('orders.return_request', '>', 0)
+                                            ->select('orders.id')
+                                            ->distinct()
+                                            ->count();
+                                    @endphp
+
+                                    @if($seller_refund_orders > 0)
+                                        <li>
+                                            <a class="media" href="{{ route('orders.admin_sellers_orders') }}" style="position:relative">
+                                                <span class="badge badge-header badge-warning" style="right:auto;left:3px;"></span>
+                                                <div class="media-body">
+                                                    <p class="mar-no text-nowrap text-main text-semibold">{{ $seller_refund_orders }} Seller Refund Order(s)</p>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                             <div class="nano-pane" style="">

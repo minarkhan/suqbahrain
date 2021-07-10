@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class RefundRequest extends Model
 {
+    protected $fillable = [
+        'refund_method',
+    ];
     public function orderDetail()
     {
         return $this->belongsTo(OrderDetail::class);

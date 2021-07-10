@@ -66,7 +66,7 @@
     				</tr>
     				<tr>
     					<td class="text-main text-bold">
-    						{{__('Order Status')}}
+    						{{__('Order step Status ')}}
     					</td>
                         @php
                             $status = $order->orderDetails->first()->delivery_status;
@@ -136,9 +136,9 @@
         				</thead>
         				<tbody>
                             @php
-                                $admin_user_id = \App\User::where('user_type', 'admin')->first()->id;
+                                // $admin_user_id = \App\User::where('user_type', 'admin')->first()->id;
                             @endphp
-                            @foreach ($order->orderDetails->where('seller_id', $admin_user_id) as $key => $orderDetail)
+                            @foreach ($order->orderDetails->where('order_id', $order->id) as $key => $orderDetail)
                                 <tr>
                                     <td>{{ $key+1 }}</td>
                                     <td>
@@ -190,7 +190,7 @@
     					<strong>{{__('Sub Total')}} :</strong>
     				</td>
     				<td>
-    					{{ single_price($order->orderDetails->where('seller_id', $admin_user_id)->sum('price')) }}
+    					{{ single_price($order->orderDetails->where('order_id', $order->id)->sum('price')) }}
     				</td>
     			</tr>
     			<tr>
@@ -198,7 +198,7 @@
     					<strong>{{__('Tax')}} :</strong>
     				</td>
     				<td>
-    					{{ single_price($order->orderDetails->where('seller_id', $admin_user_id)->sum('tax')) }}
+    					{{ single_price($order->orderDetails->where('order_id', $order->id)->sum('tax')) }}
     				</td>
     			</tr>
                 <tr>
@@ -206,7 +206,7 @@
     					<strong>{{__('Shipping')}} :</strong>
     				</td>
     				<td>
-    					{{ single_price($order->orderDetails->where('seller_id', $admin_user_id)->sum('shipping_cost')) }}
+    					{{ single_price($order->orderDetails->where('order_id', $order->id)->sum('shipping_cost')) }}
     				</td>
     			</tr>
     			<tr>
@@ -214,7 +214,7 @@
     					<strong>{{__('TOTAL')}} :</strong>
     				</td>
     				<td class="text-bold h4">
-    					{{ single_price($order->orderDetails->where('seller_id', $admin_user_id)->sum('price') + $order->orderDetails->where('seller_id', $admin_user_id)->sum('tax') + $order->orderDetails->where('seller_id', $admin_user_id)->sum('shipping_cost')) }}
+    					{{ single_price($order->orderDetails->where('order_id', $order->id)->sum('price') + $order->orderDetails->where('order_id', $order->id)->sum('tax') + $order->orderDetails->where('order_id', $order->id)->sum('shipping_cost')) }}
     				</td>
     			</tr>
     			</tbody>

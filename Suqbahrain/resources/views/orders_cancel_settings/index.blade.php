@@ -3,7 +3,7 @@
     <div class="row">
         <form class="form-horizontal" action="{{ route('orders_cancel_settings.settings_update.admin') }}" method="POST">
             @csrf
-            <input type="hidden" name="id" value="{{ $cancelRemaining->id }}">
+            <input type="hidden" name="id" value="{{ $cancelRemaining->id ?? '-' }}">
             <div class="col-lg-6">
                 <div class="panel">
                     <div class="panel-heading">

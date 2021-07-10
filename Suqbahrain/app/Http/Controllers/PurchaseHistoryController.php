@@ -39,12 +39,24 @@ class PurchaseHistoryController extends Controller
     public function purchase_history_details(Request $request)
     {
         $order = Order::findOrFail($request->order_id);
-        $order->delivery_viewed = 1;
-        $order->payment_status_viewed = 1;
-        $order->customer_view = 1;
+
+        if(Auth::user()->user_type == 'customer'){
+            $order->delivery_viewed = 1;
+            $order->payment_status_viewed = 1;
+            $order->customer_view = 1;
+        } elseif(Auth::user()->user_type == 'seller'){
+            $order->seller_viewed = 1;
+        }
         $order->save();
         return view('frontend.partials.order_details_customer', compact('order'));
     }
+
+    // public function purchase_return_request($id)
+    // {
+    //     return $id;
+    //     $orders = Order::where('id', $id)->first();
+    //     return view('frontend.purchase_return', compact('orders'));
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -133,8 +145,8 @@ class PurchaseHistoryController extends Controller
         $product_return->reason = $request->reason;
         if($request->hasFile('image')){
             $image = $request->file('image')->store('uploads/product_return');
+            $product_return->image = $image;
         }
-        $product_return->image = $image;
         if( $product_return->save() ){
             $order = Order::findOrFail($request->order_id);
             $order->return_request = 1;

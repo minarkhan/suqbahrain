@@ -19,6 +19,9 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/refund-request-pay', 'RefundRequestController@refund_pay')->name('refund_request_money_by_admin');
     Route::post('/refund-request-time-store', 'RefundRequestController@refund_time_update')->name('refund_request_time_config');
     Route::post('/refund-request-sticker-store', 'RefundRequestController@refund_sticker_update')->name('refund_sticker_config');
+
+    Route::get('refund_reuest_vendor_pay/{id}', 'CancleRequestController@refund_reuest_vendor_pay')->name('vendor_refund_pay');
+
 });
 
 //FrontEnd User panel
@@ -27,6 +30,9 @@ Route::group(['middleware' => ['user', 'verified']], function(){
     Route::get('refund-request', 'RefundRequestController@vendor_index')->name('vendor_refund_request');
     Route::get('sent-refund-request', 'RefundRequestController@customer_index')->name('customer_refund_request');
     Route::post('refund-reuest-vendor-approval', 'RefundRequestController@request_approval_vendor')->name('vendor_refund_approval');
+
+
+
     Route::get('refund-request/{id}', 'RefundRequestController@refund_request_send_page')->name('refund_request_send_page');
 });
 

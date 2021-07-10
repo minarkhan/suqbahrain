@@ -145,13 +145,17 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::post('/flash_deals/product_discount_edit', 'FlashDealController@product_discount_edit')->name('flash_deals.product_discount_edit');
 
 	Route::get('/orders', 'OrderController@admin_orders')->name('orders.index.admin');
+
+	Route::get('/seller_orders', 'OrderController@admin_sellers_orders')->name('orders.admin_sellers_orders');
+	Route::get('/seller_orders/{id}/show', 'OrderController@seller_orders_show')->name('orders.seller_orders_show');
+
 	Route::get('/orders/{id}/show', 'OrderController@show')->name('orders.show');
 	Route::get('/sales/{id}/show', 'OrderController@sales_show')->name('sales.show');
 	Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
 	Route::get('/sales', 'OrderController@sales')->name('sales.index');
 	Route::get('/orders_canceled', 'OrderController@admin_orders_cancel')->name('orders_canceled.index.admin');
 	Route::get('/order_cancel/{id}', 'OrderController@order_cancel')->name('order_cancel.index.admin');
-    
+
 	Route::get('/orders_return', 'OrderController@admin_orders_return')->name('orders_return.index.admin');
 	Route::get('/orders_return_app/{id}', 'OrderController@orders_return_app')->name('orders_return_app.update.admin');
 

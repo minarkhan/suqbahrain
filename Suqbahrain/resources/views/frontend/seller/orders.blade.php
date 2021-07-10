@@ -55,6 +55,7 @@
                                                     $order = \App\Order::find($order_id->id);
                                                 @endphp
                                                 @if($order != null)
+
                                                     <tr>
                                                         <td>
                                                             {{ $key+1 }}
@@ -120,7 +121,27 @@
 
                                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="">
                                                                     <button onclick="show_order_details({{ $order->id }})" class="dropdown-item">{{__('Order Details')}}</button>
-                                                                    <a href="{{ route('seller.invoice.download', $order->id) }}" class="dropdown-item">{{__('Download Invoice')}}</a>
+
+                                                                    <a href="{{ route('seller.invoice.download', $order->id) }}" class="dropdown-item">
+                                                                        {{__('Download Invoice')}}
+                                                                    </a>
+                                                                    @php
+                                                                        print_r($order->cancel_request);
+                                                                    @endphp
+
+                                                                    @if ( $order->cancel_request == 0 )
+                                                                        <a
+                                                                            class="dropdown-item"
+                                                                            href="{{ route('orders.order_cancel_seller', $order->id ) }}">
+                                                                            {{__('Order Cancel')}}
+                                                                        </a>
+                                                                    @elseif ($order->cancel_request == 1)
+                                                                        <a
+                                                                            class="dropdown-item text-danger"
+                                                                            href="{{ route('orders.order_cancel_seller', $order->id ) }}">
+                                                                            {{__('Accept Cancel Request')}}
+                                                                        </a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </td>

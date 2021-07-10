@@ -158,7 +158,21 @@ class RefundRequestController extends Controller
      */
     public function request_approval_vendor(Request $request)
     {
+        // return $request;
         $refund = RefundRequest::findOrFail($request->el);
+
+        if( $refund->reason == null){
+
+            $refund->seller_approval = 1;
+            // $refund->refund_status = 1;
+            if ($refund->save()) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
             $refund->seller_approval = 1;
             $refund->admin_approval = 1;
@@ -182,6 +196,16 @@ class RefundRequestController extends Controller
     public function refund_pay(Request $request)
     {
         $refund = RefundRequest::findOrFail($request->el);
+
+        if( $refund->reason == null && $refund->refund_method !=  'Wallet'){
+            if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
+                $refund->admin_approval = 1;
+                $refund->save();
+                return 1;
+            }
+            return 0;
+        }
+
         if ($refund->seller_approval == 1) {
             $seller = Seller::where('user_id', $refund->seller_id)->first();
             if ($seller != null) {
@@ -189,15 +213,19 @@ class RefundRequestController extends Controller
             }
             $seller->save();
         }
+
+
         $wallet = new Wallet;
         $wallet->user_id = $refund->user_id;
         $wallet->amount = $refund->refund_amount;
         $wallet->payment_method = 'Refund';
         $wallet->payment_details = 'Product Money Refund';
         $wallet->save();
+
         $user = User::findOrFail($refund->user_id);
         $user->balance += $refund->refund_amount;
         $user->save();
+
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
             $refund->admin_approval = 1;
             $refund->refund_status = 1;
@@ -209,6 +237,7 @@ class RefundRequestController extends Controller
             return 0;
         }
     }
+
 
     /**
      * Show the form for creating a new resource.
