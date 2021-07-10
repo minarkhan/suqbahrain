@@ -142,13 +142,8 @@ class CancleRequestController extends Controller
     {
         $order = Order::find($id);
         $order->return_request = 3;
-        $order->viewed = 0;
+        $order->seller_viewed = 0;
         $order->save();
-        // $orderdetails = OrderDetail::where('order_id', $id)->get();
-        // foreach($orderdetails as $key => $orderdetail){
-        //     $orderdetail->cancel_request = 1;
-        //     $orderdetail->save();
-        // }
         return redirect()->back();
     }
 

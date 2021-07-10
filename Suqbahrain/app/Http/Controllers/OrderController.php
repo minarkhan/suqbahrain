@@ -43,11 +43,11 @@ class OrderController extends Controller
                     ->distinct()
                     ->paginate(15);
 
-        foreach ($orders as $key => $value) {
-            $order = \App\Order::find($value->id);
-            $order->viewed = 1;
-            $order->save();
-        }
+        // foreach ($orders as $key => $value) {
+        //     $order = \App\Order::find($value->id);
+        //     $order->viewed = 1;
+        //     $order->save();
+        // }
 
         return view('frontend.seller.orders', compact('orders'));
     }
@@ -95,6 +95,38 @@ class OrderController extends Controller
         }
         $orders = $orders->paginate(15);
         return view('orders.index', compact('orders','payment_status','delivery_status', 'sort_search', 'admin_user_id'));
+    }
+
+    public function admin_sellers_orders(Request $request)
+    {
+        CoreComponentRepository::instantiateShopRepository();
+
+        $payment_status = null;
+        $delivery_status = null;
+        $sort_search = null;
+        $admin_user_id = User::where('user_type', 'seller')->first()->id;
+        $orders = DB::table('orders')
+                    ->orderBy('code', 'desc')
+                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+                    ->join('users','users.id','=','order_details.seller_id')
+                    ->Where('users.user_type', 'seller')
+                    ->select('orders.id')
+                    ->distinct();
+
+        if ($request->payment_type != null){
+            $orders = $orders->where('order_details.payment_status', $request->payment_type);
+            $payment_status = $request->payment_type;
+        }
+        if ($request->delivery_status != null) {
+            $orders = $orders->where('order_details.delivery_status', $request->delivery_status);
+            $delivery_status = $request->delivery_status;
+        }
+        if ($request->has('search')){
+            $sort_search = $request->search;
+            $orders = $orders->where('code', 'like', '%'.$sort_search.'%');
+        }
+        $orders = $orders->paginate(15);
+        return view('orders.seller_orders', compact('orders','payment_status','delivery_status', 'sort_search', 'admin_user_id'));
     }
 
     /**
@@ -547,6 +579,14 @@ class OrderController extends Controller
         return view('orders.show', compact('order'));
     }
 
+    public function seller_orders_show($id)
+    {
+        $order = Order::findOrFail(decrypt($id));
+        $order->viewed = 1;
+        $order->save();
+        return view('orders.seller_orders_show', compact('order'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -849,11 +889,15 @@ class OrderController extends Controller
     {
         // return $id;
         $order = Order::findOrFail($id);
+        if($order->cancel_request == 1){
+            $order->canceled_by = 'customer';
+        }else{
+            $order->canceled_by = 'seller';
+        }
         $order->cancel_request = 3;
         $order->viewed = 0;
         $order->seller_viewed = 0;
         $order->customer_view = 0;
-        $order->canceled_by = 'seller';
         $order->save();
         $orderdetails = OrderDetail::where('order_id', $id)->get();
         foreach($orderdetails as $key => $orderdetail){
